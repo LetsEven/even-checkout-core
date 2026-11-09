@@ -63,22 +63,90 @@ Bunker Swings & Beers, Colibrí Café, Dataframe Café, Duo Padel Park, Even Sup
 
 ## Qué no cuadra todavía
 
-**Comisión Even.** El portal reporta $1,048.32 en Pick & Go y $449.87 en Tap Order & Pay. Sobre consumo + propina eso es 1.38 % y 1.19 %. La tarifa de Even es 4 % + IVA (≈ 4.64 %), es decir ≈ $3,535 en Pick & Go y ≈ $1,757 en Tap Order & Pay. La tarjeta "Ingresos Even" debe usar otra definición (neta de costos, solo la parte del cliente, otra base, o un filtro distinto). Hay que aclarar qué mide antes de usarla para validar el cobro tras la migración.
+**Comisión Even (resuelto con la base).** "Ingresos Even" del dashboard es `even_net_income` de `payment_transactions`, es decir la comisión de Even **neta del costo de EcartPay**, no la comisión bruta. Verificado: Tap Order & Pay $449.87 coincide exacto; Pick & Go $1,038.09 en la base contra $1,048.32 del portal (3 órdenes de diferencia por el corte de zona horaria del 8-nov). La comisión bruta es 4 % + IVA: $1,625.67 en Tap Order & Pay y $3,317.90 en Pick & Go, con costo de EcartPay de $1,175.80 y $2,279.81.
 
 **Fecha de corte.** Los datos llegan al 2026-11-08 21:45; no incluyen el 9-nov.
 
-## Pendientes (datos que faltan)
+## Datos de la base de producción (Supabase "Even", consultados el 2026-11-09)
 
-| Dato | Para qué se necesita | Cómo obtenerlo cuando haya acceso |
+Fuente: proyecto Supabase `Even` (`lpddleurgayjgstywysr`), solo lectura, solo agregados, sin datos personales. Se asume que es la base de producción (tiene datos desde junio, 691 perfiles y 21 restaurantes, y coincide con el dashboard). Hay una rama `DEV` aparte. Ventana: 2026-10-10 a 2026-11-08.
+
+### Pagos (`payment_transactions`, 30 días)
+
+| Servicio | Pagos | Base | Propinas | Comisión bruta | Costo EcartPay | Ingreso neto Even |
+|---|---|---|---|---|---|---|
+| Pick & Go | 179 | 69,175.68 | 2,331.62 | 3,317.90 | 2,279.81 | 1,038.09 |
+| Tap Order & Pay | 130 | 32,216.26 | 2,819.00 | 1,625.67 | 1,175.80 | 449.87 |
+
+Histórico completo: Pick & Go 719 pagos en 9 restaurantes (desde 2026-07-07), Tap Order & Pay 154 en 4 (desde 2026-06-25, último 2026-10-31), y 65 de mesa (FlexBill o Tap & Pay) entre julio y el 2026-09-11 sin actividad desde entonces. Room Service y Tap & Pay: sin pagos.
+
+### Método de pago (30 días)
+
+| Método | Pick & Go | Tap Order & Pay | Total |
+|---|---|---|---|
+| **Apple Pay** | 96 | 86 | **182 (58 %)** |
+| Tarjeta guardada | 87 | 43 | 130 (crédito 96, débito 34) |
+| Google Pay | 2 | 1 | 3 |
+
+Apple Pay es más de la mitad del volumen: el archivo `apple-developer-merchantid-domain-association` y el dominio registrado con Apple y EcartPay deben seguir funcionando tras la migración. Las 5 apps del monorepo traen el archivo en `public/.well-known`.
+
+### Intentos de pago (`payment_intents`, 30 días)
+
+| Estado | Intentos |
+|---|---|
+| confirmed | 136 |
+| failed | 14 (≈ 8 %) |
+| charging | 18 (sin resolver) |
+| unknown | 7 (resultado ambiguo tras llamar a EcartPay: timeout o red) |
+
+Motivos de rechazo: tarjeta inválida (9), "No se puede procesar, intente más tarde" (2), fondos insuficientes (1), "use una tarjeta digital" (1), validación previa fallida (1). Los 18 intentos en `charging` y los 7 en `unknown` merecen revisión antes del cutover: pueden ser intentos que nunca se resolvieron o cobros ambiguos. No se investigó su antigüedad ni si hubo cargo.
+
+### QR
+
+- `qr_codes.code` es un identificador corto (`EVEN-XXXXXX`), no una URL. **El QR no lleva el dominio del frontend:** el backend (`qrCodeController`) resuelve el código y arma la URL de destino por servicio, usando las variables `FLEX_BILL_URL`, `TAP_ORDER_PAY_URL`, `ROOM_SERVICE_URL`, `PICK_AND_GO_URL`, `TAP_AND_PAY_GO_URL`, con respaldo en `fb.`, `top.`, `rs.`, `pc.` y `tp.letseven.io`. Ojo: el respaldo de Pick & Go es `pc.letseven.io`, pero el CORS permite `pg.letseven.io`; hay que confirmar en Railway cuál dominio sirve realmente Pick & Go.
+- Cambiar a dónde apunta un servicio no requiere reimprimir QR: basta la variable de entorno del backend (o, por restaurante, un cambio en el resolvedor).
+- QR activos: Room Service 750, FlexBill 56, Tap Order & Pay 49 (más 5 inactivos), Tap & Pay 28, Pick & Go 16.
+- Formato de ruta destino (código): Pick & Go `/{restaurantId}/menu?branch={n}`, Tap Order & Pay y Room Service `/{restaurantId}/{branch}/menu?table=|room=`, Tap & Pay `/{restaurantId}/{branch}/order?table=`.
+
+### Restaurantes y POS
+
+18 activos (más 3 eliminados). Pick & Go tiene QR activos en 9 restaurantes.
+
+| Restaurante (id) | Sucursales | Servicios con QR activo | POS |
+|---|---|---|---|
+| Saku By Miyako (12) | 1 | Pick & Go | ninguno |
+| Dataframe Café (15) | 1 | los 5 servicios | ninguno |
+| Colibrí Café (35) | 1 | Pick & Go | Soft Restaurant |
+| Sainte Marianne (29) | 1 | Pick & Go | ninguno |
+| Josefina Cafe (36) | 1 | Pick & Go | ninguno |
+| Sunora Bacanora Bar (16) | 1 | Pick & Go | ninguno |
+| Magnolias (30) | 4 | Pick & Go | ninguno |
+| Even Supply (32) | 1 | Pick & Go | ninguno |
+| La Polloteria (22) | 1 | Pick & Go, Tap Order & Pay | Soft Restaurant |
+| Las Palomas (31) | 1 | Pick & Go, Room Service | Givex |
+| Polotab (39) | 1 | Pick & Go, Tap Order & Pay | PoloTab |
+| Tacos Domingo (37) | 1 | Tap Order & Pay | PoloTab |
+| Duo Padel Park (8) | 1 | FlexBill, Tap Order & Pay, Tap & Pay | Soft Restaurant |
+| Bunker Swings & Beers (19) | 1 | Tap & Pay | Soft Restaurant |
+| Holy Cow (21) | 2 | FlexBill | Soft Restaurant |
+| Steaks del Herradero (23) | 2 | FlexBill | Soft Restaurant |
+| Sonoran Star (28) | 1 | Room Service | Soft Restaurant |
+| Playa Bonita (38) | 1 | Room Service | Soft Restaurant |
+
+### Otros hallazgos de la base
+
+- La fila de prueba `tap_pay_orders.folio = 'QA-TEST-1'` **ya no existe** en este proyecto (queda resuelto el pendiente de las pruebas de pago).
+- La rama `main` del proyecto Supabase muestra estado `MIGRATIONS_FAILED` en la lista de ramas (la rama `DEV` está bien). Conviene revisarlo antes de tocar migraciones.
+- El proyecto `Xquisito-back` está inactivo (el anterior).
+
+## Pendientes (lo que sigue sin dato)
+
+| Dato | Estado | Cómo obtenerlo |
 |---|---|---|
-| Intentos, rechazos, motivos y tasa de aprobación de pago | Línea base para comparar durante el canary | Supabase prod (`payment_transactions` agrupada por estado y motivo) o panel de EcartPay; la API de monitoreo nueva del backend ya registra rechazos por orden |
-| Método de pago (tarjeta guardada / nueva / Apple Pay / Google Pay) | Priorizar pruebas de wallet y 3DS | Mismas fuentes; EcartPay distingue el método |
-| Reembolsos y cobros duplicados | Línea base de doble cobro | Supabase prod y EcartPay |
-| Órdenes canceladas o fallidas | Línea base de errores | Supabase prod |
-| QR: formato de URL, cantidad y dominios | Confirmar que todos apuntan a `*.letseven.io` (cutover sin cambiar QR) | Supabase prod (tabla de QR) o el admin-portal; Vercel prod para el dominio asignado a cada proyecto |
-| Integración con POS por restaurante | Saber qué restaurantes dependen del agente de POS | Admin-portal o tabla de sucursales en Supabase prod |
-| IDs de restaurante, servicios habilitados y número de sucursales | Elegir canary y reglas de ruteo por restaurante | Supabase prod |
-| Definición exacta de "Ingresos Even" | Validar comisión tras la migración | Revisar el código del main-portal o preguntar a quien lo construyó |
-| Consumo total y ticket promedio oficiales | Reemplazar los calculados a mano | Supabase prod |
-
-Si no llega acceso a la base, una segunda pasada del agente de Chrome por el admin-portal (restaurantes, servicios por restaurante, sucursales, QR, POS) puede cubrir las filas de QR, POS e IDs.
+| Valor real de `PICK_AND_GO_URL` y demás URLs de servicio, dominio asignado a cada proyecto de Vercel, y variables de entorno de prod | Falta | Railway prod y Vercel prod (acceso esperado lunes o martes) |
+| Antigüedad e impacto de los 18 intentos `charging` y 7 `unknown` | Falta | Consulta a `payment_intents` por fecha y cruce con `payment_transactions` y EcartPay |
+| Canceladas / fallidas de órdenes (`pick_and_go_orders.payment_status`) | Falta | Consulta a Supabase |
+| Reembolsos y cobros duplicados | Falta | Cruce de `ecartpay_order_id` repetidos en `payment_transactions` y panel de EcartPay |
+| Estado del agente POS por sucursal (`pos_integrations.agent_last_connected_at`) | Falta | Consulta a Supabase |
+| Si Dataframe Café y Polotab son restaurantes de prueba | Por confirmar con Arturo | n/a |
+| Rama `main` de Supabase en `MIGRATIONS_FAILED` | Por revisar | Panel de Supabase |

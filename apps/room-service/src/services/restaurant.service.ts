@@ -13,6 +13,8 @@ interface ApiResponse<T> {
 interface RestaurantWithMenu {
   restaurant: Restaurant;
   menu: MenuSection[];
+  orderable_from?: string | null;
+  menu_valid_until?: string | null;
 }
 
 export interface Branch {
@@ -62,7 +64,7 @@ class RestaurantService {
   async getRestaurantMenu(restaurantId: number): Promise<MenuSection[]> {
     try {
       const response = await fetch(
-        `${API_URL}/restaurants/${restaurantId}/menu`
+        `${API_URL}/restaurants/${restaurantId}/menu`,
       );
 
       if (!response.ok) {
@@ -87,11 +89,11 @@ class RestaurantService {
 
   // Obtener restaurante con su menú completo en una sola petición
   async getRestaurantWithMenu(
-    restaurantId: number
+    restaurantId: number,
   ): Promise<RestaurantWithMenu> {
     try {
       const response = await fetch(
-        `${API_URL}/restaurants/${restaurantId}/complete`
+        `${API_URL}/restaurants/${restaurantId}/complete`,
       );
 
       if (!response.ok) {
@@ -117,11 +119,11 @@ class RestaurantService {
   // Obtener restaurante con su menú filtrado por sucursal en una sola petición
   async getRestaurantWithMenuByBranch(
     restaurantId: number,
-    branchNumber: number
+    branchNumber: number,
   ): Promise<RestaurantWithMenu> {
     try {
       const response = await fetch(
-        `${API_URL}/restaurants/${restaurantId}/${branchNumber}/complete`
+        `${API_URL}/restaurants/${restaurantId}/${branchNumber}/complete`,
       );
 
       if (!response.ok) {
@@ -170,7 +172,7 @@ class RestaurantService {
   async getRestaurantBranches(restaurantId: number): Promise<Branch[]> {
     try {
       const response = await fetch(
-        `${API_URL}/restaurants/${restaurantId}/branches`
+        `${API_URL}/restaurants/${restaurantId}/branches`,
       );
 
       if (!response.ok) {
@@ -198,7 +200,7 @@ class RestaurantService {
     restaurantId: number,
     branchNumber: number,
     roomNumber: string,
-    service?: string
+    service?: string,
   ): Promise<ValidationResult> {
     try {
       // Construir la URL con el parámetro service si se proporciona

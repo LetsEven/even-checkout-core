@@ -8,9 +8,9 @@ import { useCart, CartItem } from "../../context/CartContext";
 import type { MenuItemData } from "../../interfaces/menuItemData";
 import { useTableNavigation } from "../../hooks/useTableNavigation";
 import { useRestaurant } from "../../context/RestaurantContext";
+import { useIsOffSchedule } from "../../hooks/useCartAvailability";
 import RestaurantClosedModal from "../RestaurantClosedModal";
 import OutOfStockModal from "../OutOfStockModal";
-import { getItemDisplayPrice } from "../../utils/commissionCalculator";
 import ItemCustomizations from "@/components/ItemCustomizations";
 
 interface ReorderModalProps {
@@ -31,6 +31,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
   } = useCart();
   const { navigateWithTable } = useTableNavigation();
   const { isOpen: restaurantIsOpen, restaurant, menu } = useRestaurant();
+  const showImages = !!restaurant && restaurant.menu_show_images !== false;
 
   const [showClosedModal, setShowClosedModal] = useState(false);
   const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
@@ -45,7 +46,8 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
     }
   }, [isOpen]);
 
-  const uniqueItems = useMemo(() => {
+  const isOffSchedule = useIsOffSchedule();
+  const dedupedItems = useMemo(() => {
     const seen = new Set<number>();
     const result: LastOrderDish[] = [];
     for (const item of items) {
@@ -55,6 +57,10 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
     }
     return result;
   }, [items]);
+  // Platillos fuera de su horario no se ofrecen para reordenar.
+  const uniqueItems = dedupedItems.filter(
+    (x) => !isOffSchedule(x.menu_item_id),
+  );
 
   const outOfStockIds = useMemo(() => {
     const ids = new Set<number>();
@@ -157,7 +163,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
     () =>
       uniqueItems.reduce((sum, item) => {
         const qty = getCartItem(item.menu_item_id)?.quantity ?? 0;
-        return sum + qty * getItemDisplayPrice(item.price + (item.extra_price || 0));
+        return sum + qty * (item.price + (item.extra_price || 0));
       }, 0),
     [uniqueItems, cartState.items],
   );
@@ -207,9 +213,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
               <h2 className="text-lg md:text-xl lg:text-2xl text-white font-semibold leading-snug">
                 {tc("reorderCta")}
               </h2>
-              <p className="text-sm text-white mt-0.5">
-                {t("subtitle")}
-              </p>
+              <p className="text-sm text-white mt-0.5">{t("subtitle")}</p>
             </div>
             <div className="border-t border-white/20" />
           </div>
@@ -273,43 +277,50 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
                       </div>
 
                       {/* Image */}
-                      <div className="shrink-0 relative">
-                        <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-gray-300 flex items-center justify-center">
-                          {item.images?.length > 0 && item.images[0] ? (
-                            <img
-                              src={item.images[0]}
-                              alt={item.item}
-                              className={`w-full h-full object-cover${itemIsOutOfStock ? " blur-sm" : ""}`}
-                            />
-                          ) : (
-                            <img
-                              src="/even/even-asterisk-evergreen.svg"
-                              alt="Logo Even"
-                              className={`size-10 md:size-12 object-contain${itemIsOutOfStock ? " blur-sm" : ""}`}
-                            />
+                      {showImages && (
+                        <div className="shrink-0 relative">
+                          <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-gray-300 flex items-center justify-center">
+                            {item.images?.length > 0 && item.images[0] ? (
+                              <img
+                                src={item.images[0]}
+                                alt={item.item}
+                                className={`w-full h-full object-cover${itemIsOutOfStock ? " blur-sm" : ""}`}
+                              />
+                            ) : (
+                              <img
+                                src="/even/even-asterisk-evergreen.svg"
+                                alt="Logo Even"
+                                className={`size-10 md:size-12 object-contain${itemIsOutOfStock ? " blur-sm" : ""}`}
+                              />
+                            )}
+                          </div>
+                          {itemIsOutOfStock && (
+                            <div className="absolute bottom-0.5 left-0.5">
+                              <span className="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full tracking-wide">
+                                {tc("outOfStockBadge")}
+                              </span>
+                            </div>
                           )}
                         </div>
-                        {itemIsOutOfStock && (
-                          <div className="absolute bottom-0.5 left-0.5">
-                            <span className="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full tracking-wide">
-                              {tc("outOfStockBadge")}
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                      )}
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <h3 className="text-base md:text-lg text-white font-medium capitalize">
                           {item.item}
                         </h3>
+                        {!showImages && itemIsOutOfStock && (
+                          <span className="inline-block bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full tracking-wide">
+                            {tc("outOfStockBadge")}
+                          </span>
+                        )}
                         <ItemCustomizations
                           customFields={customFields}
                           variant="dark"
                           className="mt-0.5"
                         />
                         <p className="text-xs md:text-sm text-white/60 mt-1">
-                          ${getItemDisplayPrice(item.price + (item.extra_price || 0)).toFixed(2)}
+                          ${(item.price + (item.extra_price || 0)).toFixed(2)}
                         </p>
                       </div>
 

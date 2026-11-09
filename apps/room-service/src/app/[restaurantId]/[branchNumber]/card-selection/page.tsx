@@ -26,11 +26,20 @@ import { USER_DISCOUNT_SERVICE } from "@/services/userDiscounts.service";
 import { useAgentStatus } from "@/hooks/useAgentStatus";
 import { useRestaurant } from "@/context/RestaurantContext";
 import POSBlockedModal from "@/components/POSBlockedModal";
+import RestaurantClosedModal from "@/components/RestaurantClosedModal";
+import UnavailableItemsModal, {
+  toUnavailableModalItems,
+} from "@/components/UnavailableItemsModal";
+import { useCartAvailability } from "@/hooks/useCartAvailability";
 import {
   ensurePaymentIntent,
   clearStoredPaymentIntent,
   updateStoredPaymentIntent,
 } from "@/utils/paymentIdempotency";
+import {
+  getOrCreateWalletOrderId,
+  clearCachedWalletOrder,
+} from "@/utils/walletOrderCache";
 
 const POLL_INTERVAL_MS = 3000;
 const POLL_TIMEOUT_MS = 60000;
@@ -48,7 +57,16 @@ export default function CardSelectionPage() {
   } = useValidateAccess();
   const restaurantId = restaurantIdNum.toString();
 
-  const { state: cartState, clearCart } = useCart();
+  const { state: cartState, clearCart, updateQuantity } = useCart();
+  const { block: cartBlock, unavailableItems } = useCartAvailability(
+    cartState.items,
+  );
+  const [showClosedModal, setShowClosedModal] = useState(false);
+  const [showUnavailableModal, setShowUnavailableModal] = useState(false);
+  const openCartBlockModal = () => {
+    if (cartBlock === "closed") setShowClosedModal(true);
+    else if (cartBlock === "unavailable") setShowUnavailableModal(true);
+  };
   const { navigateWithRoom, roomNumber } = useRoomNavigation();
   const { paymentMethods, deletePaymentMethod } = usePayment();
   const { user, profile } = useAuth();
@@ -345,41 +363,64 @@ export default function CardSelectionPage() {
 
     (async () => {
       try {
-        const orderResult = await paymentService.createApplePayOrder({
-          amount: totalAmount,
-          currency: "MXN",
-          restaurantId,
-          baseAmount,
-          tipAmount,
-          items: cartState.items.map((i) => ({
-            name: i.name,
-            price: i.price,
-            quantity: i.quantity || 1,
-            extraPrice: (i.extraPrice || 0) * (i.quantity || 1),
-            // even-backend #333: el id del carrito permite al servidor
-            // recalcular el consumo contra cart_items en vez de cobrar el
-            // total que mandamos. Es opcional en el backend: sin él, cobra
-            // igual que antes.
-            cartItemId: i.cartItemId,
-          })),
-          userDiscountId:
-            accountDiscount?.source === "personal"
-              ? accountDiscount.id
-              : undefined,
-          promoRedemptionId:
-            accountDiscount?.source === "promo"
-              ? accountDiscount.id
-              : undefined,
-        });
+        let rejection: any = null;
+        const appleOrderId = await getOrCreateWalletOrderId(
+          "apple",
+          {
+            items: cartState.items.map((i) => ({
+              menuItemId: i.id,
+              quantity: i.quantity || 1,
+              extraPrice: i.extraPrice || 0,
+              customFields: i.customFields || null,
+            })),
+            tipAmount,
+            discountId: accountDiscount?.id ?? null,
+            total: totalAmount,
+          },
+          async () => {
+            const orderResult = await paymentService.createApplePayOrder({
+              amount: totalAmount,
+              currency: "MXN",
+              restaurantId,
+              baseAmount,
+              tipAmount,
+              items: cartState.items.map((i) => ({
+                name: i.name,
+                price: i.price,
+                quantity: i.quantity || 1,
+                extraPrice: (i.extraPrice || 0) * (i.quantity || 1),
+                // even-backend #333: el id del carrito permite al servidor
+                // recalcular el consumo contra cart_items en vez de cobrar el
+                // total que mandamos. Es opcional en el backend: sin él, cobra
+                // igual que antes.
+                cartItemId: i.cartItemId,
+              })),
+              userDiscountId:
+                accountDiscount?.source === "personal"
+                  ? accountDiscount.id
+                  : undefined,
+              promoRedemptionId:
+                accountDiscount?.source === "promo"
+                  ? accountDiscount.id
+                  : undefined,
+            });
 
-        const appleOrderId =
-          (orderResult as any).orderId ?? orderResult.data?.orderId;
-        if (!orderResult.success || !appleOrderId) {
+            const id =
+              (orderResult as any).orderId ?? orderResult.data?.orderId;
+            if (!orderResult.success || !id) {
+              rejection = orderResult;
+              return null;
+            }
+            return id;
+          },
+        );
+
+        if (!appleOrderId) {
           // Un 4xx con código semántico es un rechazo definitivo (400
           // baseAmount <= 0, 422 payment_rejected, ...): reintentar con los
           // mismos datos fallaría igual, así que se cae a tarjeta guardada. Un
           // 5xx pasajero no oculta la wallet.
-          if (isDefinitiveWalletRejection(orderResult)) {
+          if (rejection && isDefinitiveWalletRejection(rejection)) {
             setApplePayUnavailable(true);
             setWalletOrderRejected(true);
           }
@@ -418,6 +459,7 @@ export default function CardSelectionPage() {
           }
         });
         applePaySDK.on("success", (event: any) => {
+          clearCachedWalletOrder("apple");
           const walletPaymentId = event?.detail?.id || appleOrderId;
           setApplePayPaymentId(walletPaymentId);
           setIsApplePayProcessing(true);
@@ -442,7 +484,7 @@ export default function CardSelectionPage() {
           buttonStyle: "black",
           buttonType: "pay",
           borderRadius: "8px",
-          supportedNetworks: ["visa", "masterCard", "amex"],
+          supportedNetworks: ["visa", "masterCard"],
         });
 
         if (sdkAlreadyLoaded)
@@ -470,41 +512,64 @@ export default function CardSelectionPage() {
 
     (async () => {
       try {
-        const orderResult = await paymentService.createGooglePayOrder({
-          amount: totalAmount,
-          currency: "MXN",
-          restaurantId,
-          baseAmount,
-          tipAmount,
-          items: cartState.items.map((i) => ({
-            name: i.name,
-            price: i.price,
-            quantity: i.quantity || 1,
-            extraPrice: (i.extraPrice || 0) * (i.quantity || 1),
-            // even-backend #333: el id del carrito permite al servidor
-            // recalcular el consumo contra cart_items en vez de cobrar el
-            // total que mandamos. Es opcional en el backend: sin él, cobra
-            // igual que antes.
-            cartItemId: i.cartItemId,
-          })),
-          userDiscountId:
-            accountDiscount?.source === "personal"
-              ? accountDiscount.id
-              : undefined,
-          promoRedemptionId:
-            accountDiscount?.source === "promo"
-              ? accountDiscount.id
-              : undefined,
-        });
+        let rejection: any = null;
+        const googleOrderId = await getOrCreateWalletOrderId(
+          "google",
+          {
+            items: cartState.items.map((i) => ({
+              menuItemId: i.id,
+              quantity: i.quantity || 1,
+              extraPrice: i.extraPrice || 0,
+              customFields: i.customFields || null,
+            })),
+            tipAmount,
+            discountId: accountDiscount?.id ?? null,
+            total: totalAmount,
+          },
+          async () => {
+            const orderResult = await paymentService.createGooglePayOrder({
+              amount: totalAmount,
+              currency: "MXN",
+              restaurantId,
+              baseAmount,
+              tipAmount,
+              items: cartState.items.map((i) => ({
+                name: i.name,
+                price: i.price,
+                quantity: i.quantity || 1,
+                extraPrice: (i.extraPrice || 0) * (i.quantity || 1),
+                // even-backend #333: el id del carrito permite al servidor
+                // recalcular el consumo contra cart_items en vez de cobrar el
+                // total que mandamos. Es opcional en el backend: sin él, cobra
+                // igual que antes.
+                cartItemId: i.cartItemId,
+              })),
+              userDiscountId:
+                accountDiscount?.source === "personal"
+                  ? accountDiscount.id
+                  : undefined,
+              promoRedemptionId:
+                accountDiscount?.source === "promo"
+                  ? accountDiscount.id
+                  : undefined,
+            });
 
-        const googleOrderId =
-          (orderResult as any).orderId ?? orderResult.data?.orderId;
-        if (!orderResult.success || !googleOrderId) {
+            const id =
+              (orderResult as any).orderId ?? orderResult.data?.orderId;
+            if (!orderResult.success || !id) {
+              rejection = orderResult;
+              return null;
+            }
+            return id;
+          },
+        );
+
+        if (!googleOrderId) {
           // Un 4xx con código semántico es un rechazo definitivo (400
           // baseAmount <= 0, 422 payment_rejected, ...): reintentar con los
           // mismos datos fallaría igual, así que se cae a tarjeta guardada. Un
           // 5xx pasajero no oculta la wallet.
-          if (isDefinitiveWalletRejection(orderResult)) {
+          if (rejection && isDefinitiveWalletRejection(rejection)) {
             setGooglePayUnavailable(true);
             setWalletOrderRejected(true);
           }
@@ -546,6 +611,7 @@ export default function CardSelectionPage() {
           if (googlePaySucceededRef.current) return;
           googlePaySucceededRef.current = true;
           stopGooglePay3dsWatch();
+          clearCachedWalletOrder("google");
           setGooglePayPaymentId(walletPaymentId);
           setIsGooglePayProcessing(true);
           setCompletedOrderItems([...cartState.items]);
@@ -567,9 +633,8 @@ export default function CardSelectionPage() {
         // y solo emite "success" si el iframe manda postMessage; la página de
         // recibo de EcartPay no lo manda, así que confirmamos por polling.
         const isOrderPaid = async () => {
-          const status = await paymentService.getEcartOrderStatus(
-            googleOrderId,
-          );
+          const status =
+            await paymentService.getEcartOrderStatus(googleOrderId);
           return !!status && PAID_ECART_STATUSES.includes(status);
         };
         const finishFromOverlay = () => {
@@ -630,6 +695,10 @@ export default function CardSelectionPage() {
   ]);
 
   const handleInitiatePayment = (): void => {
+    if (cartBlock) {
+      openCartBlockModal();
+      return;
+    }
     if (isPOSBlocked) {
       setPosModalReason(isTurnoClosed ? "turno_closed" : "agent_disconnected");
       setShowPOSModal(true);
@@ -895,9 +964,8 @@ export default function CardSelectionPage() {
 
         while (firstAttempt || Date.now() < deadline) {
           firstAttempt = false;
-          const confirmResult = await roomOrderService.confirmOrder(
-            buildBody(),
-          );
+          const confirmResult =
+            await roomOrderService.confirmOrder(buildBody());
 
           if (confirmResult.success && confirmResult.data?.order) {
             return { success: true, order: confirmResult.data.order };
@@ -1530,6 +1598,12 @@ export default function CardSelectionPage() {
                       !isPOSBlocked && (
                         <div className="relative w-full h-12">
                           <div id="apple-pay-container" className="w-full" />
+                          {cartBlock && (
+                            <div
+                              className="absolute inset-0 z-10 cursor-pointer"
+                              onClick={openCartBlockModal}
+                            />
+                          )}
                           {!applePayReady && (
                             <div className="absolute inset-0 rounded-full bg-black flex items-center justify-center gap-2">
                               <span
@@ -1557,6 +1631,12 @@ export default function CardSelectionPage() {
                       !isPOSBlocked && (
                         <div className="relative w-full h-12">
                           <div id="google-pay-container" className="w-full" />
+                          {cartBlock && (
+                            <div
+                              className="absolute inset-0 z-10 cursor-pointer"
+                              onClick={openCartBlockModal}
+                            />
+                          )}
                           {!googlePayReady && (
                             <div className="absolute inset-0 rounded-full bg-black flex items-center justify-center gap-2">
                               <svg
@@ -1824,9 +1904,7 @@ export default function CardSelectionPage() {
                 </div>
               </div>
               <div className="px-6 py-4">
-                <p className="text-black mb-4">
-                  {t("totalBreakdownIntro")}
-                </p>
+                <p className="text-black mb-4">{t("totalBreakdownIntro")}</p>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-black font-medium">
@@ -1916,6 +1994,24 @@ export default function CardSelectionPage() {
           </div>
         </div>
       )}
+      <RestaurantClosedModal
+        isOpen={showClosedModal}
+        onClose={() => setShowClosedModal(false)}
+        openingHours={restaurant?.opening_hours}
+        restaurantName={restaurant?.name}
+        restaurantLogo={restaurant?.logo_url}
+      />
+      <UnavailableItemsModal
+        isOpen={showUnavailableModal}
+        onClose={() => setShowUnavailableModal(false)}
+        items={toUnavailableModalItems(unavailableItems)}
+        showImages={restaurant?.menu_show_images !== false}
+        onRemove={async () => {
+          for (const item of unavailableItems) {
+            if (item.cartItemId) await updateQuantity(item.cartItemId, 0);
+          }
+        }}
+      />
       <POSBlockedModal
         isOpen={showPOSModal}
         onClose={() => setShowPOSModal(false)}

@@ -18,6 +18,12 @@ import { authService } from "@/app/services/auth.service";
 import { getItemDisplayPrice } from "@/app/utils/commissionCalculator";
 import ItemCustomizations from "@/app/components/ItemCustomizations";
 import { getBackendOrigin } from "@even/api-client";
+import RestaurantClosedModal from "@/app/components/RestaurantClosedModal";
+import UnavailableItemsModal, {
+  toUnavailableModalItems,
+} from "@/app/components/UnavailableItemsModal";
+import UnavailableCartRow from "@/app/components/UnavailableCartRow";
+import { useCartAvailability } from "@/app/hooks/useCartAvailability";
 
 // Perfil completo = tiene nombre Y fecha de nacimiento. Sin esto,
 // handleConfirmOrder termina generando un nombre placeholder tipo
@@ -43,6 +49,7 @@ export default function CartView() {
   const { user, isAuthenticated, isLoading, profile, refreshProfile } =
     useAuth();
   const { restaurantId, branchNumber, restaurant } = useRestaurant();
+  const showImages = !!restaurant && restaurant.menu_show_images !== false;
   const { guestName } = useGuest();
   const { agentStatus } = useAgentStatus(restaurantId, branchNumber);
   const hasActivePOS =
@@ -64,6 +71,19 @@ export default function CartView() {
   }, [isLoading, user, profile, refreshProfile]);
 
   const [notesOpen, setNotesOpen] = useState(false);
+  const [showClosedModal, setShowClosedModal] = useState(false);
+  const [showUnavailableModal, setShowUnavailableModal] = useState(false);
+  const {
+    block,
+    unavailableItems,
+    ready: availabilityReady,
+  } = useCartAvailability(cartState.items);
+  const removeCartItem = async (cartItemId?: string) => {
+    if (cartItemId) await updateQuantity(cartItemId, 0);
+  };
+  const removeUnavailable = async () => {
+    for (const item of unavailableItems) await removeCartItem(item.cartItemId);
+  };
   const [showOrderAnimation, setShowOrderAnimation] = useState(false);
   const [orderedItems, setOrderedItems] = useState<CartItem[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,6 +125,14 @@ export default function CartView() {
 
   const handleOrder = async () => {
     if (hasOnlyPromoItems) return;
+    if (block === "closed") {
+      setShowClosedModal(true);
+      return;
+    }
+    if (block === "unavailable") {
+      setShowUnavailableModal(true);
+      return;
+    }
 
     if (hasActivePOS && restaurantId && branchNumber) {
       try {
@@ -324,129 +352,168 @@ export default function CartView() {
                 </div>
               ) : (
                 <div>
-                  <div className="text-black font-medium text-sm md:text-base lg:text-lg flex gap-10 md:gap-12 lg:gap-[68px] justify-end translate-y-4">
+                  <div
+                    className={`text-black font-medium text-sm md:text-base lg:text-lg flex gap-10 md:gap-12 lg:gap-[68px] justify-end ${showImages ? "translate-y-4" : "mb-1 md:mb-2"}`}
+                  >
                     <span>{t("qtyLabel")}</span>
                     <span>{t("priceLabel")}</span>
                   </div>
                   <div className="divide-y divide-stroke/50">
-                    {cartState.items.map((item, index) => (
-                      <div
-                        key={`${item.id}-${index}`}
-                        className="py-3 md:py-4 lg:py-5"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div
-                            onClick={() =>
-                              !(item.isPromoItem && !item.userDiscountId) &&
-                              item.cartItemId &&
-                              navigateWithTable(
-                                `/dish/${item.id}?cartItemId=${item.cartItemId}`,
-                              )
-                            }
-                            className={`flex items-center gap-3 md:gap-4 lg:gap-5 flex-1 min-w-0 ${
-                              !(item.isPromoItem && !item.userDiscountId) &&
-                              item.cartItemId
-                                ? "cursor-pointer active:scale-95 transition-transform duration-150"
-                                : ""
-                            }`}
-                          >
-                            <div className="flex-shrink-0">
-                              <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
-                                {item.images &&
-                                item.images.length > 0 &&
-                                item.images[0] ? (
-                                  <img
-                                    src={item.images[0]}
-                                    alt="Dish preview"
-                                    className="w-full h-full object-cover rounded-sm md:rounded-md"
-                                  />
-                                ) : (
-                                  <img
-                                    src="/even/even-asterisk-evergreen.svg"
-                                    alt="Logo Even"
-                                    className="size-10 md:size-12 lg:size-14 object-contain"
-                                  />
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="text-base md:text-lg lg:text-xl text-black capitalize">
-                                {item.name}
-                              </h3>
-                              {item.isPromoItem && (
-                                <span className="inline-block mt-1 text-[10px] md:text-xs bg-even-grass/20 text-even-evergreen px-2 py-0.5 rounded-full uppercase tracking-wide">
-                                  {t("promoBadge")}
-                                </span>
-                              )}
-                              <ItemCustomizations
-                                customFields={item.customFields}
-                                note={item.specialInstructions}
-                                formatPrice={(price) =>
-                                  price *
-                                  ((displayUnitPrices.get(
-                                    item.cartItemId || "",
-                                  ) ?? item.price + (item.extraPrice || 0)) /
-                                    (item.price + (item.extraPrice || 0) || 1))
-                                }
-                              />
-                            </div>
+                    {!availabilityReady &&
+                      cartState.items.map((item, index) => (
+                        <div
+                          key={`${item.id}-${index}`}
+                          className="py-3 md:py-4 lg:py-5 flex items-center gap-3 md:gap-4 lg:gap-5 animate-pulse"
+                        >
+                          {showImages && (
+                            <div className="shrink-0 size-16 md:size-20 lg:size-24 bg-gray-200 rounded-sm md:rounded-md" />
+                          )}
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 md:h-5 bg-gray-200 rounded w-2/3" />
+                            <div className="h-3 md:h-4 bg-gray-200 rounded w-1/3" />
                           </div>
-                          <div className="text-right flex items-center justify-center gap-4 md:gap-5 lg:gap-6">
-                            <div className="flex items-center gap-2 md:gap-3">
-                              <Minus
-                                onClick={() =>
-                                  item.cartItemId &&
-                                  updateQuantity(
-                                    item.cartItemId,
-                                    item.quantity - 1,
-                                  )
-                                }
-                                className="size-4 md:size-5 lg:size-6 flex items-center justify-center text-black cursor-pointer"
-                              />
-                              <p className="text-base md:text-lg lg:text-xl text-black text-center">
-                                {item.quantity}
-                              </p>
-                              <Plus
+                        </div>
+                      ))}
+                    {availabilityReady &&
+                      cartState.items.map((item, index) => {
+                        if (unavailableItems.includes(item)) {
+                          return (
+                            <UnavailableCartRow
+                              key={`${item.id}-${index}`}
+                              name={item.name}
+                              image={item.images?.[0]}
+                              quantity={item.quantity}
+                              showImages={showImages}
+                              onRemove={() => removeCartItem(item.cartItemId)}
+                            />
+                          );
+                        }
+                        return (
+                          <div
+                            key={`${item.id}-${index}`}
+                            className="py-3 md:py-4 lg:py-5"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div
                                 onClick={() =>
                                   !(item.isPromoItem && !item.userDiscountId) &&
                                   item.cartItemId &&
-                                  updateQuantity(
-                                    item.cartItemId,
-                                    item.quantity + 1,
+                                  navigateWithTable(
+                                    `/dish/${item.id}?cartItemId=${item.cartItemId}`,
                                   )
                                 }
-                                className={`size-4 md:size-5 lg:size-6 flex items-center justify-center text-black ${
-                                  item.isPromoItem && !item.userDiscountId
-                                    ? "opacity-30 cursor-not-allowed"
-                                    : "cursor-pointer"
+                                className={`flex items-center gap-3 md:gap-4 lg:gap-5 flex-1 min-w-0 ${
+                                  !(item.isPromoItem && !item.userDiscountId) &&
+                                  item.cartItemId
+                                    ? "cursor-pointer active:scale-95 transition-transform duration-150"
+                                    : ""
                                 }`}
-                              />
-                            </div>
-                            <div className="w-20 md:w-24 lg:w-28 text-right">
-                              {item.isPromoItem &&
-                                item.promoDiscountPercentage != null &&
-                                item.promoDiscountPercentage < 100 && (
-                                  <p className="text-xs md:text-sm text-gray-400 line-through">
+                              >
+                                {showImages && (
+                                  <div className="flex-shrink-0">
+                                    <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
+                                      {item.images &&
+                                      item.images.length > 0 &&
+                                      item.images[0] ? (
+                                        <img
+                                          src={item.images[0]}
+                                          alt="Dish preview"
+                                          className="w-full h-full object-cover rounded-sm md:rounded-md"
+                                        />
+                                      ) : (
+                                        <img
+                                          src="/even/even-asterisk-evergreen.svg"
+                                          alt="Logo Even"
+                                          className="size-10 md:size-12 lg:size-14 object-contain"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="text-base md:text-lg lg:text-xl text-black capitalize">
+                                    {item.name}
+                                  </h3>
+                                  {item.isPromoItem && (
+                                    <span className="inline-block mt-1 text-[10px] md:text-xs bg-even-grass/20 text-even-evergreen px-2 py-0.5 rounded-full uppercase tracking-wide">
+                                      {t("promoBadge")}
+                                    </span>
+                                  )}
+                                  <ItemCustomizations
+                                    customFields={item.customFields}
+                                    note={item.specialInstructions}
+                                    formatPrice={(price) =>
+                                      price *
+                                      ((displayUnitPrices.get(
+                                        item.cartItemId || "",
+                                      ) ??
+                                        item.price + (item.extraPrice || 0)) /
+                                        (item.price + (item.extraPrice || 0) ||
+                                          1))
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="text-right flex items-center justify-center gap-4 md:gap-5 lg:gap-6">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  <Minus
+                                    onClick={() =>
+                                      item.cartItemId &&
+                                      updateQuantity(
+                                        item.cartItemId,
+                                        item.quantity - 1,
+                                      )
+                                    }
+                                    className="size-4 md:size-5 lg:size-6 flex items-center justify-center text-black cursor-pointer"
+                                  />
+                                  <p className="text-base md:text-lg lg:text-xl text-black text-center">
+                                    {item.quantity}
+                                  </p>
+                                  <Plus
+                                    onClick={() =>
+                                      !(
+                                        item.isPromoItem && !item.userDiscountId
+                                      ) &&
+                                      item.cartItemId &&
+                                      updateQuantity(
+                                        item.cartItemId,
+                                        item.quantity + 1,
+                                      )
+                                    }
+                                    className={`size-4 md:size-5 lg:size-6 flex items-center justify-center text-black ${
+                                      item.isPromoItem && !item.userDiscountId
+                                        ? "opacity-30 cursor-not-allowed"
+                                        : "cursor-pointer"
+                                    }`}
+                                  />
+                                </div>
+                                <div className="w-20 md:w-24 lg:w-28 text-right">
+                                  {item.isPromoItem &&
+                                    item.promoDiscountPercentage != null &&
+                                    item.promoDiscountPercentage < 100 && (
+                                      <p className="text-xs md:text-sm text-gray-400 line-through">
+                                        $
+                                        {(
+                                          item.price /
+                                          (1 -
+                                            item.promoDiscountPercentage / 100)
+                                        ).toFixed(2)}
+                                      </p>
+                                    )}
+                                  <p className="text-base md:text-lg lg:text-xl text-black">
                                     $
                                     {(
-                                      item.price /
-                                      (1 - item.promoDiscountPercentage / 100)
+                                      displayUnitPrices.get(
+                                        item.cartItemId || "",
+                                      ) ?? item.price + (item.extraPrice || 0)
                                     ).toFixed(2)}
                                   </p>
-                                )}
-                              <p className="text-base md:text-lg lg:text-xl text-black">
-                                $
-                                {(
-                                  displayUnitPrices.get(
-                                    item.cartItemId || "",
-                                  ) ?? item.price + (item.extraPrice || 0)
-                                ).toFixed(2)}
-                              </p>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    ))}
+                        );
+                      })}
                   </div>
 
                   {/* Comentarios Textarea - Dentro del scroll */}
@@ -527,10 +594,16 @@ export default function CartView() {
                   <button
                     onClick={handleOrder}
                     disabled={
-                      isSubmitting || cartState.isLoading || hasOnlyPromoItems
+                      isSubmitting ||
+                      cartState.isLoading ||
+                      hasOnlyPromoItems ||
+                      !availabilityReady
                     }
                     className={`py-3 md:py-4 lg:py-5 bg-even-grass text-even-evergreen rounded-full cursor-pointer font-normal h-fit shrink-0 flex items-center justify-center text-base md:text-lg lg:text-xl active:scale-95 transition-transform ${
-                      isSubmitting || cartState.isLoading || hasOnlyPromoItems
+                      isSubmitting ||
+                      cartState.isLoading ||
+                      hasOnlyPromoItems ||
+                      !availabilityReady
                         ? "opacity-50 cursor-not-allowed px-8 md:px-10 lg:px-12"
                         : "px-8 md:px-10 lg:px-12 animate-pulse-button"
                     }`}
@@ -563,6 +636,20 @@ export default function CartView() {
           onConfirm={handleConfirmOrder}
         />
       )}
+      <RestaurantClosedModal
+        isOpen={showClosedModal}
+        onClose={() => setShowClosedModal(false)}
+        openingHours={restaurant?.opening_hours}
+        restaurantName={restaurant?.name}
+        restaurantLogo={restaurant?.logo_url}
+      />
+      <UnavailableItemsModal
+        isOpen={showUnavailableModal}
+        onClose={() => setShowUnavailableModal(false)}
+        items={toUnavailableModalItems(unavailableItems)}
+        showImages={showImages}
+        onRemove={removeUnavailable}
+      />
       <POSBlockedModal
         isOpen={showPOSModal}
         onClose={() => setShowPOSModal(false)}

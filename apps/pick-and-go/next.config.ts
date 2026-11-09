@@ -3,7 +3,13 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+// Prefijo de los archivos estáticos (/_next/...). Vacío por defecto. Se usa
+// cuando el dominio actual enruta (rewrite) a este proyecto, ver
+// docs/plan-despliegue-migracion.md. Ejemplo: ASSET_PREFIX=/_pgv2
+const assetPrefix = process.env.ASSET_PREFIX || undefined;
+
 const nextConfig: NextConfig = {
+  assetPrefix,
   async headers() {
     return [
       {

@@ -34,7 +34,7 @@ Solo Pick & Go tiene uso sostenido. Tap Order & Pay tuvo un pico de un solo día
 | Josefina Cafe | 2 | 180.08 | 2026-11-06 19:12 |
 | Polotab | 2 | 71.62 | 2026-10-27 11:57 |
 
-**Concentración:** Saku By Miyako es el 79 % de las órdenes y el 97 % del consumo de Pick & Go. Dataframe Café y Polotab parecen restaurantes de prueba o demostración (importes muy bajos); es una inferencia, no un dato del portal.
+**Concentración:** Saku By Miyako es el 79 % de las órdenes y el 97 % del consumo de Pick & Go. Dataframe Café y Polotab son restaurantes de **prueba** (confirmado por Arturo el 2026-11-09; no son negocios reales). Sin ellos, Pick & Go tiene 158 órdenes reales en 30 días (Saku 144, Colibrí Café 8, Sainte Marianne 4, Josefina Cafe 2) y Saku es el 91 % de ellas.
 
 ## Tap Order & Pay
 
@@ -148,5 +148,5 @@ Motivos de rechazo: tarjeta inválida (9), "No se puede procesar, intente más t
 | Canceladas / fallidas de órdenes (`pick_and_go_orders.payment_status`) | Falta | Consulta a Supabase |
 | Reembolsos y cobros duplicados | Falta | Cruce de `ecartpay_order_id` repetidos en `payment_transactions` y panel de EcartPay |
 | Estado del agente POS por sucursal (`pos_integrations.agent_last_connected_at`) | Falta | Consulta a Supabase |
-| Si Dataframe Café y Polotab son restaurantes de prueba | Por confirmar con Arturo | n/a |
+| Si Dataframe Café y Polotab son restaurantes de prueba | Resuelto: sí son de prueba (Arturo, 2026-11-09) | n/a |
 | Rama `main` de Supabase en `MIGRATIONS_FAILED` | Por revisar | Panel de Supabase |

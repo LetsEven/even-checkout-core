@@ -273,7 +273,7 @@ export default function AuthSelectionPage() {
                       <button
                         type="button"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="h-[52px] w-[90px] px-3 text-gray-700 font-medium bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer flex items-center justify-between gap-1.5"
+                        className="h-13 w-22.5 px-3 text-gray-700 font-medium bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer flex items-center justify-between gap-1.5"
                         disabled={loading}
                       >
                         <div className="flex items-center gap-1.5">
@@ -330,7 +330,7 @@ export default function AuthSelectionPage() {
                           setPhoneNumber(value);
                           setPhoneNumberDisplay(formatPhoneInput(value));
                         }}
-                        className="h-[52px] w-full pl-10 pr-3 text-gray-700 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen"
+                        className="h-13 w-full pl-10 pr-3 text-gray-700 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen"
                         placeholder={t("phonePlaceholder")}
                         disabled={loading}
                         maxLength={14}

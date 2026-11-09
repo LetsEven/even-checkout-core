@@ -28,6 +28,11 @@ import { usePaymentProvider } from "@/hooks/usePaymentProvider";
 import { useAgentStatus } from "@/hooks/useAgentStatus";
 import { useMsiConfig } from "@/hooks/useMsiConfig";
 import POSBlockedModal from "@/components/POSBlockedModal";
+import RestaurantClosedModal from "@/components/RestaurantClosedModal";
+import UnavailableItemsModal, {
+  toUnavailableModalItems,
+} from "@/components/UnavailableItemsModal";
+import { useCartAvailability } from "@/hooks/useCartAvailability";
 import {
   ensurePaymentIntent,
   clearStoredPaymentIntent,
@@ -80,7 +85,17 @@ export default function CardSelectionPage() {
     clearCart,
     orderNotes,
     updateOrderNotes,
+    updateQuantity,
   } = useCart();
+  const { block: cartBlock, unavailableItems } = useCartAvailability(
+    cartState.items,
+  );
+  const [showClosedModal, setShowClosedModal] = useState(false);
+  const [showUnavailableModal, setShowUnavailableModal] = useState(false);
+  const openCartBlockModal = () => {
+    if (cartBlock === "closed") setShowClosedModal(true);
+    else if (cartBlock === "unavailable") setShowUnavailableModal(true);
+  };
   const { navigateWithRestaurantId, branchNumber } = useNavigation();
   const { paymentMethods, deletePaymentMethod } = usePayment();
   const { user, profile } = useAuth();
@@ -373,6 +388,10 @@ export default function CardSelectionPage() {
     if (isPOSBlocked) {
       setPosModalReason(isTurnoClosed ? "turno_closed" : "agent_disconnected");
       setShowPOSModal(true);
+      return;
+    }
+    if (cartBlock) {
+      openCartBlockModal();
       return;
     }
     if (!selectedPaymentMethodId) {
@@ -788,9 +807,8 @@ export default function CardSelectionPage() {
         // y solo emite "success" si el iframe manda postMessage; la página de
         // recibo de EcartPay no lo manda, así que confirmamos por polling.
         const isOrderPaid = async () => {
-          const status = await paymentService.getEcartOrderStatus(
-            googleOrderId,
-          );
+          const status =
+            await paymentService.getEcartOrderStatus(googleOrderId);
           return !!status && PAID_ECART_STATUSES.includes(status);
         };
         const finishFromOverlay = () => {
@@ -1082,9 +1100,7 @@ export default function CardSelectionPage() {
 
       while (firstAttempt || Date.now() < deadline) {
         firstAttempt = false;
-        const confirmResult = await pickAndGoService.confirmOrder(
-          buildBody(),
-        );
+        const confirmResult = await pickAndGoService.confirmOrder(buildBody());
 
         if (confirmResult.success && confirmResult.data?.order) {
           return { success: true, order: confirmResult.data.order };
@@ -1828,6 +1844,12 @@ export default function CardSelectionPage() {
                       !isPOSBlocked && (
                         <div className="relative w-full h-[48px]">
                           <div id="apple-pay-container" className="w-full" />
+                          {cartBlock && (
+                            <div
+                              className="absolute inset-0 z-10 cursor-pointer"
+                              onClick={openCartBlockModal}
+                            />
+                          )}
                           {!applePayReady && (
                             <div className="absolute inset-0 rounded-full bg-black flex items-center justify-center gap-2">
                               <span
@@ -1855,6 +1877,12 @@ export default function CardSelectionPage() {
                       !isPOSBlocked && (
                         <div className="relative w-full h-[48px]">
                           <div id="google-pay-container" className="w-full" />
+                          {cartBlock && (
+                            <div
+                              className="absolute inset-0 z-10 cursor-pointer"
+                              onClick={openCartBlockModal}
+                            />
+                          )}
                           {!googlePayReady && (
                             <div className="absolute inset-0 rounded-full bg-black flex items-center justify-center gap-2">
                               {/* Google "G" logo */}
@@ -2230,6 +2258,24 @@ export default function CardSelectionPage() {
         reason={posModalReason}
         restaurantName={restaurant?.name}
         restaurantLogo={restaurant?.logo_url}
+      />
+      <RestaurantClosedModal
+        isOpen={showClosedModal}
+        onClose={() => setShowClosedModal(false)}
+        openingHours={restaurant?.opening_hours}
+        restaurantName={restaurant?.name}
+        restaurantLogo={restaurant?.logo_url}
+      />
+      <UnavailableItemsModal
+        isOpen={showUnavailableModal}
+        onClose={() => setShowUnavailableModal(false)}
+        items={toUnavailableModalItems(unavailableItems)}
+        showImages={restaurant?.menu_show_images !== false}
+        onRemove={async () => {
+          for (const item of unavailableItems) {
+            if (item.cartItemId) await updateQuantity(item.cartItemId, 0);
+          }
+        }}
       />
     </>
   );

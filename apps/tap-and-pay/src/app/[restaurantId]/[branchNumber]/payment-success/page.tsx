@@ -615,13 +615,21 @@ export default function PaymentSuccessPage() {
                         >
                           {/* Image */}
                           {showImages && (
-                            <img
-                              src={
-                                dish.images?.[0] || "/logos/logo-short-green.webp"
-                              }
-                              alt={dish.item}
-                              className="size-14 md:size-16 lg:size-20 object-cover rounded-lg md:rounded-xl shrink-0"
-                            />
+                            <div className="size-14 md:size-16 lg:size-20 bg-gray-300 rounded-lg md:rounded-xl shrink-0 flex items-center justify-center overflow-hidden">
+                              {dish.images?.[0] ? (
+                                <img
+                                  src={dish.images[0]}
+                                  alt={dish.item}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <img
+                                  src="/even/even-asterisk-evergreen.svg"
+                                  alt="Logo Even"
+                                  className="size-10 md:size-12 lg:size-14 object-contain"
+                                />
+                              )}
+                            </div>
                           )}
                           <div className="flex-1">
                             <p className="text-white font-medium text-base md:text-lg lg:text-xl">

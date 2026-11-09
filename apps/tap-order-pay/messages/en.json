@@ -440,7 +440,9 @@
     "submittingCta": "Submitting order...",
     "promoBadge": "Promo",
     "freePrice": "Free",
-    "promoOnlyWarning": "Add another product to continue"
+    "promoOnlyWarning": "Add another product to continue",
+    "removeItem": "Remove",
+    "unavailableBadge": "Not available now"
   },
   "Terms": {
     "checkbox": "I have read and accept the <terms>Terms and Conditions</terms> and the <privacy>Privacy Notice</privacy>.",
@@ -448,5 +450,11 @@
     "updateBody": "We updated our Terms and Conditions and Privacy Notice.",
     "updateCta": "Got it",
     "errorSave": "We couldn't save your acceptance. Please try again."
+  },
+  "UnavailableItemsModal": {
+    "title": "Not available now",
+    "subtitle": "{count, plural, one {This item is no longer available at this time.} other {These items are no longer available at this time.}}",
+    "remove": "{count, plural, one {Remove item} other {Remove # items}}",
+    "cancel": "Back"
   }
 }

@@ -80,7 +80,9 @@
     "promoOnlyWarning": "Agrega otro producto para ordenar",
     "orderTimeoutAlert": "No pudimos confirmar tu pedido a tiempo. Por favor verifica el estado de tu pedido antes de intentar de nuevo.",
     "errorUnknown": "Error desconocido",
-    "orderSubmitError": "Error al enviar la orden: {message}. Por favor intenta nuevamente."
+    "orderSubmitError": "Error al enviar la orden: {message}. Por favor intenta nuevamente.",
+    "removeItem": "Quitar",
+    "unavailableBadge": "Fuera de horario"
   },
   "DishPage": {
     "errorLoadingTitle": "Error al cargar",
@@ -555,5 +557,11 @@
     "updateBody": "Actualizamos nuestros Términos y Condiciones y Aviso de Privacidad.",
     "updateCta": "Entendido",
     "errorSave": "No pudimos guardar tu aceptación. Intenta de nuevo."
+  },
+  "UnavailableItemsModal": {
+    "title": "Fuera de horario",
+    "subtitle": "{count, plural, one {Este platillo ya no está disponible a esta hora.} other {Estos platillos ya no están disponibles a esta hora.}}",
+    "remove": "{count, plural, one {Quitar platillo} other {Quitar # platillos}}",
+    "cancel": "Volver"
   }
 }

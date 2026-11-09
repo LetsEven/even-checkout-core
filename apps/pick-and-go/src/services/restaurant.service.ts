@@ -6,6 +6,7 @@ interface RestaurantWithMenu {
   restaurant: Restaurant;
   menu: MenuSection[];
   orderable_from?: string | null;
+  menu_valid_until?: string | null;
 }
 
 export interface ValidationResult {
@@ -21,21 +22,21 @@ export interface ValidationResult {
 class RestaurantService {
   private async request<T>(
     endpoint: string,
-    options?: RequestInit
+    options?: RequestInit,
   ): Promise<ApiResponse<T>> {
     return requestWithAuth<T>(endpoint, options);
   }
   // Obtener información de un restaurante por ID
   async getRestaurantById(restaurantId: number): Promise<Restaurant> {
     const result = await this.request<Restaurant>(
-      `/restaurants/${restaurantId}`
+      `/restaurants/${restaurantId}`,
     );
 
     if (!result.success || !result.data) {
       throw new Error(
         typeof result.error === "string"
           ? result.error
-          : "Failed to fetch restaurant"
+          : "Failed to fetch restaurant",
       );
     }
 
@@ -45,14 +46,14 @@ class RestaurantService {
   // Obtener menú completo de un restaurante
   async getRestaurantMenu(restaurantId: number): Promise<MenuSection[]> {
     const result = await this.request<MenuSection[]>(
-      `/restaurants/${restaurantId}/menu`
+      `/restaurants/${restaurantId}/menu`,
     );
 
     if (!result.success || !result.data) {
       throw new Error(
         typeof result.error === "string"
           ? result.error
-          : "Failed to fetch restaurant menu"
+          : "Failed to fetch restaurant menu",
       );
     }
 
@@ -61,17 +62,17 @@ class RestaurantService {
 
   // Obtener restaurante con su menú completo en una sola petición
   async getRestaurantWithMenu(
-    restaurantId: number
+    restaurantId: number,
   ): Promise<RestaurantWithMenu> {
     const result = await this.request<RestaurantWithMenu>(
-      `/restaurants/${restaurantId}/complete`
+      `/restaurants/${restaurantId}/complete`,
     );
 
     if (!result.success || !result.data) {
       throw new Error(
         typeof result.error === "string"
           ? result.error
-          : "Failed to fetch restaurant data"
+          : "Failed to fetch restaurant data",
       );
     }
 
@@ -81,17 +82,17 @@ class RestaurantService {
   // Obtener restaurante con su menú filtrado por sucursal en una sola petición
   async getRestaurantWithMenuByBranch(
     restaurantId: number,
-    branchNumber: number
+    branchNumber: number,
   ): Promise<RestaurantWithMenu> {
     const result = await this.request<RestaurantWithMenu>(
-      `/restaurants/${restaurantId}/${branchNumber}/complete`
+      `/restaurants/${restaurantId}/${branchNumber}/complete`,
     );
 
     if (!result.success || !result.data) {
       throw new Error(
         typeof result.error === "string"
           ? result.error
-          : "Failed to fetch restaurant data"
+          : "Failed to fetch restaurant data",
       );
     }
 
@@ -106,7 +107,7 @@ class RestaurantService {
       throw new Error(
         typeof result.error === "string"
           ? result.error
-          : "Failed to fetch restaurants"
+          : "Failed to fetch restaurants",
       );
     }
 
@@ -117,7 +118,7 @@ class RestaurantService {
   async validateRestaurantAndBranch(
     restaurantId: number,
     branchNumber: number | null,
-    service?: string
+    service?: string,
   ): Promise<ValidationResult> {
     try {
       // Construir la URL con o sin branchNumber

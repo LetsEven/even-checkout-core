@@ -25,6 +25,9 @@ interface RestaurantContextValue {
   error: string | null;
   isOpen: boolean;
   orderableFrom: string | null;
+  menuValidUntil: string | null;
+  isClosedByHours: boolean;
+  availableItemIds: Set<number>;
   setRestaurantId: (id: number) => void;
   refetchMenu: () => Promise<void>;
 }
@@ -53,6 +56,8 @@ export function RestaurantProvider({ children }: RestaurantProviderProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [orderableFrom, setOrderableFrom] = useState<string | null>(null);
+  const [menuValidUntil, setMenuValidUntil] = useState<string | null>(null);
+  const [, setTick] = useState(0);
 
   // Función para establecer el restaurantId y cargar los datos
   const setRestaurantId = useCallback((id: number) => {
@@ -97,6 +102,7 @@ export function RestaurantProvider({ children }: RestaurantProviderProps) {
         setRestaurant(data.restaurant);
         setMenu(data.menu);
         setOrderableFrom(data.orderable_from ?? null);
+        setMenuValidUntil(data.menu_valid_until ?? null);
       } else {
         //console.log("📡 Fetching restaurant data for ID:", id);
         // Obtener restaurante y menú completo (sin filtrar por sucursal)
@@ -108,6 +114,7 @@ export function RestaurantProvider({ children }: RestaurantProviderProps) {
         setRestaurant(data.restaurant);
         setMenu(data.menu);
         setOrderableFrom(null);
+        setMenuValidUntil(null);
       }
     } catch (err) {
       const errorMessage =
@@ -152,29 +159,30 @@ export function RestaurantProvider({ children }: RestaurantProviderProps) {
     authService.setBranchNumber(selectedBranchNumber);
   }, [selectedBranchNumber]);
 
-  // Check if restaurant is currently open (re-check every minute)
-  const isOpen = useMemo(() => {
-    return isRestaurantOpen(restaurant?.opening_hours) && !orderableFrom;
-  }, [restaurant?.opening_hours, orderableFrom]);
+  // Se recalcula en cada render; el intervalo de abajo fuerza uno por minuto.
+  const isClosedByHours = !isRestaurantOpen(restaurant?.opening_hours);
+  const isOpen = !isClosedByHours && !orderableFrom;
 
-  // Menú de la siguiente ventana: recargar cuando ya se pueda pedir.
+  const availableItemIds = useMemo(
+    () => new Set(menu.flatMap((s) => s.items.map((i) => i.id))),
+    [menu],
+  );
+
+  // Recargar el menú cuando abre o cierra una ventana de horario.
   useEffect(() => {
-    if (!orderableFrom || !restaurantId) return;
-    const ms = new Date(orderableFrom).getTime() - Date.now();
+    if (!menuValidUntil || !restaurantId) return;
+    const ms = new Date(menuValidUntil).getTime() - Date.now();
     const timer = setTimeout(
-      () => fetchRestaurantData(restaurantId, selectedBranchNumber || undefined),
+      () =>
+        fetchRestaurantData(restaurantId, selectedBranchNumber || undefined),
       Math.min(Math.max(ms, 0) + 1000, 2147483647),
     );
     return () => clearTimeout(timer);
-  }, [orderableFrom, restaurantId, selectedBranchNumber]);
+  }, [menuValidUntil, restaurantId, selectedBranchNumber]);
 
   // Re-check restaurant hours every minute
   useEffect(() => {
-    const interval = setInterval(() => {
-      // Force re-render by updating a dummy state
-      setRestaurant((prev) => (prev ? { ...prev } : null));
-    }, 60000); // Check every minute
-
+    const interval = setInterval(() => setTick((n) => n + 1), 60000);
     return () => clearInterval(interval);
   }, []);
 
@@ -186,6 +194,9 @@ export function RestaurantProvider({ children }: RestaurantProviderProps) {
     error,
     isOpen,
     orderableFrom,
+    menuValidUntil,
+    isClosedByHours,
+    availableItemIds,
     setRestaurantId,
     refetchMenu,
   };

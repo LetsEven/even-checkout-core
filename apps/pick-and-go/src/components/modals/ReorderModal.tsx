@@ -8,6 +8,7 @@ import { useCart, CartItem } from "../../context/CartContext";
 import type { MenuItemData } from "../../interfaces/menuItemData";
 import { useNavigation } from "../../hooks/useNavigation";
 import { useRestaurant } from "../../context/RestaurantContext";
+import { useIsOffSchedule } from "../../hooks/useCartAvailability";
 import RestaurantClosedModal from "../RestaurantClosedModal";
 import OutOfStockModal from "../OutOfStockModal";
 import ItemCustomizations from "@/components/ItemCustomizations";
@@ -38,7 +39,8 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
     }
   }, [isOpen]);
 
-  const uniqueItems = useMemo(() => {
+  const isOffSchedule = useIsOffSchedule();
+  const dedupedItems = useMemo(() => {
     const seen = new Set<number>();
     const result: PickAndGoItem[] = [];
     for (const item of items) {
@@ -48,6 +50,10 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
     }
     return result;
   }, [items]);
+  // Platillos fuera de su horario no se ofrecen para reordenar.
+  const uniqueItems = dedupedItems.filter(
+    (x) => !isOffSchedule(x.menu_item_id!),
+  );
 
   const outOfStockIds = useMemo(() => {
     const ids = new Set<number>();

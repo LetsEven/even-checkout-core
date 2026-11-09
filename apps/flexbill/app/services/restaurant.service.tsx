@@ -14,6 +14,7 @@ interface RestaurantWithMenu {
   restaurant: Restaurant;
   menu: MenuSection[];
   orderable_from?: string | null;
+  menu_valid_until?: string | null;
 }
 
 export interface Branch {

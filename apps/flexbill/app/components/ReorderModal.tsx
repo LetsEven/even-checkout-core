@@ -8,6 +8,7 @@ import { useCart, CartItem } from "@/app/context/CartContext";
 import { useTable } from "@/app/context/TableContext";
 import { useAuth } from "@/app/context/AuthContext";
 import { useRestaurant } from "@/app/context/RestaurantContext";
+import { useIsOffSchedule } from "../hooks/useCartAvailability";
 import { useGuest } from "@/app/context/GuestContext";
 import { useTableNavigation } from "@/app/hooks/useTableNavigation";
 import OrderAnimation from "@/app/components/UI/OrderAnimation";
@@ -95,7 +96,8 @@ function ReorderModal({
     onClose();
   };
 
-  const uniqueItems = useMemo(() => {
+  const isOffSchedule = useIsOffSchedule();
+  const dedupedItems = useMemo(() => {
     const seen = new Set<string>();
     const result: { key: string; order: DishOrder }[] = [];
     for (const order of dishOrders) {
@@ -112,6 +114,10 @@ function ReorderModal({
     }
     return result;
   }, [dishOrders]);
+  // Platillos fuera de su horario no se ofrecen para reordenar.
+  const uniqueItems = dedupedItems.filter(
+    (x) => !isOffSchedule(x.order.menu_item_id!),
+  );
 
   const outOfStockIds = useMemo(() => {
     const ids = new Set<number>();
@@ -230,6 +236,10 @@ function ReorderModal({
   );
 
   const handleReorder = () => {
+    if (!restaurantIsOpen) {
+      setShowClosedModal(true);
+      return;
+    }
     const modalItemIds = new Set(
       uniqueItems.map(({ order }) => order.menu_item_id),
     );
@@ -274,7 +284,8 @@ function ReorderModal({
       // Fire-and-forget: quitar los items del carrito es housekeeping, no
       // debe bloquear la confirmación si el pedido ya se creó con éxito.
       Promise.all(orderedItems.map((item) => removeItem(item.id))).catch(
-        (err) => console.error("Error removing reordered items from cart:", err),
+        (err) =>
+          console.error("Error removing reordered items from cart:", err),
       );
       // El pedido ya se confirmó de verdad contra el backend — OrderAnimation
       // esperaba esta señal para avanzar a la pantalla de éxito.
@@ -328,7 +339,7 @@ function ReorderModal({
         itemName={outOfStockItemName}
       />
       <div
-        className="fixed inset-0 bg-black/25 backdrop-blur-xs z-[999] flex items-center justify-center"
+        className="fixed inset-0 bg-black/25 backdrop-blur-xs z-999 flex items-center justify-center"
         onClick={handleClose}
       >
         <div
@@ -336,7 +347,7 @@ function ReorderModal({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <div className="w-full flex justify-end">
               <button
                 onClick={handleClose}
@@ -354,9 +365,7 @@ function ReorderModal({
                   {tc("tableLabel", { table: tableNumber })}
                 </p>
               )}
-              <p className="text-sm text-white mt-0.5">
-                {t("subtitle")}
-              </p>
+              <p className="text-sm text-white mt-0.5">{t("subtitle")}</p>
             </div>
             <div className="border-t border-white/20" />
           </div>
@@ -404,7 +413,7 @@ function ReorderModal({
                     >
                       {/* Checkbox */}
                       <div
-                        className="flex-shrink-0 self-center"
+                        className="shrink-0 self-center"
                         onClick={(e) => {
                           e.stopPropagation();
                           if (isSelected) {
@@ -437,7 +446,7 @@ function ReorderModal({
 
                       {/* Image */}
                       {showImages && (
-                        <div className="flex-shrink-0 relative">
+                        <div className="shrink-0 relative">
                           <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-gray-300">
                             {order.images &&
                             order.images.length > 0 &&
@@ -480,7 +489,9 @@ function ReorderModal({
                           variant="dark"
                           formatPrice={(price) =>
                             price *
-                            (getItemDisplayPrice(order.price + (order.extra_price || 0)) /
+                            (getItemDisplayPrice(
+                              order.price + (order.extra_price || 0),
+                            ) /
                               (order.price + (order.extra_price || 0) || 1))
                           }
                           className="mt-0.5"
@@ -496,7 +507,7 @@ function ReorderModal({
                       {/* Quantity controls — visible cuando qty > 0 */}
                       {isSelected ? (
                         <div
-                          className="flex items-center flex-shrink-0 self-center"
+                          className="flex items-center shrink-0 self-center"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <button
@@ -526,7 +537,7 @@ function ReorderModal({
           </div>
 
           {/* Footer */}
-          <div className="flex-shrink-0 px-6 md:px-8 lg:px-10 py-4 md:py-5 border-t border-white/20">
+          <div className="shrink-0 px-6 md:px-8 lg:px-10 py-4 md:py-5 border-t border-white/20">
             {hasSelection && (
               <p className="text-white/70 text-sm md:text-base text-right mb-3">
                 {t("subtotalLabel")}{" "}

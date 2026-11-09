@@ -34,7 +34,6 @@ import { useAuth } from "@/app/context/AuthContext";
 import { useTableNavigation } from "@/app/hooks/useTableNavigation";
 import { useCart } from "@/app/context/CartContext";
 import { useRestaurant } from "@/app/context/RestaurantContext";
-import { restaurantService } from "@/app/services/restaurant.service";
 import { DEFAULT_IMAGES } from "@/app/constants/images";
 import { useTable } from "@/app/context/TableContext";
 import ReorderModal from "@/app/components/ReorderModal";
@@ -307,23 +306,8 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
   };
   const { state: cartState } = useCart();
   const { state: tableState, loadDishOrders, syncOrderFromPOS } = useTable();
-  const { restaurant, menu, loading, error, restaurantId, branchNumber } =
-    useRestaurant();
+  const { restaurant, menu, loading, error } = useRestaurant();
   const showImages = !!restaurant && restaurant.menu_show_images !== false;
-
-  // TEMP: nombre de sucursal bajo la mesa (revertir)
-  const [branchName, setBranchName] = useState<string | null>(null);
-  useEffect(() => {
-    if (!restaurantId || !branchNumber) return;
-    restaurantService
-      .getRestaurantBranches(restaurantId)
-      .then((branches) =>
-        setBranchName(
-          branches.find((b) => b.branch_number === branchNumber)?.name ?? null,
-        ),
-      )
-      .catch(() => setBranchName(null));
-  }, [restaurantId, branchNumber]);
 
   const handleRefreshOrder = async () => {
     setIsRefreshing(true);
@@ -486,11 +470,6 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
               <h3 className="mt-1 text-black/70 text-xl md:text-2xl lg:text-3xl">
                 {tc("tableLabel", { table: tableNumber ?? "" })}
               </h3>
-              {branchName && (
-                <p className="text-black/50 text-base md:text-lg lg:text-xl">
-                  {branchName}
-                </p>
-              )}
               {Array.isArray(tableState.dishOrders) &&
                 tableState.dishOrders.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2 justify-center">

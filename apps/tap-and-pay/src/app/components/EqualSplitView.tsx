@@ -7,14 +7,12 @@ import { useTranslations } from "next-intl";
 const TIP_OPTIONS = [0, 10, 15, 20];
 const MIN_PEOPLE = 2;
 const MAX_PEOPLE = 50;
-// Con más personas los segmentos del anillo ya no se distinguen.
-const MAX_RING_SEGMENTS = 10;
+// A partir de aquí el anillo se queda en este número de segmentos.
+const MAX_RING_SEGMENTS = 15;
 
 const RADIUS = 86;
 const STROKE = 22;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-const GAP = STROKE + 12;
-const MIN_SLICE = GAP + 20;
 const TWEEN_MS = 320;
 
 // Interpola el número de personas para que el anillo se reparta de forma
@@ -62,32 +60,33 @@ type Props = {
 
 type Segment = { start: number; length: number };
 
-function ringSegments(p: number): { yours: Segment; rest: Segment[] } {
-  if (p > MAX_RING_SEGMENTS) {
-    const slice = Math.max(CIRCUMFERENCE / p, MIN_SLICE);
-    return {
-      yours: { start: 0, length: slice },
-      rest: [{ start: slice, length: CIRCUMFERENCE - slice }],
-    };
-  }
+function ringSegments(p: number): {
+  slice: number;
+  yours: Segment;
+  rest: Segment[];
+} {
   const slice = CIRCUMFERENCE / p;
   const full = Math.floor(p);
   const rest: Segment[] = [];
   for (let i = 1; i < full; i++) rest.push({ start: i * slice, length: slice });
   const partial = CIRCUMFERENCE - full * slice;
   if (partial > 0.01) rest.push({ start: full * slice, length: partial });
-  return { yours: { start: 0, length: slice }, rest };
+  return { slice, yours: { start: 0, length: slice }, rest };
 }
 
 function SplitRing({ people }: { people: number }) {
-  const { yours, rest } = ringSegments(useTweened(people));
+  const { slice, yours, rest } = ringSegments(
+    useTweened(Math.min(people, MAX_RING_SEGMENTS)),
+  );
+  // Separación entre segmentos: se achica con muchos para que sigan visibles.
+  const gapFull = STROKE + Math.min(12, slice * 0.15);
 
-  // Un segmento más chico que MIN_SLICE (el que entra o sale) se dibuja más
-  // delgado en proporción, así crece desde un punto sin encimarse.
+  // El segmento que entra o sale se dibuja más delgado en proporción, así
+  // crece desde un punto sin encimarse.
   const arc = (seg: Segment, color: string, key: string) => {
-    const k = Math.min(1, seg.length / MIN_SLICE);
+    const k = Math.min(1, seg.length / slice);
     if (k <= 0.01) return null;
-    const gap = GAP * k;
+    const gap = gapFull * k;
     const visible = Math.max(seg.length - gap, 0.001);
     return (
       <circle

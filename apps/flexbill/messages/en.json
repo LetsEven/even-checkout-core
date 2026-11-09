@@ -80,7 +80,9 @@
     "promoOnlyWarning": "Add another product to order",
     "orderTimeoutAlert": "We couldn't confirm your order in time. Please check your order status before trying again.",
     "errorUnknown": "Unknown error",
-    "orderSubmitError": "Error submitting the order: {message}. Please try again."
+    "orderSubmitError": "Error submitting the order: {message}. Please try again.",
+    "removeItem": "Remove",
+    "unavailableBadge": "Not available now"
   },
   "DishPage": {
     "errorLoadingTitle": "Error loading",
@@ -555,5 +557,11 @@
     "updateBody": "We updated our Terms and Conditions and Privacy Notice.",
     "updateCta": "Got it",
     "errorSave": "We couldn't save your acceptance. Please try again."
+  },
+  "UnavailableItemsModal": {
+    "title": "Not available now",
+    "subtitle": "{count, plural, one {This item is no longer available at this time.} other {These items are no longer available at this time.}}",
+    "remove": "{count, plural, one {Remove item} other {Remove # items}}",
+    "cancel": "Back"
   }
 }

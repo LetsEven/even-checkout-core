@@ -440,7 +440,9 @@
     "submittingCta": "Enviando pedido...",
     "promoBadge": "Promo",
     "freePrice": "Gratis",
-    "promoOnlyWarning": "Agrega otro producto para continuar"
+    "promoOnlyWarning": "Agrega otro producto para continuar",
+    "removeItem": "Quitar",
+    "unavailableBadge": "Fuera de horario"
   },
   "Terms": {
     "checkbox": "He leído y acepto los <terms>Términos y Condiciones</terms> y el <privacy>Aviso de Privacidad</privacy>.",
@@ -448,5 +450,11 @@
     "updateBody": "Actualizamos nuestros Términos y Condiciones y Aviso de Privacidad.",
     "updateCta": "Entendido",
     "errorSave": "No pudimos guardar tu aceptación. Intenta de nuevo."
+  },
+  "UnavailableItemsModal": {
+    "title": "Fuera de horario",
+    "subtitle": "{count, plural, one {Este platillo ya no está disponible a esta hora.} other {Estos platillos ya no están disponibles a esta hora.}}",
+    "remove": "{count, plural, one {Quitar platillo} other {Quitar # platillos}}",
+    "cancel": "Volver"
   }
 }

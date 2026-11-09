@@ -8,6 +8,7 @@ import { useCart, CartItem } from "../../context/CartContext";
 import type { MenuItemData } from "../../interfaces/menuItemData";
 import { useTableNavigation } from "../../hooks/useTableNavigation";
 import { useRestaurant } from "../../context/RestaurantContext";
+import { useIsOffSchedule } from "../../hooks/useCartAvailability";
 import RestaurantClosedModal from "../RestaurantClosedModal";
 import OutOfStockModal from "../OutOfStockModal";
 import ItemCustomizations from "@/components/ItemCustomizations";
@@ -45,7 +46,8 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
     }
   }, [isOpen]);
 
-  const uniqueItems = useMemo(() => {
+  const isOffSchedule = useIsOffSchedule();
+  const dedupedItems = useMemo(() => {
     const seen = new Set<number>();
     const result: LastOrderDish[] = [];
     for (const item of items) {
@@ -55,6 +57,10 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
     }
     return result;
   }, [items]);
+  // Platillos fuera de su horario no se ofrecen para reordenar.
+  const uniqueItems = dedupedItems.filter(
+    (x) => !isOffSchedule(x.menu_item_id),
+  );
 
   const outOfStockIds = useMemo(() => {
     const ids = new Set<number>();
@@ -207,9 +213,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
               <h2 className="text-lg md:text-xl lg:text-2xl text-white font-semibold leading-snug">
                 {tc("reorderCta")}
               </h2>
-              <p className="text-sm text-white mt-0.5">
-                {t("subtitle")}
-              </p>
+              <p className="text-sm text-white mt-0.5">{t("subtitle")}</p>
             </div>
             <div className="border-t border-white/20" />
           </div>

@@ -15,6 +15,7 @@ import { PaymentProvider } from "@/context/PaymentContext";
 import { PepperProvider } from "@/context/PepperContext";
 import AuthCartSync from "@/components/AuthCartSync";
 import TermsUpdateToast from "@/components/TermsUpdateToast";
+import EnvBadge from "@/components/EnvBadge";
 import Script from "next/script";
 
 const dmMono = DM_Mono({
@@ -71,6 +72,7 @@ export default async function RootLayout({
           src="https://pay.ecart.com/sdk/pay.js"
           strategy="afterInteractive"
         />
+        <EnvBadge />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <TermsUpdateToast />

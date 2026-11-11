@@ -81,6 +81,7 @@ El reparto de la comisión Even (4 %) depende del servicio; ver [docs/comisiones
 
 Cada app es un proyecto de Vercel distinto apuntando a este repo, con **Root Directory** en `apps/<app>`.
 Vercel detecta Turborepo y solo reconstruye la app cuando cambia ella o un paquete que usa.
+Las variables `NEXT_PUBLIC_*` (p. ej. `NEXT_PUBLIC_ENV_BADGE`) se incrustan en el build: tras cambiarlas hay que redesplegar.
 
 ## Migración
 

@@ -9,6 +9,16 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const assetPrefix = process.env.ASSET_PREFIX || undefined;
 
 const nextConfig: NextConfig = {
+  // Apple Pay valida el dominio pidiendo este archivo sin extensión; en public/
+  // vive con .txt, así que se reescribe al estático (sin código en runtime).
+  async rewrites() {
+    return [
+      {
+        source: "/.well-known/apple-developer-merchantid-domain-association",
+        destination: "/.well-known/apple-developer-merchantid-domain-association.txt",
+      },
+    ];
+  },
   assetPrefix,
   async headers() {
     return [

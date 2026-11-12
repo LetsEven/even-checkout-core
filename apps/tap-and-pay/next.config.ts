@@ -4,6 +4,16 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  // Apple Pay valida el dominio pidiendo este archivo sin extensión; en public/
+  // vive con .txt, así que se reescribe al estático (sin código en runtime).
+  async rewrites() {
+    return [
+      {
+        source: "/.well-known/apple-developer-merchantid-domain-association",
+        destination: "/.well-known/apple-developer-merchantid-domain-association.txt",
+      },
+    ];
+  },
   devIndicators: false,
   // Los tests E2E construyen en su propio directorio para no pisar el build normal.
   distDir: process.env.NEXT_DIST_DIR || ".next",

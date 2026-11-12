@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isDefinitiveWalletRejection } from "./wallet";
+import { classifyGooglePayError, isDefinitiveWalletRejection } from "./wallet";
 
 describe("isDefinitiveWalletRejection", () => {
   it.each([
@@ -13,5 +13,14 @@ describe("isDefinitiveWalletRejection", () => {
     [{ code: "network" }, false],
   ])("%j → %s", (result, expected) => {
     expect(isDefinitiveWalletRejection(result)).toBe(expected);
+  });
+});
+
+describe("classifyGooglePayError", () => {
+  it("con el botón listo es un error de intento de pago", () => {
+    expect(classifyGooglePayError(true)).toBe("payment");
+  });
+  it("antes de que el botón esté listo es un error de inicialización", () => {
+    expect(classifyGooglePayError(false)).toBe("init");
   });
 });

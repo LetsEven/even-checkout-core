@@ -7,6 +7,7 @@ import { usePayment } from "@/context/PaymentContext";
 import { useRestaurant } from "@/context/RestaurantContext";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { classifyGooglePayError } from "@even/payments";
 import { useAuth } from "@/context/AuthContext";
 import { authService } from "@/services/auth.service";
 import { useGuest, useIsGuest } from "@/context/GuestContext";
@@ -773,7 +774,14 @@ export default function CardSelectionPage() {
           // estar listo.
           console.error("❌ Google Pay error:", err);
           setIsGooglePayProcessing(false);
-          if (!googlePayReadyRef.current) {
+          stopGooglePay3dsWatch();
+          if (classifyGooglePayError(googlePayReadyRef.current) === "payment") {
+            // Intento real de pago fallido: avisar al usuario (antes quedaba
+            // sin feedback) y dejarlo reintentar o pagar con tarjeta guardada.
+            setCanRetryCharge(true);
+            setErrorTitle(t("googlePayErrorTitle"));
+            setErrorMessage(t("googlePayErrorMessage"));
+          } else {
             setGooglePayUnavailable(true);
           }
         });

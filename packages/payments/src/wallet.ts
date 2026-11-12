@@ -15,3 +15,13 @@ export function isDefinitiveWalletRejection(result: {
   if (status === 408 || status === 429) return false;
   return !!(result.code ?? result.error?.code);
 }
+
+/**
+ * El evento `error` del SDK de Google Pay también dispara durante la
+ * inicialización, antes de que el botón esté listo. Solo un error con el botón
+ * ya listo corresponde a un intento real de pago y debe mostrarse al usuario;
+ * el de inicialización solo oculta el botón.
+ */
+export function classifyGooglePayError(buttonReady: boolean): "init" | "payment" {
+  return buttonReady ? "payment" : "init";
+}

@@ -28,6 +28,7 @@ import {
   clearCachedWalletOrder,
 } from "@/app/utils/walletOrderCache";
 import { useTranslations } from "next-intl";
+import { classifyGooglePayError } from "@even/payments";
 import { calculateCommissions } from "@/app/utils/commissionCalculator";
 
 const POLL_INTERVAL_MS = 3000;
@@ -569,7 +570,14 @@ export default function CardSelectionPage() {
           // ocultamos si el error ocurre antes de que el botón llegara a
           // estar listo.
           setIsGooglePayProcessing(false);
-          if (!googlePayReadyRef.current) {
+          stopGooglePay3dsWatch();
+          if (classifyGooglePayError(googlePayReadyRef.current) === "payment") {
+            // Intento real de pago fallido: avisar al usuario (antes quedaba
+            // sin feedback) y dejarlo reintentar o pagar con tarjeta guardada.
+            setCanRetryCharge(true);
+            setErrorTitle(t("googlePayErrorTitle"));
+            setErrorMessage(t("googlePayErrorMessage"));
+          } else {
             setGooglePayUnavailable(true);
           }
         });

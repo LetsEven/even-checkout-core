@@ -1,7 +1,7 @@
 export const PACKAGE_NAME = "@even/payments";
 export * from "./types";
 export { createPaymentService, type PaymentService } from "./payment-service";
-export { isDefinitiveWalletRejection } from "./wallet";
+export { classifyGooglePayError, isDefinitiveWalletRejection } from "./wallet";
 export {
   PAYMENT_INTENT_STORAGE_KEY,
   computeFingerprint,

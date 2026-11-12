@@ -374,6 +374,8 @@
     "retryTitle": "Try again",
     "retryShortMessage": "We couldn't verify your payment. Try again in a few seconds.",
     "paymentRejectedTitle": "Payment rejected",
+    "googlePayErrorTitle": "We couldn't process Google Pay",
+    "googlePayErrorMessage": "Google Pay couldn't complete the payment. You have not been charged. You can try again or pay with a saved card.",
     "paymentRejectedMessage": "We couldn't process the payment with this card. Try another card.",
     "walletUnavailableMessage": "Apple Pay and Google Pay are not available for this order. Pay with a saved card.",
     "processingError": "Error processing payment",

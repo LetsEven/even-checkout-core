@@ -3,6 +3,7 @@
 import { IVA_FACTOR, IVA_RATE } from "@/app/constants/fiscal";
 import { calculateCommissions } from "@/app/utils/commissionCalculator";
 import { useTranslations } from "next-intl";
+import { classifyGooglePayError } from "@even/payments";
 import { useSearchParams } from "next/navigation";
 import { useTable } from "@/app/context/TableContext";
 import { useTableNavigation } from "@/app/hooks/useTableNavigation";
@@ -1129,7 +1130,14 @@ export default function CardSelectionPage() {
           // estar listo.
           console.error("❌ Google Pay error:", err);
           setIsGooglePayProcessing(false);
-          if (!googlePayReadyRef.current) {
+          stopGooglePay3dsWatch();
+          if (classifyGooglePayError(googlePayReadyRef.current) === "payment") {
+            // Intento real de pago fallido: avisar al usuario (antes quedaba
+            // sin feedback) y dejarlo reintentar o pagar con tarjeta guardada.
+            setCanRetryCharge(true);
+            setErrorTitle(t("googlePayErrorTitle"));
+            setErrorMessage(t("googlePayErrorMessage"));
+          } else {
             setGooglePayUnavailable(true);
           }
         });

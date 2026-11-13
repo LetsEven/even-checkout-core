@@ -208,17 +208,17 @@ export default function CheckoutModal({
         <div className="px-6 py-4">
           {/* Test Card Helper */}
           {process.env.NODE_ENV === "development" && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+            <div className="bg-info-50 border border-info-200 rounded-lg p-3 mb-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-800 font-medium text-sm">
+                  <p className="text-info-800 font-medium text-sm">
                     Development Mode
                   </p>
-                  <p className="text-blue-600 text-xs">Use test card data</p>
+                  <p className="text-info-600 text-xs">Use test card data</p>
                 </div>
                 <button
                   onClick={fillTestCard}
-                  className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+                  className="px-3 py-1 bg-info-600 text-white text-xs rounded hover:bg-info-700 transition-colors"
                 >
                   Fill Test
                 </button>

@@ -64,12 +64,12 @@ function EmptyBill({
         )}
         <div
           className={`relative size-20 md:size-24 rounded-full flex items-center justify-center ${
-            posIssue ? "bg-amber-100" : "bg-even-grass/20"
+            posIssue ? "bg-hue-amber-100" : "bg-even-grass/20"
           }`}
         >
           <Icon
             className={`size-10 md:size-12 ${
-              posIssue ? "text-amber-700" : "text-even-evergreen"
+              posIssue ? "text-hue-amber-700" : "text-even-evergreen"
             }`}
           />
         </div>

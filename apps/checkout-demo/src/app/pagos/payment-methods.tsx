@@ -36,7 +36,7 @@ export function PaymentMethods() {
   }
   if (state.status === "error") {
     return (
-      <p role="alert" className="mt-4 text-red-600">
+      <p role="alert" className="mt-4 text-danger-600">
         {state.message}
       </p>
     );

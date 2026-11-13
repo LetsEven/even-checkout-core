@@ -143,14 +143,14 @@ export default function BranchSelectionModal({
               <p className="text-tone-600 text-base mb-4">
                 {tc("itemsUnavailableIntro")}
               </p>
-              <div className="bg-red-50 rounded-lg p-4 mb-4 max-h-48 overflow-y-auto">
+              <div className="bg-danger-50 rounded-lg p-4 mb-4 max-h-48 overflow-y-auto">
                 <ul className="space-y-2 text-left">
                   {itemsToRemove.map((item) => (
                     <li
                       key={item.cartItemId || item.id}
                       className="flex items-start gap-2 text-sm"
                     >
-                      <X className="size-4 text-red-500 flex-shrink-0 mt-0.5" />
+                      <X className="size-4 text-danger-500 flex-shrink-0 mt-0.5" />
                       <div className="flex-1">
                         <p className="font-medium text-tone-900">{item.name}</p>
                         <p className="text-tone-600 text-xs">

@@ -258,7 +258,7 @@ export default function EqualSplitView({
         )}
 
         {isUnderMinimum && share > 0 && (
-          <p className="text-red-600 text-sm mt-3">
+          <p className="text-danger-600 text-sm mt-3">
             {t("underMinimumWarning")}
           </p>
         )}

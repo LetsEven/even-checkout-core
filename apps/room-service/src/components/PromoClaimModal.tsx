@@ -204,7 +204,7 @@ function PromoActivationCard({
         </div>
       )}
 
-      {error && <p className="text-red-300 text-xs text-center">{error}</p>}
+      {error && <p className="text-danger-300 text-xs text-center">{error}</p>}
 
       <div className="flex items-center justify-center gap-3">
         {hasMultiplePromos && (

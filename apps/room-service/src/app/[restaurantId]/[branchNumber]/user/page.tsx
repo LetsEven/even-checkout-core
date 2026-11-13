@@ -171,7 +171,7 @@ export default function UserPage() {
                   variant="light"
                 />
                 {termsError && (
-                  <p className="mt-3 text-sm text-red-600 text-center">
+                  <p className="mt-3 text-sm text-danger-600 text-center">
                     {termsError}
                   </p>
                 )}

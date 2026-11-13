@@ -124,7 +124,7 @@ export default function UnavailableItemsModal({
           <button
             onClick={handleRemove}
             disabled={removing}
-            className="w-full mt-6 md:mt-8 flex items-center justify-center gap-2 bg-black hover:bg-stone-950 text-white text-base md:text-lg lg:text-xl py-3 md:py-4 rounded-full transition-opacity disabled:opacity-50"
+            className="w-full mt-6 md:mt-8 flex items-center justify-center gap-2 bg-black hover:bg-warm-950 text-white text-base md:text-lg lg:text-xl py-3 md:py-4 rounded-full transition-opacity disabled:opacity-50"
           >
             {removing && <Loader2 className="size-5 animate-spin" />}
             {t("remove", { count: items.length })}

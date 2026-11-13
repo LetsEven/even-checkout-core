@@ -166,7 +166,7 @@ export function CardScanner({
       </div>
 
       {error && (
-        <div role="alert" className="absolute top-24 left-4 right-4 bg-red-500/90 text-white p-4 rounded-lg">
+        <div role="alert" className="absolute top-24 left-4 right-4 bg-danger-500/90 text-white p-4 rounded-lg">
           <p className="text-sm">{error}</p>
         </div>
       )}
@@ -196,7 +196,7 @@ export function CardScanner({
             type="button"
             aria-label="Ingresar manualmente"
             onClick={close}
-            className="text-black py-3 rounded-full transition-colors bg-white hover:bg-stone-100 w-14 h-14 flex items-center justify-center flex-shrink-0 cursor-pointer"
+            className="text-black py-3 rounded-full transition-colors bg-white hover:bg-warm-100 w-14 h-14 flex items-center justify-center flex-shrink-0 cursor-pointer"
           >
             <Keyboard className="size-6 text-black" />
           </button>

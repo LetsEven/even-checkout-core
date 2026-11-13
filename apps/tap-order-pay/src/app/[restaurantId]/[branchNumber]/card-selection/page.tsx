@@ -1545,10 +1545,10 @@ export default function CardSelectionPage() {
 
                 {/* Alerta de mínimo */}
                 {isUnderMinimum && totalAmount > 0 && (
-                  <div className="bg-red-50 px-6 py-3 -mx-8 rounded-lg mb-4">
+                  <div className="bg-danger-50 px-6 py-3 -mx-8 rounded-lg mb-4">
                     <div className="flex justify-center items-center gap-3">
-                      <X className="size-6 text-red-500 shrink-0" />
-                      <p className="text-red-700 font-medium text-base md:text-lg">
+                      <X className="size-6 text-danger-500 shrink-0" />
+                      <p className="text-danger-700 font-medium text-base md:text-lg">
                         {t("minimumPurchaseWarning", {
                           amount: MINIMUM_AMOUNT.toFixed(2),
                         })}
@@ -1666,7 +1666,7 @@ export default function CardSelectionPage() {
                         <button
                           onClick={() => handleDeleteCard(method.id)}
                           disabled={deletingCardId === method.id}
-                          className="pl-2 text-tone-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                          className="pl-2 text-tone-400 hover:text-danger-600 transition-colors disabled:opacity-50 cursor-pointer"
                         >
                           {deletingCardId === method.id ? (
                             <Loader2 className="size-5 animate-spin" />
@@ -2046,9 +2046,9 @@ export default function CardSelectionPage() {
           >
             <div className="p-6 max-w-2xl mx-auto">
               <div className="flex flex-col items-center mb-4">
-                <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                <div className="w-14 h-14 rounded-full bg-danger-100 flex items-center justify-center mb-4">
                   <CircleAlert
-                    className="size-7 text-red-500"
+                    className="size-7 text-danger-500"
                     strokeWidth={2}
                   />
                 </div>

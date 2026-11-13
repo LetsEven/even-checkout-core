@@ -121,9 +121,9 @@ export default function HistoryTab() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "preparing":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+        return "bg-caution-100 text-caution-800 border-caution-300";
       case "ready":
-        return "bg-orange-100 text-orange-800 border-orange-300";
+        return "bg-warning-100 text-warning-800 border-warning-300";
       case "delivered":
         return "bg-positive-100 text-positive-800 border-positive-300";
       default:
@@ -219,7 +219,7 @@ export default function HistoryTab() {
   if (error) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-red-500 text-base md:text-lg lg:text-xl">{error}</p>
+        <p className="text-danger-500 text-base md:text-lg lg:text-xl">{error}</p>
       </div>
     );
   }
@@ -312,14 +312,14 @@ export default function HistoryTab() {
                     <span
                       className={`text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1 md:py-1.5 lg:py-2 rounded-full font-medium truncate ${
                         order.orderType === "tap-order-and-pay"
-                          ? "bg-purple-100 text-purple-700"
+                          ? "bg-hue-purple-100 text-hue-purple-700"
                           : order.orderType === "pick-and-go"
                             ? "bg-positive-100 text-positive-700"
                             : order.orderType === "room-service"
-                              ? "bg-orange-100 text-orange-700"
+                              ? "bg-warning-100 text-warning-700"
                               : order.orderType === "tap-and-pay"
-                                ? "bg-yellow-100 text-yellow-600"
-                                : "bg-blue-100 text-blue-700"
+                                ? "bg-caution-100 text-caution-600"
+                                : "bg-info-100 text-info-700"
                       }`}
                     >
                       {order.orderType === "tap-order-and-pay"
@@ -433,8 +433,8 @@ export default function HistoryTab() {
                   </h3>
                   <div className="space-y-2 md:space-y-3 lg:space-y-4">
                     <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                      <div className="bg-blue-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
-                        <Calendar className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-blue-600" />
+                      <div className="bg-info-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                        <Calendar className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-info-600" />
                       </div>
                       <span className="text-sm md:text-base lg:text-lg">
                         {format.dateTime(
@@ -449,8 +449,8 @@ export default function HistoryTab() {
                     </div>
                     {selectedOrderDetails.orderType === "room-service" ? (
                       <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                        <div className="bg-orange-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
-                          <Utensils className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-orange-600" />
+                        <div className="bg-warning-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                          <Utensils className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-warning-600" />
                         </div>
                         <span className="text-sm md:text-base lg:text-lg">
                           {t("roomNumber", {
@@ -460,8 +460,8 @@ export default function HistoryTab() {
                       </div>
                     ) : selectedOrderDetails.orderType !== "pick-and-go" ? (
                       <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                        <div className="bg-orange-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
-                          <Utensils className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-orange-600" />
+                        <div className="bg-warning-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                          <Utensils className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-warning-600" />
                         </div>
                         <span className="text-sm md:text-base lg:text-lg">
                           {t("tableNumber", {

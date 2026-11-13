@@ -110,9 +110,9 @@ export default function HistoryTab() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "preparing":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+        return "bg-caution-100 text-caution-800 border-caution-300";
       case "ready":
-        return "bg-orange-100 text-orange-800 border-orange-300";
+        return "bg-warning-100 text-warning-800 border-warning-300";
       case "delivered":
         return "bg-positive-100 text-positive-800 border-positive-300";
       default:
@@ -179,7 +179,7 @@ export default function HistoryTab() {
   if (error) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-red-500 text-base md:text-lg lg:text-xl">{error}</p>
+        <p className="text-danger-500 text-base md:text-lg lg:text-xl">{error}</p>
       </div>
     );
   }

@@ -238,9 +238,9 @@ export default function OrderStatus() {
                             };
                             const statusColorMap: Record<string, string> = {
                               preparing:
-                                "bg-yellow-100 text-yellow-800 border-yellow-300",
+                                "bg-caution-100 text-caution-800 border-caution-300",
                               ready:
-                                "bg-blue-100 text-blue-800 border-blue-300",
+                                "bg-info-100 text-info-800 border-info-300",
                               delivered:
                                 "bg-positive-100 text-positive-800 border-positive-300",
                             };
@@ -304,7 +304,7 @@ export default function OrderStatus() {
                                       />
                                       <div className="mt-1 md:mt-1.5 lg:mt-2">
                                         <span
-                                          className={`inline-block px-2 md:px-3 lg:px-4 py-0.5 md:py-1 lg:py-1.5 text-xs md:text-sm lg:text-base font-medium rounded-full border ${statusColorMap[dish.status] || "bg-yellow-100 text-yellow-800 border-yellow-300"}`}
+                                          className={`inline-block px-2 md:px-3 lg:px-4 py-0.5 md:py-1 lg:py-1.5 text-xs md:text-sm lg:text-base font-medium rounded-full border ${statusColorMap[dish.status] || "bg-caution-100 text-caution-800 border-caution-300"}`}
                                         >
                                           {statusMap[dish.status] ||
                                             dish.status}

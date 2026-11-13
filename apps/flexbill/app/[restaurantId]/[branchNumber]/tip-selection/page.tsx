@@ -710,7 +710,7 @@ export default function TipSelectionPage() {
                               customPaymentAmount &&
                               parseFloat(customPaymentAmount) >
                                 displayUnpaidAmount
-                                ? "border-red-500 bg-red-50"
+                                ? "border-danger-500 bg-danger-50"
                                 : "border-tone-300 focus:border-even-grass"
                             }`}
                           />
@@ -724,7 +724,7 @@ export default function TipSelectionPage() {
                       {customPaymentAmount &&
                         parseFloat(customPaymentAmount) >
                           displayUnpaidAmount && (
-                          <p className="text-sm text-red-600 mt-1">
+                          <p className="text-sm text-danger-600 mt-1">
                             {t("minimumPurchaseWarning", {
                               amount: displayUnpaidAmount.toFixed(2),
                             })}
@@ -993,10 +993,10 @@ export default function TipSelectionPage() {
                 {isUnderMinimum &&
                   baseAmount > 0 &&
                   paymentType !== "select-items" && (
-                    <div className="bg-linear-to-br from-red-50 to-red-100 px-4 py-2">
+                    <div className="bg-linear-to-br from-danger-50 to-danger-100 px-4 py-2">
                       <div className="flex items-center gap-3 px-8 md:px-10 lg:px-12">
-                        <X className="size-6 text-red-500 shrink-0" />
-                        <p className="text-red-700 font-medium text-base md:text-lg">
+                        <X className="size-6 text-danger-500 shrink-0" />
+                        <p className="text-danger-700 font-medium text-base md:text-lg">
                           {t("underMinimumWarning")}
                         </p>
                       </div>
@@ -1109,7 +1109,7 @@ export default function TipSelectionPage() {
                     </span>
                   </div>
                   {selectItemsExceedsRemaining && (
-                    <p className="text-sm text-red-600 mt-1">
+                    <p className="text-sm text-danger-600 mt-1">
                       {t("selectedItemsExceedMessage", {
                         selected: displaySelectedItemsAmount.toFixed(2),
                         remaining: displayUnpaidAmount.toFixed(2),
@@ -1198,10 +1198,10 @@ export default function TipSelectionPage() {
 
               {/* Alerta de mínimo de compra - select-items */}
               {isUnderMinimum && baseAmount > 0 && (
-                <div className="bg-linear-to-br from-red-50 to-red-100 px-4 py-2">
+                <div className="bg-linear-to-br from-danger-50 to-danger-100 px-4 py-2">
                   <div className="flex items-center gap-3 px-8 md:px-10 lg:px-12">
-                    <X className="size-6 text-red-500 shrink-0" />
-                    <p className="text-red-700 font-medium text-base md:text-lg">
+                    <X className="size-6 text-danger-500 shrink-0" />
+                    <p className="text-danger-700 font-medium text-base md:text-lg">
                       {t("underMinimumWarning")}
                     </p>
                   </div>

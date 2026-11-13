@@ -169,7 +169,7 @@ export default function CardScanner({
       {error && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-20">
           <div className="text-center px-6 max-w-md">
-            <div className="bg-red-500/90 text-white p-6 rounded-lg">
+            <div className="bg-danger-500/90 text-white p-6 rounded-lg">
               <p className="text-sm mb-4">{error}</p>
               <div className="flex gap-2 justify-center">
                 <button

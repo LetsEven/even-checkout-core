@@ -456,7 +456,7 @@ export default function InvoiceModal({
                 />
               </Field>
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && <p className="text-danger-500 text-sm">{error}</p>}
             </div>
           )}
 
@@ -477,7 +477,7 @@ export default function InvoiceModal({
                   {t("openPreview")}
                 </a>
               )}
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && <p className="text-danger-500 text-sm">{error}</p>}
             </div>
           )}
 
@@ -533,7 +533,7 @@ export default function InvoiceModal({
                 </div>
               </div>
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && <p className="text-danger-500 text-sm">{error}</p>}
             </div>
           )}
         </div>

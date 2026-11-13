@@ -32,3 +32,34 @@ export {
 } from "./components/terms-checkbox";
 export { TermsUpdateToast, type TermsUpdateToastProps } from "./components/terms-update-toast";
 export { Spinner, type SpinnerProps } from "./components/spinner";
+export {
+  DAY_KEYS,
+  DETAIL_ANIMATION_MS,
+  RestaurantDetailSheet,
+  type DayKey,
+  type RestaurantDetailLabels,
+  type RestaurantDetailSheetProps,
+  type RestaurantHours,
+} from "./components/menu/restaurant-detail-sheet";
+export {
+  INTRO_FLY_MS,
+  INTRO_SHOW_MS,
+  RestaurantIntro,
+  useRestaurantIntro,
+  type IntroPhase,
+  type RestaurantIntroLabels,
+  type RestaurantIntroProps,
+  type UseRestaurantIntroOptions,
+} from "./components/menu/restaurant-intro";
+export {
+  MenuActionsPill,
+  MenuHamburger,
+  PillButton,
+  PillCartButton,
+  PillPepperButton,
+  UserAvatar,
+  type MenuActionsPillProps,
+  type MenuHamburgerProps,
+  type PillButtonProps,
+  type UserAvatarProps,
+} from "./components/menu/menu-actions-pill";

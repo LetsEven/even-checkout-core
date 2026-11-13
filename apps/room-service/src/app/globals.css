@@ -7,28 +7,6 @@
 }
 
 /* Toast fade in/out animation */
-@keyframes fade-in-out {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  10% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  90% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-}
-
-.animate-fade-in-out {
-  animation: fade-in-out 3s ease-in-out forwards;
-}
 
 /* Fly to cart animation */
 .flying-to-cart {
@@ -54,28 +32,6 @@
   animation: shake-cart 0.3s ease forwards;
 }
 
-@keyframes bounce-in {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-8px) scale(1.05);
-  }
-  75% {
-    transform: translateY(4px) scale(0.98);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.5s ease-out forwards;
-}
-
 /* OrderAnimation styles */
 @keyframes expand-circle {
   0% {
@@ -84,15 +40,6 @@
   }
   100% {
     transform: scale(35);
-    opacity: 1;
-  }
-}
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
     opacity: 1;
   }
 }
@@ -149,10 +96,6 @@
   animation: expand-green-from-logo 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-in;
-}
-
 .animate-simple-fade-in {
   animation: simple-fade-in 0.4s ease-in forwards;
 }
@@ -175,17 +118,6 @@
 }
 
 /* Payment success animations */
-@keyframes slide-up {
-  0% {
-    opacity: 0;
-    transform: translateY(100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes logo-fade-in {
   0% {
     opacity: 0;
@@ -195,10 +127,6 @@
     opacity: 1;
     transform: scale(1);
   }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-logo-fade-in {
@@ -349,22 +277,6 @@
   }
 }
 
-@keyframes pulse-button {
-  0% {
-    box-shadow: 0 0 0 0 rgba(130, 230, 87, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(130, 230, 87, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(130, 230, 87, 0);
-  }
-}
-
-.animate-pulse-button {
-  animation: pulse-button 1.5s ease-out infinite;
-}
-
 /* Loader — giro del asterisco Even en pasos (recurso de marca del landing) */
 @keyframes asterisk-spin-steps {
   to {
@@ -417,10 +329,6 @@
 .min-h-new {
   overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
-}
-
-.animate-pulse-button {
-  animation: pulse-button 1.5s ease-out infinite;
 }
 
 @keyframes pulse-button-pink {

@@ -631,10 +631,10 @@ export default function MenuView() {
           src={restaurant.banner_url}
           alt=""
           fetchPriority="high"
-          className="absolute top-0 left-0 w-full h-[230px] md:h-96 lg:h-[28rem] object-cover banner-mobile z-0"
+          className="absolute -top-10 md:top-0 left-0 w-full h-(--menu-banner-h) object-cover banner-mobile z-0"
         />
       ) : (
-        <div className="absolute top-0 left-0 w-full h-[230px] md:h-96 lg:h-[28rem] bg-even-evergreen banner-mobile z-0" />
+        <div className="absolute top-0 left-0 w-full h-(--menu-banner-h) bg-even-evergreen banner-mobile z-0" />
       )}
 
       {/* Degradado para legibilidad del texto sobre el banner */}
@@ -668,7 +668,18 @@ export default function MenuView() {
                 />
               )}
             </button>
-            <h1 className="text-white text-xl md:text-3xl lg:text-4xl font-medium truncate drop-shadow">
+            {/* Con la intro activa (y durante el vuelo del logo) el texto queda
+                invisible pero ocupando su espacio; aparece al aterrizar el logo.
+                Sin intro no cambia de estado, así que no anima. */}
+            <h1
+              className="reduce-motion-fade text-white text-xl md:text-3xl lg:text-4xl font-medium truncate drop-shadow"
+              style={{
+                opacity: introActive ? 0 : 1,
+                transform: introActive ? "translateX(-0.75rem)" : "none",
+                transition:
+                  "opacity 300ms ease, transform 300ms cubic-bezier(0.32, 0.72, 0, 1)",
+              }}
+            >
               {t("welcome", {
                 gender: profile?.gender === "female" ? "female" : "other",
                 name: profile?.firstName ? ` ${profile.firstName}` : "",
@@ -679,7 +690,7 @@ export default function MenuView() {
       </div>
 
       <main
-        className="mt-[4.5rem] md:mt-64 lg:mt-80 relative z-10"
+        className="mt-(--menu-card-gap) relative z-10"
         inert={showDetail || introActive}
         aria-hidden={showDetail || introActive}
       >

@@ -17,7 +17,7 @@ export default function MenuHeader({ profileButton }: MenuHeaderProps) {
   const { navigateWithRestaurantId } = useNavigation();
 
   return (
-    <header className="sticky top-0 container mx-auto px-5 md:px-8 lg:px-10 pt-5 md:pt-7 lg:pt-9 z-5">
+    <header className="relative container mx-auto px-5 md:px-8 lg:px-10 pt-5 md:pt-7 lg:pt-9 z-5">
       <div className="flex items-center justify-end z-10">
         <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4 z-10">
           {profileButton}

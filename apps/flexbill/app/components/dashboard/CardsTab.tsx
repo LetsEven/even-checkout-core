@@ -146,7 +146,7 @@ export default function CardsTab() {
                         <button
                           onClick={() => setConfirmDeleteId(method.id)}
                           disabled={deletingCardId === method.id}
-                          className="p-2 md:p-2.5 lg:p-3 text-tone-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                          className="p-2 md:p-2.5 lg:p-3 text-tone-400 hover:text-danger-600 transition-colors disabled:opacity-50 cursor-pointer"
                           title={tc("deleteCardTitle")}
                         >
                           {deletingCardId === method.id ? (
@@ -207,7 +207,7 @@ export default function CardsTab() {
                 </button>
                 <button
                   onClick={() => handleDeleteCard(confirmDeleteId)}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
+                  className="flex-1 bg-danger-600 hover:bg-danger-700 text-white py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
                 >
                   {t("deleteCta")}
                 </button>
@@ -236,7 +236,7 @@ export default function CardsTab() {
                 <X className="size-5 md:size-6 lg:size-7" />
               </button>
               <div className="flex items-center gap-3 mb-4 md:mb-5">
-                <CircleAlert className="size-6 md:size-7 text-red-500 flex-shrink-0" />
+                <CircleAlert className="size-6 md:size-7 text-danger-500 flex-shrink-0" />
                 <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-tone-800">
                   {tc("errorTitle")}
                 </h3>

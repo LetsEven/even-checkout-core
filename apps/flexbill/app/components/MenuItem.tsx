@@ -265,12 +265,12 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
                     {adaptedItem.description}
                   </p>
                   {effectiveDiscount > 0 && (
-                    <span className="shrink-0 bg-red-600 text-white text-[11px] md:text-xs font-bold px-2 py-0.5 tracking-wide">
+                    <span className="shrink-0 bg-danger-600 text-white text-[11px] md:text-xs font-bold px-2 py-0.5 tracking-wide">
                       {effectiveDiscount}% OFF
                     </span>
                   )}
                   {isOutOfStock && (
-                    <span className="shrink-0 bg-red-600 text-white text-[11px] md:text-xs font-bold px-2 py-0.5 tracking-wide">
+                    <span className="shrink-0 bg-danger-600 text-white text-[11px] md:text-xs font-bold px-2 py-0.5 tracking-wide">
                       {tc("outOfStockBadge")}
                     </span>
                   )}
@@ -343,14 +343,14 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
             </div>
             {effectiveDiscount > 0 && (
               <div className="absolute top-0 left-0 rounded-tl-xl md:rounded-tl-2xl overflow-hidden">
-                <span className="block bg-red-600 text-white text-[11px] md:text-xs font-bold px-2 pt-1 pb-0.5 tracking-wide">
+                <span className="block bg-danger-600 text-white text-[11px] md:text-xs font-bold px-2 pt-1 pb-0.5 tracking-wide">
                   {effectiveDiscount}% OFF
                 </span>
               </div>
             )}
             {isOutOfStock && (
               <div className="absolute bottom-0 right-0 rounded-br-xl md:rounded-br-2xl overflow-hidden">
-                <span className="block bg-red-600 text-white text-[12px] md:text-xs font-bold px-2 py-0.5 tracking-wide">
+                <span className="block bg-danger-600 text-white text-[12px] md:text-xs font-bold px-2 py-0.5 tracking-wide">
                   {tc("outOfStockBadge")}
                 </span>
               </div>

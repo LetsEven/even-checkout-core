@@ -354,10 +354,10 @@ export default function OrderConfirmPage() {
 
             {/* Alerta mínimo */}
             {isUnderMinimum && totalAmount > 0 && (
-              <div className="bg-red-50 px-6 py-3 -mx-8 rounded-lg">
+              <div className="bg-danger-50 px-6 py-3 -mx-8 rounded-lg">
                 <div className="flex justify-center items-center gap-3">
-                  <X className="size-6 text-red-500 flex-shrink-0" />
-                  <p className="text-red-700 font-medium text-base md:text-lg">
+                  <X className="size-6 text-danger-500 flex-shrink-0" />
+                  <p className="text-danger-700 font-medium text-base md:text-lg">
                     {t("minimumAmountWarning", {
                       amount: MINIMUM_AMOUNT.toFixed(2),
                     })}
@@ -428,14 +428,14 @@ export default function OrderConfirmPage() {
                       <p className="text-tone-600 text-base mb-4">
                         {tc("itemsUnavailableIntro")}
                       </p>
-                      <div className="bg-red-50 rounded-lg p-4 mb-4 max-h-48 overflow-y-auto">
+                      <div className="bg-danger-50 rounded-lg p-4 mb-4 max-h-48 overflow-y-auto">
                         <ul className="space-y-2 text-left">
                           {itemsToRemove.map((item) => (
                             <li
                               key={item.cartItemId || item.id}
                               className="flex items-start gap-2 text-sm"
                             >
-                              <X className="size-4 text-red-500 flex-shrink-0 mt-0.5" />
+                              <X className="size-4 text-danger-500 flex-shrink-0 mt-0.5" />
                               <div className="flex-1">
                                 <p className="font-medium text-tone-900">
                                   {item.name}
@@ -530,9 +530,9 @@ export default function OrderConfirmPage() {
             >
               <div className="p-6 max-w-2xl mx-auto">
                 <div className="flex flex-col items-center mb-4">
-                  <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 rounded-full bg-danger-100 flex items-center justify-center mb-4">
                     <CircleAlert
-                      className="size-7 text-red-500"
+                      className="size-7 text-danger-500"
                       strokeWidth={2}
                     />
                   </div>

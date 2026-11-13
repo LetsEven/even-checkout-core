@@ -390,9 +390,9 @@ export default function PaymentSuccessPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "preparing":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+        return "bg-caution-100 text-caution-800 border-caution-300";
       case "ready":
-        return "bg-orange-100 text-orange-800 border-orange-300";
+        return "bg-warning-100 text-warning-800 border-warning-300";
       case "delivered":
         return "bg-positive-100 text-positive-800 border-positive-300";
       default:
@@ -518,7 +518,7 @@ export default function PaymentSuccessPage() {
               {/* Ticket btn */}
               <button
                 onClick={() => setIsTicketModalOpen(true)}
-                className="text-base md:text-lg lg:text-xl w-full flex items-center justify-center gap-2 md:gap-3 lg:gap-4 text-black border border-black py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-all active:scale-90 bg-white hover:bg-stone-100"
+                className="text-base md:text-lg lg:text-xl w-full flex items-center justify-center gap-2 md:gap-3 lg:gap-4 text-black border border-black py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-all active:scale-90 bg-white hover:bg-warm-100"
               >
                 <Receipt
                   className="size-5 md:size-6 lg:size-7"
@@ -530,7 +530,7 @@ export default function PaymentSuccessPage() {
               {/* Status btn - Regresa a order-view */}
               <button
                 onClick={handleViewStatus}
-                className="text-base md:text-lg lg:text-xl w-full flex items-center justify-center gap-2 md:gap-3 lg:gap-4 text-black border border-black py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-all active:scale-90 bg-white hover:bg-stone-100"
+                className="text-base md:text-lg lg:text-xl w-full flex items-center justify-center gap-2 md:gap-3 lg:gap-4 text-black border border-black py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-all active:scale-90 bg-white hover:bg-warm-100"
               >
                 <Utensils
                   className="size-5 md:size-6 lg:size-7"
@@ -601,8 +601,8 @@ export default function PaymentSuccessPage() {
                 <div className="space-y-2 md:space-y-3 lg:space-y-4">
                   {paymentDetails?.userName && (
                     <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                      <div className="bg-orange-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
-                        <Utensils className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-orange-600" />
+                      <div className="bg-warning-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                        <Utensils className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-warning-600" />
                       </div>
                       <span className="text-sm md:text-base lg:text-lg">
                         {paymentDetails.userName}
@@ -610,8 +610,8 @@ export default function PaymentSuccessPage() {
                     </div>
                   )}
                   <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                    <div className="bg-blue-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
-                      <Calendar className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-blue-600" />
+                    <div className="bg-info-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                      <Calendar className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-info-600" />
                     </div>
                     <span className="text-sm md:text-base lg:text-lg">
                       {format.dateTime(orderCreatedAt || new Date(), {
@@ -828,7 +828,7 @@ export default function PaymentSuccessPage() {
                 </div>
               ) : orderError ? (
                 <div className="text-center py-8 md:py-10 lg:py-12">
-                  <p className="text-red-300 text-base md:text-lg lg:text-xl">
+                  <p className="text-danger-300 text-base md:text-lg lg:text-xl">
                     {orderError}
                   </p>
                 </div>

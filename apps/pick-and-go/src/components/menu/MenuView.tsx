@@ -100,13 +100,13 @@ function UserAvatar({
   }
   if (isAuthenticated && profile?.firstName) {
     return (
-      <span className={`text-stone-800 font-semibold select-none ${textSize}`}>
+      <span className={`text-warm-800 font-semibold select-none ${textSize}`}>
         {profile.firstName.charAt(0).toUpperCase()}
       </span>
     );
   }
   return (
-    <UserCircle className={`text-stone-500 ${iconSize}`} strokeWidth={1.2} />
+    <UserCircle className={`text-warm-500 ${iconSize}`} strokeWidth={1.2} />
   );
 }
 
@@ -1040,7 +1040,7 @@ export default function MenuView() {
               className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
             >
               <ShoppingCart
-                className="size-5 md:size-6 text-stone-700"
+                className="size-5 md:size-6 text-warm-700"
                 strokeWidth={1.5}
               />
             </button>

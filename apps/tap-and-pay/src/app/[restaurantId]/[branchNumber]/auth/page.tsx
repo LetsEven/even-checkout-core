@@ -404,7 +404,7 @@ export default function AuthPage() {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 p-3 bg-red-500/20 border border-red-500 rounded-lg text-white text-sm">
+          <div className="mb-4 p-3 bg-danger-500/20 border border-danger-500 rounded-lg text-white text-sm">
             {error}
           </div>
         )}
@@ -493,7 +493,7 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading || !phoneNumber || phoneNumber.length < 8}
-              className="w-full bg-black hover:bg-stone-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-black hover:bg-warm-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? t("sending") : t("sendCode")}
             </button>
@@ -520,7 +520,7 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading || sendingCode || otp.length !== 6}
-              className="w-full bg-black hover:bg-stone-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-black hover:bg-warm-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {sendingCode
                   ? t("sending")
@@ -623,7 +623,7 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading || !firstName || age === "" || !acceptedTerms}
-              className="w-full bg-black hover:bg-stone-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+              className="w-full bg-black hover:bg-warm-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
               {loading ? t("saving") : t("continueCta")}
             </button>

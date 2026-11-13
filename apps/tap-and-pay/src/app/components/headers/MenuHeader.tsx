@@ -131,16 +131,16 @@ export default function MenuHeader({
   // Generar color según el nombre
   const getAvatarColor = (name: string) => {
     const colors = [
-      "bg-blue-500",
+      "bg-info-500",
       "bg-positive-500",
-      "bg-purple-500",
-      "bg-pink-500",
-      "bg-indigo-500",
-      "bg-red-500",
-      "bg-yellow-500",
-      "bg-teal-500",
-      "bg-orange-500",
-      "bg-cyan-500",
+      "bg-hue-purple-500",
+      "bg-hue-pink-500",
+      "bg-hue-indigo-500",
+      "bg-danger-500",
+      "bg-caution-500",
+      "bg-hue-teal-500",
+      "bg-warning-500",
+      "bg-hue-cyan-500",
     ];
     let hash = 0;
     for (let i = 0; i < name.length; i++) {

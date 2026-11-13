@@ -9,13 +9,29 @@ import {
   useRef,
   useLayoutEffect,
   useTransition,
+  useCallback,
   useDeferredValue,
   forwardRef,
   useImperativeHandle,
 } from "react";
 import { useTranslations } from "next-intl";
-import { setMenuCategory, takeMenuPosition } from "@/app/utils/menuScrollMemory";
+import {
+  setMenuCategory,
+  takeMenuPosition,
+} from "@/app/utils/menuScrollMemory";
 import MenuHeader from "@/app/components/headers/MenuHeader";
+import RestaurantDetailCard, {
+  DETAIL_ANIMATION_MS,
+} from "@/app/components/RestaurantDetailCard";
+import RestaurantIntro from "@/app/components/RestaurantIntro";
+import {
+  MenuActionsPill,
+  PillButton,
+  PillCartButton,
+  PillPepperButton,
+  UserAvatar as SharedUserAvatar,
+  useRestaurantIntro,
+} from "@even/ui";
 import MenuCategory from "@/app/components/MenuCategory";
 import PepperIcon from "@/app/components/UI/PepperIcon";
 import ErrorScreen from "@/app/components/ErrorScreen";
@@ -23,7 +39,6 @@ import Loader from "@/app/components/UI/Loader";
 import {
   Search,
   ShoppingCart,
-  UserCircle,
   ReceiptText,
   RefreshCw,
   X,
@@ -99,32 +114,9 @@ interface UserAvatarProps {
   textSize?: string;
 }
 
-function UserAvatar({
-  isAuthenticated,
-  profile,
-  iconSize = "size-6 md:size-7 lg:size-8",
-  textSize = "text-base md:text-lg lg:text-xl",
-}: UserAvatarProps) {
+function UserAvatar(props: UserAvatarProps) {
   const t = useTranslations("MenuView");
-  if (isAuthenticated && profile?.photoUrl) {
-    return (
-      <img
-        src={profile.photoUrl}
-        alt={t("profileAlt")}
-        className="w-full h-full object-cover"
-      />
-    );
-  }
-  if (isAuthenticated && profile?.firstName) {
-    return (
-      <span className={`text-warm-800 font-semibold select-none ${textSize}`}>
-        {profile.firstName.charAt(0).toUpperCase()}
-      </span>
-    );
-  }
-  return (
-    <UserCircle className={`text-warm-500 ${iconSize}`} strokeWidth={1.2} />
-  );
+  return <SharedUserAvatar {...props} alt={t("profileAlt")} />;
 }
 
 interface MenuViewProps {
@@ -142,6 +134,7 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
 ) {
   const t = useTranslations("MenuView");
   const tc = useTranslations("Common");
+  const tr = useTranslations("RestaurantDetail");
   const statusLabels = {
     pending: tc("statusPending"),
     preparing: tc("statusPreparing"),
@@ -217,19 +210,60 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
   const [isRefreshing, setIsRefreshing] = useState(false);
   const stickyTriggerRef = useRef<HTMLDivElement>(null);
 
+  // Detalle del restaurante (se intercambia con la tarjeta del menú)
+  const [showDetail, setShowDetail] = useState(false);
+  const logoButtonRef = useRef<HTMLButtonElement>(null);
+  const closeDetail = useCallback(() => {
+    setShowDetail(false);
+    setTimeout(
+      () => logoButtonRef.current?.focus({ preventScroll: true }),
+      DETAIL_ANIMATION_MS,
+    );
+  }, []);
+
+  // Pantalla de bienvenida (hook compartido de @even/ui)
+  const {
+    phase: introPhase,
+    active: introActive,
+    logoTransform: introLogoTransform,
+    logoRef: introLogoRef,
+    skip: startIntroFly,
+  } = useRestaurantIntro({ storageKey: menuKey, logoTargetRef: logoButtonRef });
+
+  // La píldora (perfil, carrito, orden, Pepper) se ve si el usuario la abrió con
+  // la hamburguesa o si aparece por scroll.
+  const [menuOpenByUser, setMenuOpenByUser] = useState(false);
+  const pillVisible =
+    (menuOpenByUser || showStickyBar) && !showDetail && !introActive;
+  // Al volver arriba la píldora se cierra sola
+  const prevStickyRef = useRef(false);
+  useEffect(() => {
+    if (prevStickyRef.current && !showStickyBar) setMenuOpenByUser(false);
+    prevStickyRef.current = showStickyBar;
+  }, [showStickyBar]);
+
   useEffect(() => {
     if (
       showPepperChat ||
       showSettingsModal ||
       showReorderModal ||
-      isStatusModalOpen
+      isStatusModalOpen ||
+      showDetail ||
+      introActive
     ) {
       lockScroll();
     } else {
       unlockScroll();
     }
     return unlockScroll;
-  }, [showPepperChat, showSettingsModal, showReorderModal, isStatusModalOpen]);
+  }, [
+    showPepperChat,
+    showSettingsModal,
+    showReorderModal,
+    isStatusModalOpen,
+    showDetail,
+    introActive,
+  ]);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -258,7 +292,9 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
   // "#ffffff", así que ese es el valor correcto al que hay que volver.
   useEffect(() => {
     const modalOpen = showPepperChat || showSettingsModal;
-    document.body.style.backgroundColor = modalOpen ? "var(--color-overscroll)" : "var(--color-background)";
+    document.body.style.backgroundColor = modalOpen
+      ? "var(--color-overscroll)"
+      : "var(--color-background)";
     return () => {
       document.body.style.backgroundColor = "var(--color-background)";
     };
@@ -282,6 +318,7 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
 
   // El back gesto/botón del dispositivo cierra estos modales en vez de
   // salir de la página (misma animación que cerrar con la X/backdrop).
+  useModalBackClose(showDetail, () => closeDetail());
   useModalBackClose(showPepperChat, () => closePepperChat());
   useModalBackClose(showSettingsModal, () => closeSettingsModal());
 
@@ -419,14 +456,62 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
         src={restaurant.banner_url || DEFAULT_IMAGES.RESTAURANT_BANNER}
         alt=""
         fetchPriority="high"
-        className="absolute top-0 left-0 w-full h-[230px] md:h-96 lg:h-[28rem] object-cover banner-mobile z-0"
+        className="absolute -top-10 md:top-0 left-0 w-full h-(--menu-banner-h) object-cover banner-mobile z-0"
       />
 
-      <MenuHeader restaurant={restaurant} tableNumber={tableNumber} />
+      {/* Degradado para legibilidad del texto sobre el banner */}
+      <div className="absolute top-0 left-0 w-full h-28 md:h-40 bg-linear-to-b from-black/55 to-transparent z-0 pointer-events-none" />
+
+      <MenuHeader
+        restaurant={restaurant}
+        menuOpen={menuOpenByUser}
+        onToggleMenu={() => setMenuOpenByUser((open) => !open)}
+      />
+
+      {/* Logo + bienvenida sobre el banner (no sticky) */}
+      <div className="absolute top-0 inset-x-0 z-6 pointer-events-none">
+        <div className="container mx-auto px-5 md:px-8 lg:px-10 pt-5 md:pt-7 lg:pt-9">
+          <div className="flex items-center gap-2 md:gap-3 h-10 md:h-12 lg:h-14 pr-24 md:pr-32 lg:pr-40">
+            <button
+              ref={logoButtonRef}
+              type="button"
+              onClick={() => (showDetail ? closeDetail() : setShowDetail(true))}
+              aria-haspopup="dialog"
+              aria-expanded={showDetail}
+              aria-label={tr("openDetail")}
+              style={{ opacity: introActive ? 0 : 1 }}
+              className="pointer-events-auto size-10 md:size-12 lg:size-14 shrink-0 rounded-full bg-even-evergreen overflow-hidden border border-white/70 shadow-sm active:scale-95 transition-transform"
+            >
+              <img
+                src={restaurant.logo_url || DEFAULT_IMAGES.RESTAURANT_LOGO}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </button>
+            {/* Con la intro activa (y durante el vuelo del logo) el texto queda
+                invisible pero ocupando su espacio; aparece al aterrizar el logo. */}
+            <h1
+              className="reduce-motion-fade text-white text-xl md:text-3xl lg:text-4xl font-medium truncate drop-shadow"
+              style={{
+                opacity: introActive ? 0 : 1,
+                transform: introActive ? "translateX(-0.75rem)" : "none",
+                transition:
+                  "opacity 300ms ease, transform 300ms cubic-bezier(0.32, 0.72, 0, 1)",
+              }}
+            >
+              {t("welcome", {
+                gender: profile?.gender === "female" ? "female" : "other",
+                name: profile?.firstName ? ` ${profile.firstName}` : "",
+              })}
+            </h1>
+          </div>
+        </div>
+      </div>
 
       <main
-        className="mt-48 md:mt-64 lg:mt-80 relative z-10"
-        style={{ marginTop: "9rem" }}
+        className="mt-(--menu-card-gap) relative z-10"
+        inert={showDetail || introActive}
+        aria-hidden={showDetail || introActive}
       >
         <div className="bg-white rounded-t-4xl flex flex-col items-center px-6 md:px-8 lg:px-10">
           {/* Trigger invisible para IntersectionObserver */}
@@ -434,62 +519,35 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
             ref={stickyTriggerRef}
             className="absolute top-0 h-px w-px pointer-events-none"
           />
-          <div className="mt-6 md:mt-8 flex items-start justify-between w-full">
-            {/* Settings Icon */}
-            <button
-              onClick={() => setShowSettingsModal(true)}
-              className="bg-white rounded-full shadow-sm hover:bg-tone-50 transition-all active:scale-95 size-9 md:size-10 lg:size-12 overflow-hidden flex items-center justify-center"
-            >
-              <UserAvatar isAuthenticated={isAuthenticated} profile={profile} />
-            </button>
-            {/* Assistant Icon */}
-            <button
-              onClick={() => setShowPepperChat(true)}
-              className="size-14 md:size-16 lg:size-18 overflow-hidden transition-all active:scale-95 -mt-2 md:-mt-3"
-            >
-              <PepperIcon />
-            </button>
+          {/* Nombre del restaurante y mesa */}
+          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full px-2 md:px-4">
+            <h2 className="text-center text-2xl md:text-4xl font-semibold tracking-tight leading-tight text-black line-clamp-2 text-balance">
+              {restaurant.name}
+            </h2>
+            <p className="mt-1 text-center text-tone-600 text-base md:text-xl">
+              {tc("tableLabel", { table: tableNumber ?? "" })}
+            </p>
           </div>
 
-          {/* Name and photo */}
-          <div className="flex flex-col items-center">
-            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-tone-200 overflow-hidden border border-tone-400 shadow-sm">
-              <img
-                src={restaurant.logo_url || DEFAULT_IMAGES.RESTAURANT_LOGO}
-                alt="Profile Pic"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="text-black mt-3 md:mt-5 mb-6 md:mb-8 flex flex-col items-center">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium">
-                {t("welcome", {
-                  gender: profile?.gender === "female" ? "female" : "other",
-                  name: profile?.firstName ? ` ${profile.firstName}` : "",
-                })}
-              </h1>
-              <h3 className="mt-1 text-black/70 text-xl md:text-2xl lg:text-3xl">
-                {tc("tableLabel", { table: tableNumber ?? "" })}
-              </h3>
-              {Array.isArray(tableState.dishOrders) &&
-                tableState.dishOrders.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2 justify-center">
-                    <button
-                      onClick={() => setIsStatusModalOpen(true)}
-                      className="bg-surface border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-base lg:text-lg font-medium text-black active:scale-90 transition-all"
-                    >
-                      {t("orderStatus")}
-                    </button>
-                    <button
-                      onClick={() => setShowReorderModal(true)}
-                      className="bg-even-grass text-even-evergreen border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-base lg:text-lg font-medium flex items-center gap-1.5 active:scale-90 transition-all"
-                    >
-                      {tc("reorderCta")}
-                      <RefreshCw className="size-4" />
-                    </button>
-                  </div>
-                )}
-            </div>
-          </div>
+          {/* Estatus de pedido + Reordenar */}
+          {Array.isArray(tableState.dishOrders) &&
+            tableState.dishOrders.length > 0 && (
+              <div className="mb-2 md:mb-4 flex flex-wrap gap-2 justify-center">
+                <button
+                  onClick={() => setIsStatusModalOpen(true)}
+                  className="bg-surface border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-base lg:text-lg font-medium text-black active:scale-90 transition-all"
+                >
+                  {t("orderStatus")}
+                </button>
+                <button
+                  onClick={() => setShowReorderModal(true)}
+                  className="bg-even-grass text-even-evergreen border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-base lg:text-lg font-medium flex items-center gap-1.5 active:scale-90 transition-all"
+                >
+                  {tc("reorderCta")}
+                  <RefreshCw className="size-4" />
+                </button>
+              </div>
+            )}
 
           {/* Search Input */}
           <div className="w-full">
@@ -559,7 +617,7 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
       </main>
 
       {/* Carrito flotante */}
-      {totalItems > 0 && (
+      {totalItems > 0 && !showDetail && !introActive && (
         <div className="fixed bottom-6 md:bottom-8 lg:bottom-10 left-0 right-0 z-50 flex justify-center pointer-events-none">
           <button
             onClick={() => navigateWithTable("/cart")}
@@ -573,82 +631,59 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
         </div>
       )}
 
-      {/* Sticky Bar — aparece al hacer scroll down */}
-      <div
-        className="fixed top-0 inset-x-0 z-40 flex justify-center px-4 pt-4 pb-3"
-        style={{
-          opacity: showStickyBar ? 1 : 0,
-          transition: "opacity 120ms ease",
-          pointerEvents: showStickyBar ? "auto" : "none",
-        }}
-      >
-        <div
-          className="flex items-center gap-4 md:gap-5 rounded-full px-6 md:px-7 py-3 md:py-3.5 shadow-lg border border-white/40"
-          style={{
-            background: "rgba(255, 255, 255, 0.82)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-          }}
+      <MenuActionsPill visible={pillVisible}>
+        <PillButton onClick={() => setShowSettingsModal(true)} clip>
+          <UserAvatar
+            isAuthenticated={isAuthenticated}
+            profile={profile}
+            iconSize="size-6 md:size-7"
+            textSize="text-base md:text-lg"
+          />
+        </PillButton>
+        <PillCartButton
+          onClick={() => navigateWithTable("/cart")}
+          count={cartState.totalItems}
+        />
+        <PillButton
+          onClick={() => navigateWithTable("/order")}
+          count={
+            Array.isArray(tableState.dishOrders)
+              ? tableState.dishOrders.length
+              : 0
+          }
         >
-          {/* Settings */}
-          <button
-            onClick={() => setShowSettingsModal(true)}
-            className="size-11 md:size-12 rounded-full overflow-hidden flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
-          >
-            <UserAvatar
-              isAuthenticated={isAuthenticated}
-              profile={profile}
-              iconSize="size-6 md:size-7"
-              textSize="text-base md:text-lg"
-            />
-          </button>
+          <ReceiptText
+            className="size-5 md:size-6 text-warm-700"
+            strokeWidth={1.5}
+          />
+        </PillButton>
+        <PillPepperButton onClick={() => setShowPepperChat(true)}>
+          <PepperIcon />
+        </PillPepperButton>
+      </MenuActionsPill>
 
-          {/* Carrito */}
-          <div className="relative group">
-            <button
-              onClick={() => navigateWithTable("/cart")}
-              className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
-            >
-              <ShoppingCart
-                className="size-5 md:size-6 text-warm-700"
-                strokeWidth={1.5}
-              />
-            </button>
-            {cartState.totalItems > 0 && (
-              <div className="absolute -top-1 -right-1 bg-even-grass text-even-evergreen rounded-full size-5 flex items-center justify-center text-xs font-normal">
-                {cartState.totalItems}
-              </div>
-            )}
-          </div>
+      {/* Bienvenida al cargar la página */}
+      {introActive && (
+        <RestaurantIntro
+          restaurant={restaurant}
+          phase={introPhase === "fly" ? "fly" : "show"}
+          branchName={tc("tableLabel", { table: tableNumber ?? "" })}
+          welcomeText={t("welcome", {
+            gender: profile?.gender === "female" ? "female" : "other",
+            name: profile?.firstName ? ` ${profile.firstName}` : "",
+          })}
+          logoTransform={introLogoTransform}
+          logoRef={introLogoRef}
+          onSkip={startIntroFly}
+        />
+      )}
 
-          {/* Orden */}
-          <div className="relative group">
-            <button
-              onClick={() => navigateWithTable("/order")}
-              className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
-            >
-              <ReceiptText
-                className="size-5 md:size-6 text-warm-700"
-                strokeWidth={1.5}
-              />
-            </button>
-            {Array.isArray(tableState.dishOrders) &&
-              tableState.dishOrders.length > 0 && (
-                <div className="absolute -top-1 -right-1 bg-even-grass text-even-evergreen rounded-full size-5 flex items-center justify-center text-xs font-normal">
-                  {tableState.dishOrders.length}
-                </div>
-              )}
-          </div>
-
-          {/* Pepper */}
-          <button
-            onClick={() => setShowPepperChat(true)}
-            className="size-12 md:size-14 overflow-hidden transition-colors active:scale-95"
-          >
-            <PepperIcon />
-          </button>
-        </div>
-      </div>
+      {/* Detalle del restaurante (se intercambia con la tarjeta del menú) */}
+      <RestaurantDetailCard
+        restaurant={restaurant}
+        open={showDetail}
+        onClose={closeDetail}
+      />
 
       {/* Pepper Chat Modal */}
       {showPepperChat && (

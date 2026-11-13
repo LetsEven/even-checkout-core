@@ -48,7 +48,9 @@
     "filterAll": "All",
     "noResultsFor": "No results found for \"{query}\"",
     "noItemsAvailable": "No items available",
-    "viewCart": "View cart • {count}"
+    "viewCart": "View cart • {count}",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "MenuCategory": {
     "noItemsInSection": "No items in this section"
@@ -565,5 +567,28 @@
     "subtitle": "{count, plural, one {This item is no longer available at this time.} other {These items are no longer available at this time.}}",
     "remove": "{count, plural, one {Remove item} other {Remove # items}}",
     "cancel": "Back"
+  },
+  "RestaurantDetail": {
+    "title": "Restaurant details",
+    "openDetail": "View restaurant information",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Hours",
+    "closed": "Closed",
+    "allDay": "Open 24 hours",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
+  "RestaurantIntro": {
+    "title": "Welcome",
+    "skip": "Tap to continue"
   }
 }

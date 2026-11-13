@@ -124,17 +124,6 @@
 }
 
 /* Payment success animations */
-@keyframes slide-up {
-  0% {
-    opacity: 0;
-    transform: translateY(100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes logo-fade-in {
   0% {
     opacity: 0;
@@ -144,10 +133,6 @@
     opacity: 1;
     transform: scale(1);
   }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-logo-fade-in {
@@ -282,22 +267,6 @@
     content: "";
     @apply absolute inset-0 m-auto w-1.5 h-1.5 bg-white rounded-full;
   }
-}
-
-@keyframes pulse-button {
-  0% {
-    box-shadow: 0 0 0 0 rgba(130, 230, 87, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(130, 230, 87, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(130, 230, 87, 0);
-  }
-}
-
-.animate-pulse-button {
-  animation: pulse-button 1.5s ease-out infinite;
 }
 
 /* Apple Pay button border radius and height */

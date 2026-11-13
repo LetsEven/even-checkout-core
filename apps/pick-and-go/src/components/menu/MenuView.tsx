@@ -7,6 +7,9 @@ import {
   takeMenuPosition,
 } from "../../utils/menuScrollMemory";
 import PepperIcon from "../UI/PepperIcon";
+import RestaurantDetailCard, {
+  DETAIL_ANIMATION_MS,
+} from "./RestaurantDetailCard";
 import {
   Search,
   ShoppingCart,
@@ -113,6 +116,7 @@ function UserAvatar({
 export default function MenuView() {
   const t = useTranslations("MenuView");
   const tc = useTranslations("Common");
+  const tr = useTranslations("RestaurantDetail");
   const { restaurantId: menuKey, menu: initialMenu } = useRestaurant();
   // Posición guardada al abrir un platillo (se consume una sola vez al montar)
   const [restored] = useState(() => {
@@ -169,6 +173,9 @@ export default function MenuView() {
     startTransition(() => setFilter(cat));
   };
   const [showBranchModal, setShowBranchModal] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const detailCloseRef = useRef<HTMLButtonElement>(null);
+  const logoButtonRef = useRef<HTMLButtonElement>(null);
   const [activeOrders, setActiveOrders] = useState<
     NonNullable<ActiveOrderResponse["data"]>[]
   >([]);
@@ -244,6 +251,14 @@ export default function MenuView() {
 
   // El back gesto/botón del dispositivo cierra estos modales en vez de
   // salir de la página (misma animación que cerrar con la X/backdrop).
+  const closeDetail = useCallback(() => {
+    setShowDetail(false);
+    setTimeout(
+      () => logoButtonRef.current?.focus({ preventScroll: true }),
+      DETAIL_ANIMATION_MS,
+    );
+  }, []);
+  useModalBackClose(showDetail, () => closeDetail());
   useModalBackClose(showPepperChat, () => closePepperChat());
   useModalBackClose(showSettingsModal, () => closeSettingsModal());
 
@@ -265,14 +280,21 @@ export default function MenuView() {
       showPepperChat ||
       showSettingsModal ||
       showStatusModal ||
-      showReorderModal
+      showReorderModal ||
+      showDetail
     ) {
       lockScroll();
     } else {
       unlockScroll();
     }
     return unlockScroll;
-  }, [showPepperChat, showSettingsModal, showStatusModal, showReorderModal]);
+  }, [
+    showPepperChat,
+    showSettingsModal,
+    showStatusModal,
+    showReorderModal,
+    showDetail,
+  ]);
 
   // Precargar chunks lazy después de que la página ya es interactiva
   useEffect(() => {
@@ -502,18 +524,26 @@ export default function MenuView() {
       />
 
       {/* Logo + bienvenida sobre el banner (no sticky) */}
-      <div className="absolute top-0 inset-x-0 z-4 pointer-events-none">
+      <div className="absolute top-0 inset-x-0 z-6 pointer-events-none">
         <div className="container mx-auto px-5 md:px-8 lg:px-10 pt-5 md:pt-7 lg:pt-9">
           <div className="flex items-center gap-2 md:gap-3 h-10 md:h-12 lg:h-14 pr-24 md:pr-32 lg:pr-40">
-            <div className="size-10 md:size-12 lg:size-14 shrink-0 rounded-full bg-even-evergreen overflow-hidden border border-white/70 shadow-sm">
+            <button
+              ref={logoButtonRef}
+              type="button"
+              onClick={() => (showDetail ? closeDetail() : setShowDetail(true))}
+              aria-haspopup="dialog"
+              aria-expanded={showDetail}
+              aria-label={tr("openDetail")}
+              className="pointer-events-auto size-10 md:size-12 lg:size-14 shrink-0 rounded-full bg-even-evergreen overflow-hidden border border-white/70 shadow-sm active:scale-95 transition-transform"
+            >
               {restaurant.logo_url && (
                 <img
                   src={restaurant.logo_url}
-                  alt={tc("restaurantLogoAlt")}
+                  alt=""
                   className="w-full h-full object-cover"
                 />
               )}
-            </div>
+            </button>
             <h1 className="text-white text-xl md:text-3xl lg:text-4xl font-medium truncate drop-shadow">
               {t("welcome", {
                 gender: profile?.gender === "female" ? "female" : "other",
@@ -524,47 +554,22 @@ export default function MenuView() {
         </div>
       </div>
 
-      <main className="mt-[4.5rem] md:mt-64 lg:mt-80 relative z-10">
+      <main
+        className="mt-[4.5rem] md:mt-64 lg:mt-80 relative z-10"
+        inert={showDetail}
+        aria-hidden={showDetail}
+      >
         <div className="bg-white rounded-t-4xl flex flex-col items-center px-6 md:px-8 lg:px-10">
           {/* Trigger invisible para IntersectionObserver */}
           <div
             ref={stickyTriggerRef}
             className="absolute top-0 h-px w-px pointer-events-none"
           />
-          {/* Sucursal + asistente */}
-          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full flex items-center justify-between">
-            {/* Sucursal seleccionada */}
-            {branches.length > 0 && (
-              <div
-                className={`inline-flex items-center gap-1 ${branches.length > 1 ? "cursor-pointer hover:opacity-80 transition-opacity" : ""}`}
-                onClick={() => branches.length > 1 && setShowBranchModal(true)}
-              >
-                {selectedBranchNumber ? (
-                  <>
-                    <p className="text-tone-600 text-sm md:text-base">
-                      {tc("branchLabel")}{" "}
-                      <span className="font-medium text-black">
-                        {branches.find(
-                          (b) => b.branch_number === selectedBranchNumber,
-                        )?.name || tc("defaultBranchName")}
-                      </span>
-                    </p>
-                    {branches.length > 1 && (
-                      <ChevronRight className="size-4 md:size-5 text-tone-600" />
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <p className="text-tone-600 text-sm md:text-base font-medium">
-                      {tc("selectBranch")}
-                    </p>
-                    {branches.length > 1 && (
-                      <ChevronRight className="size-4 md:size-5 text-tone-600" />
-                    )}
-                  </>
-                )}
-              </div>
-            )}
+          {/* Nombre del restaurante + asistente */}
+          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full flex items-center justify-between gap-3">
+            <p className="min-w-0 truncate text-base md:text-lg font-medium text-black">
+              {restaurant.name}
+            </p>
 
             {/* Asistente */}
             <button
@@ -668,7 +673,7 @@ export default function MenuView() {
       </main>
 
       {/* Carrito flotante */}
-      {totalItems > 0 && (
+      {totalItems > 0 && !showDetail && (
         <div className="fixed bottom-6 md:bottom-8 lg:bottom-10 left-0 right-0 z-50 flex justify-center pointer-events-none">
           <button
             onClick={() => navigateWithRestaurantId("/cart")}
@@ -681,6 +686,19 @@ export default function MenuView() {
           </button>
         </div>
       )}
+
+      {/* Detalle del restaurante (se intercambia con la tarjeta del menú) */}
+      <RestaurantDetailCard
+        restaurant={restaurant}
+        branches={branches}
+        selectedBranchNumber={selectedBranchNumber}
+        open={showDetail}
+        onClose={() => {
+          if (!showBranchModal) closeDetail();
+        }}
+        onChangeBranch={() => setShowBranchModal(true)}
+        closeButtonRef={detailCloseRef}
+      />
 
       {/* Modal de selección de sucursal */}
       {showBranchModal && (
@@ -1007,9 +1025,9 @@ export default function MenuView() {
       <div
         className="fixed top-0 inset-x-0 z-40 flex justify-center px-4 pt-4 pb-3"
         style={{
-          opacity: showStickyBar ? 1 : 0,
+          opacity: showStickyBar && !showDetail ? 1 : 0,
           transition: "opacity 120ms ease",
-          pointerEvents: showStickyBar ? "auto" : "none",
+          pointerEvents: showStickyBar && !showDetail ? "auto" : "none",
         }}
       >
         <div

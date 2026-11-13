@@ -457,5 +457,27 @@
     "subtitle": "{count, plural, one {Este platillo ya no está disponible a esta hora.} other {Estos platillos ya no están disponibles a esta hora.}}",
     "remove": "{count, plural, one {Quitar platillo} other {Quitar # platillos}}",
     "cancel": "Volver"
+  },
+  "RestaurantDetail": {
+    "title": "Detalle del restaurante",
+    "openDetail": "Ver información del restaurante",
+    "close": "Cerrar",
+    "branch": "Sucursal",
+    "changeBranch": "Cambiar sucursal",
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "email": "Correo",
+    "hours": "Horario",
+    "closed": "Cerrado",
+    "allDay": "Abierto 24 horas",
+    "days": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    }
   }
 }

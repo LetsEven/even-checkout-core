@@ -1,6 +1,7 @@
 // Primitivas de UI compartidas por las apps de Even. El tema de Tailwind vive en "@even/ui/theme.css".
 export const PACKAGE_NAME = "@even/ui";
 
+export { brandColors } from "./lib/colors";
 export { cn } from "./lib/cn";
 export { lockScroll, unlockScroll } from "./lib/scroll-lock";
 export { useScrollLock } from "./lib/use-scroll-lock";

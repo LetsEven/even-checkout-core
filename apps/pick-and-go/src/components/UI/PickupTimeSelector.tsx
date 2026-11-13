@@ -120,7 +120,7 @@ export default function PickupTimeSelector({
           <div className="relative bg-white rounded-t-4xl w-full mx-4 max-h-[75vh] overflow-hidden">
             {/* Header */}
             <div className="px-6 pt-4">
-              <div className="flex items-center justify-between pb-4 border-b border-[#8e8e8e]">
+              <div className="flex items-center justify-between pb-4 border-b border-stroke">
                 <h3 className="text-lg font-semibold text-black">
                   {t("modalTitle")}
                 </h3>

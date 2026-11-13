@@ -270,7 +270,7 @@ export default function TipSelectionPage() {
             <div className="flex flex-col relative px-4 md:px-6 lg:px-8 w-full">
               <div className="left-4 right-4 bg-even-evergreen rounded-t-4xl translate-y-7 z-0">
                 <div className="py-6 md:py-8 lg:py-10 px-8 md:px-10 lg:px-12 flex flex-col justify-center">
-                  <h1 className="text-[#e0e0e0] text-xl md:text-2xl lg:text-3xl font-medium">
+                  <h1 className="text-mist text-xl md:text-2xl lg:text-3xl font-medium">
                     {tc("tableLabel", { table: tableNumber ?? "" })}
                   </h1>
                   <h1 className="font-medium text-white text-3xl md:text-4xl lg:text-5xl leading-7 md:leading-9 lg:leading-tight mt-2 md:mt-3 mb-6 md:mb-8">
@@ -392,7 +392,7 @@ export default function TipSelectionPage() {
                 style={{ zIndex: 0 }}
               >
                 <div className="py-6 md:py-8 lg:py-10 px-8 md:px-10 lg:px-12 flex flex-col justify-center">
-                  <h1 className="text-[#e0e0e0] text-xl md:text-2xl lg:text-3xl font-medium">
+                  <h1 className="text-mist text-xl md:text-2xl lg:text-3xl font-medium">
                     {tc("tableLabel", { table: tableNumber ?? "" })}
                   </h1>
                   <h1 className="font-medium text-white text-3xl md:text-4xl lg:text-5xl leading-7 md:leading-9 lg:leading-tight mt-2 md:mt-3 mb-6 md:mb-8">

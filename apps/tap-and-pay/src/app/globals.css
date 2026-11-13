@@ -83,7 +83,7 @@
 .green-circle-from-logo {
   width: 96px;
   height: 96px;
-  background: #82e657;
+  background: var(--color-even-grass);
   border-radius: 50%;
   transform-origin: center center;
   will-change: transform;
@@ -98,7 +98,7 @@
   position: absolute;
   width: 96px;
   height: 96px;
-  border: 5px solid #e5e7eb;
+  border: 5px solid var(--color-line);
   border-radius: 50%;
   animation: pulse-ring-animation 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

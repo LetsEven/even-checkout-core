@@ -3,7 +3,7 @@
 
 /* Fondo Evergreen de marca con asterisco watermark (llena el vacío, da aire) */
 .brand-evergreen {
-  background-color: #023828;
+  background-color: var(--color-even-evergreen);
 }
 
 @keyframes pulse-button-pink {
@@ -124,7 +124,7 @@
 .green-circle-from-logo {
   width: 96px;
   height: 96px;
-  background: #82e657;
+  background: var(--color-even-grass);
   border-radius: 50%;
   transform-origin: center center;
   will-change: transform;
@@ -139,7 +139,7 @@
   position: absolute;
   width: 96px;
   height: 96px;
-  border: 5px solid #e5e7eb;
+  border: 5px solid var(--color-line);
   border-radius: 50%;
   animation: pulse-ring-animation 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -286,7 +286,7 @@
   .myradio {
     @apply w-4 h-4 bg-tone-100 border border-tone-300 rounded-full cursor-pointer;
     @apply focus:outline-none;
-    @apply checked:bg-[#82E657] checked:border-transparent;
+    @apply checked:bg-even-grass checked:border-transparent;
     @apply appearance-none relative;
   }
 
@@ -302,8 +302,8 @@
     height: 20px;
     min-width: 20px;
     min-height: 20px;
-    background-color: #f3f4f6;
-    border: 1px solid #d1d5db;
+    background-color: var(--color-field);
+    border: 1px solid var(--color-field-border);
     border-radius: 9999px !important;
     cursor: pointer;
     position: relative;
@@ -312,8 +312,8 @@
   }
 
   .mycheckbox:checked {
-    background-color: #82E657;
-    border-color: #82E657;
+    background-color: var(--color-even-grass);
+    border-color: var(--color-even-grass);
   }
 
   .mycheckbox:checked::after {
@@ -323,7 +323,7 @@
     top: 45%;
     width: 5px;
     height: 9px;
-    border: solid #023828;
+    border: solid var(--color-even-evergreen);
     border-width: 0 2.5px 2.5px 0;
     transform: translate(-50%, -50%) rotate(45deg);
   }
@@ -361,7 +361,7 @@
   .banner-mobile {
     background-size: contain !important;
     background-position: center top !important;
-    background-color: #f8f9fa;
+    background-color: var(--color-panel);
   }
 }
 

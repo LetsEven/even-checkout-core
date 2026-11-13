@@ -230,7 +230,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
           {isAuthenticated && (
             <label
               htmlFor="profile-image"
-              className="absolute bottom-0 right-0 bg-even-grass text-even-evergreen p-2 md:p-2.5 lg:p-3 rounded-full cursor-pointer hover:bg-[#74cf4e] transition-colors"
+              className="absolute bottom-0 right-0 bg-even-grass text-even-evergreen p-2 md:p-2.5 lg:p-3 rounded-full cursor-pointer hover:bg-even-grass-hover transition-colors"
             >
               <Camera className="size-4 md:size-5 lg:size-6" />
               <input

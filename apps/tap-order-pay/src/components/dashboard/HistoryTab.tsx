@@ -364,7 +364,7 @@ export default function HistoryTab() {
                   </h3>
                   <div className="space-y-2 md:space-y-3 lg:space-y-4">
                     <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                      <div className="bg-[#D6F6F5] p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                      <div className="bg-tint-aqua p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
                         <Calendar className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-even-evergreen" />
                       </div>
                       <span className="text-sm md:text-base lg:text-lg">
@@ -382,7 +382,7 @@ export default function HistoryTab() {
                     </div>
                     {selectedOrderDetails.customerName && (
                       <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                        <div className="bg-[#D2F0BE] p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                        <div className="bg-tint-grass p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
                           <User className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-even-evergreen" />
                         </div>
                         <span className="text-sm md:text-base lg:text-lg">
@@ -392,7 +392,7 @@ export default function HistoryTab() {
                     )}
                     {selectedOrderDetails.paymentMethodLabel && (
                       <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                        <div className="bg-[#FBF6DC] px-1 py-1.5 md:py-2 md:px-1.5 lg:py-2.5 lg:px-2 rounded-xl flex items-center justify-center">
+                        <div className="bg-tint-sand px-1 py-1.5 md:py-2 md:px-1.5 lg:py-2.5 lg:px-2 rounded-xl flex items-center justify-center">
                           {getCardTypeIcon(
                             selectedOrderDetails.paymentCardBrand,
                             "small",

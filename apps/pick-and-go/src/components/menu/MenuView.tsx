@@ -63,9 +63,75 @@ const AuthView = lazy(() => import("./../AuthView"));
 const DashboardView = lazy(() => import("./../DashboardView"));
 const RestaurantClosedModal = lazy(() => import("../RestaurantClosedModal"));
 
-// Bienvenida: una vez por carga completa de la página (entrada o refresh).
-// Flag en memoria de módulo: se reinicia al recargar, no al navegar en cliente.
+// Bienvenida: sale en la primera entrada al menú en la pestaña (clave por
+// restaurante en sessionStorage, marcada AL INICIAR la bienvenida) y cuando el
+// usuario recarga la página. Volver al menú desde el carrito, un platillo, etc.
+// no la repite. El flag de módulo evita que una navegación cliente posterior en
+// la misma carga de documento (que sigue teniendo type "reload") la vuelva a
+// mostrar, y es el fallback si sessionStorage falla (modo privado).
+const INTRO_STORAGE_PREFIX = "intro-shown:";
+// false → la bienvenida solo sale en la primera entrada, no al refrescar
+const INTRO_REPLAY_ON_RELOAD = true;
 let introShownThisLoad = false;
+
+function isDocumentReload(): boolean {
+  const nav = performance.getEntriesByType("navigation")[0] as
+    | PerformanceNavigationTiming
+    | undefined;
+  if (nav) return nav.type === "reload";
+  // Fallback para navegadores sin Navigation Timing 2
+  return performance.navigation?.type === 1;
+}
+
+// El tipo de navegación (performance) no es fiable a la hora de montar la
+// vista, así que la recarga se detecta con una marca: al descargar el documento
+// (pagehide) se deja una marca en sessionStorage que el siguiente documento
+// consume al cargar. La navegación cliente no descarga el documento, no la deja.
+const INTRO_UNLOAD_KEY = "intro-doc-unloaded";
+const documentLoadedAsReload = (() => {
+  if (typeof window === "undefined") return false;
+  let viaMark = false;
+  try {
+    viaMark = window.sessionStorage.getItem(INTRO_UNLOAD_KEY) === "1";
+    window.sessionStorage.removeItem(INTRO_UNLOAD_KEY);
+    const w = window as typeof window & { __introUnloadHook?: boolean };
+    if (!w.__introUnloadHook) {
+      w.__introUnloadHook = true; // una sola vez aunque el módulo se reevalúe (HMR)
+      window.addEventListener("pagehide", () => {
+        try {
+          window.sessionStorage.setItem(INTRO_UNLOAD_KEY, "1");
+        } catch {
+          // almacenamiento bloqueado
+        }
+      });
+    }
+  } catch {
+    // almacenamiento bloqueado
+  }
+  return viaMark || isDocumentReload();
+})();
+
+function introAlreadyShown(restaurantId: number | null): boolean {
+  if (typeof window === "undefined") return false;
+  if (introShownThisLoad) return true;
+  if (INTRO_REPLAY_ON_RELOAD && documentLoadedAsReload) return false;
+  try {
+    return (
+      window.sessionStorage.getItem(INTRO_STORAGE_PREFIX + restaurantId) === "1"
+    );
+  } catch {
+    return false;
+  }
+}
+
+function markIntroShown(restaurantId: number | null) {
+  introShownThisLoad = true;
+  try {
+    window.sessionStorage.setItem(INTRO_STORAGE_PREFIX + restaurantId, "1");
+  } catch {
+    // modo privado / almacenamiento bloqueado: queda el flag en memoria
+  }
+}
 
 // Pure functions — defined outside to avoid re-creation on every render
 
@@ -188,8 +254,8 @@ export default function MenuView() {
 
   // Pantalla de bienvenida (el estado inicial es igual en servidor y en el
   // primer render del cliente, así el overlay ya está presente sin parpadeo)
-  const [introPhase, setIntroPhase] = useState<IntroPhase>(
-    introShownThisLoad ? "done" : "show",
+  const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
+    introAlreadyShown(menuKey) ? "done" : "show",
   );
   const [introLogoTransform, setIntroLogoTransform] = useState("");
   const introLogoRef = useRef<HTMLDivElement>(null);
@@ -213,10 +279,10 @@ export default function MenuView() {
 
   useEffect(() => {
     if (introPhase !== "show") return;
-    introShownThisLoad = true;
+    markIntroShown(menuKey);
     const timer = setTimeout(startIntroFly, INTRO_SHOW_MS);
     return () => clearTimeout(timer);
-  }, [introPhase, startIntroFly]);
+  }, [introPhase, startIntroFly, menuKey]);
 
   useEffect(() => {
     if (introPhase !== "fly") return;

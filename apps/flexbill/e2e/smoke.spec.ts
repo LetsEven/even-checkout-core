@@ -5,7 +5,7 @@ test("el menú de la mesa carga sus platillos", async ({ page }) => {
   await mockFlexBillApi(page);
   await page.goto(MENU_URL);
 
-  await expect(page.getByText("Mesa 12")).toBeVisible();
+  await expect(page.locator("main").getByText("Mesa 12")).toBeVisible();
   await expect(page.getByText("Club sándwich", { exact: false }).first()).toBeVisible();
   await expect(page.getByText("$180.00 MXN")).toBeVisible();
 });

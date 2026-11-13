@@ -63,9 +63,75 @@ const AuthView = lazy(() => import("./../AuthView"));
 const DashboardView = lazy(() => import("./../DashboardView"));
 const RestaurantClosedModal = lazy(() => import("../RestaurantClosedModal"));
 
-// Bienvenida: una vez por carga completa de la página (entrada o refresh).
-// Flag en memoria de módulo: se reinicia al recargar, no al navegar en cliente.
+// Bienvenida: sale en la primera entrada al menú en la pestaña (clave por
+// restaurante en sessionStorage, marcada AL INICIAR la bienvenida) y cuando el
+// usuario recarga la página. Volver al menú desde el carrito, un platillo, etc.
+// no la repite. El flag de módulo evita que una navegación cliente posterior en
+// la misma carga de documento (que sigue teniendo type "reload") la vuelva a
+// mostrar, y es el fallback si sessionStorage falla (modo privado).
+const INTRO_STORAGE_PREFIX = "intro-shown:";
+// false → la bienvenida solo sale en la primera entrada, no al refrescar
+const INTRO_REPLAY_ON_RELOAD = true;
 let introShownThisLoad = false;
+
+function isDocumentReload(): boolean {
+  const nav = performance.getEntriesByType("navigation")[0] as
+    | PerformanceNavigationTiming
+    | undefined;
+  if (nav) return nav.type === "reload";
+  // Fallback para navegadores sin Navigation Timing 2
+  return performance.navigation?.type === 1;
+}
+
+// El tipo de navegación (performance) no es fiable a la hora de montar la
+// vista, así que la recarga se detecta con una marca: al descargar el documento
+// (pagehide) se deja una marca en sessionStorage que el siguiente documento
+// consume al cargar. La navegación cliente no descarga el documento, no la deja.
+const INTRO_UNLOAD_KEY = "intro-doc-unloaded";
+const documentLoadedAsReload = (() => {
+  if (typeof window === "undefined") return false;
+  let viaMark = false;
+  try {
+    viaMark = window.sessionStorage.getItem(INTRO_UNLOAD_KEY) === "1";
+    window.sessionStorage.removeItem(INTRO_UNLOAD_KEY);
+    const w = window as typeof window & { __introUnloadHook?: boolean };
+    if (!w.__introUnloadHook) {
+      w.__introUnloadHook = true; // una sola vez aunque el módulo se reevalúe (HMR)
+      window.addEventListener("pagehide", () => {
+        try {
+          window.sessionStorage.setItem(INTRO_UNLOAD_KEY, "1");
+        } catch {
+          // almacenamiento bloqueado
+        }
+      });
+    }
+  } catch {
+    // almacenamiento bloqueado
+  }
+  return viaMark || isDocumentReload();
+})();
+
+function introAlreadyShown(restaurantId: number | null): boolean {
+  if (typeof window === "undefined") return false;
+  if (introShownThisLoad) return true;
+  if (INTRO_REPLAY_ON_RELOAD && documentLoadedAsReload) return false;
+  try {
+    return (
+      window.sessionStorage.getItem(INTRO_STORAGE_PREFIX + restaurantId) === "1"
+    );
+  } catch {
+    return false;
+  }
+}
+
+function markIntroShown(restaurantId: number | null) {
+  introShownThisLoad = true;
+  try {
+    window.sessionStorage.setItem(INTRO_STORAGE_PREFIX + restaurantId, "1");
+  } catch {
+    // modo privado / almacenamiento bloqueado: queda el flag en memoria
+  }
+}
 
 // Pure functions — defined outside to avoid re-creation on every render
 
@@ -188,8 +254,8 @@ export default function MenuView() {
 
   // Pantalla de bienvenida (el estado inicial es igual en servidor y en el
   // primer render del cliente, así el overlay ya está presente sin parpadeo)
-  const [introPhase, setIntroPhase] = useState<IntroPhase>(
-    introShownThisLoad ? "done" : "show",
+  const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
+    introAlreadyShown(menuKey) ? "done" : "show",
   );
   const [introLogoTransform, setIntroLogoTransform] = useState("");
   const introLogoRef = useRef<HTMLDivElement>(null);
@@ -213,10 +279,10 @@ export default function MenuView() {
 
   useEffect(() => {
     if (introPhase !== "show") return;
-    introShownThisLoad = true;
+    markIntroShown(menuKey);
     const timer = setTimeout(startIntroFly, INTRO_SHOW_MS);
     return () => clearTimeout(timer);
-  }, [introPhase, startIntroFly]);
+  }, [introPhase, startIntroFly, menuKey]);
 
   useEffect(() => {
     if (introPhase !== "fly") return;
@@ -248,6 +314,9 @@ export default function MenuView() {
     "profile" | "cards" | "history" | "support"
   >("profile");
   const [showStickyBar, setShowStickyBar] = useState(false);
+  // La píldora (perfil, carrito, Pepper) es un solo componente: se ve si el
+  // usuario la abrió con la hamburguesa o si aparece por scroll.
+  const [menuOpenByUser, setMenuOpenByUser] = useState(false);
   const [showClosedModal, setShowClosedModal] = useState(false);
   const stickyTriggerRef = useRef<HTMLDivElement>(null);
 
@@ -278,6 +347,17 @@ export default function MenuView() {
       document.body.style.backgroundColor = "var(--color-background)";
     };
   }, [showPepperChat, showSettingsModal]);
+
+  const pillVisible =
+    (menuOpenByUser || showStickyBar) && !showDetail && !introActive;
+
+  // Al volver arriba (la barra por scroll pasa de visible a oculta) se
+  // reinicia la apertura manual: la píldora se cierra sola, como antes.
+  const prevStickyRef = useRef(false);
+  useEffect(() => {
+    if (prevStickyRef.current && !showStickyBar) setMenuOpenByUser(false);
+    prevStickyRef.current = showStickyBar;
+  }, [showStickyBar]);
 
   const closePepperChat = () => {
     setIsPepperClosing(true);
@@ -562,14 +642,8 @@ export default function MenuView() {
 
       <MenuHeader
         restaurant={restaurant}
-        profileButton={
-          <button
-            onClick={() => setShowSettingsModal(true)}
-            className="bg-white/85 backdrop-blur-sm rounded-full shadow-sm hover:scale-105 transition-transform active:scale-95 size-10 md:size-12 lg:size-14 overflow-hidden flex items-center justify-center"
-          >
-            <UserAvatar isAuthenticated={isAuthenticated} profile={profile} />
-          </button>
-        }
+        menuOpen={menuOpenByUser}
+        onToggleMenu={() => setMenuOpenByUser((open) => !open)}
       />
 
       {/* Logo + bienvenida sobre el banner (no sticky) */}
@@ -616,18 +690,10 @@ export default function MenuView() {
             className="absolute top-0 h-px w-px pointer-events-none"
           />
           {/* Nombre del restaurante + asistente */}
-          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full grid grid-cols-[2.75rem_minmax(0,1fr)_2.75rem] md:grid-cols-[3.5rem_minmax(0,1fr)_3.5rem] lg:grid-cols-[4rem_minmax(0,1fr)_4rem] items-center gap-2">
-            <h2 className="col-start-2 text-center text-2xl md:text-4xl font-semibold tracking-tight leading-tight text-black line-clamp-2 text-balance">
+          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full px-2 md:px-4">
+            <h2 className="text-center text-2xl md:text-4xl font-semibold tracking-tight leading-tight text-black line-clamp-2 text-balance">
               {restaurant.name}
             </h2>
-
-            {/* Asistente */}
-            <button
-              onClick={() => setShowPepperChat(true)}
-              className="col-start-3 row-start-1 justify-self-end size-11 md:size-14 lg:size-16 overflow-hidden transition-all active:scale-95"
-            >
-              <PepperIcon />
-            </button>
           </div>
 
           {/* Botón de pedidos activos + Reordenar */}
@@ -1092,18 +1158,26 @@ export default function MenuView() {
         </div>
       )}
 
-      {/* Sticky Bar — aparece al hacer scroll down */}
+      {/* Píldora de acciones — se abre con la hamburguesa o aparece al hacer
+          scroll; siempre en el mismo lugar */}
       <div
-        className="fixed top-0 inset-x-0 z-40 flex justify-center px-4 pt-4 pb-3"
+        className="reduce-motion-fade fixed top-0 inset-x-0 z-40 flex justify-center px-4 pt-4 pb-3"
+        inert={!pillVisible}
+        aria-hidden={!pillVisible}
         style={{
-          opacity: showStickyBar && !showDetail && !introActive ? 1 : 0,
-          transition: "opacity 120ms ease",
-          pointerEvents: showStickyBar && !showDetail && !introActive ? "auto" : "none",
+          opacity: pillVisible ? 1 : 0,
+          transform: pillVisible ? "none" : "translateY(-0.75rem) scale(0.97)",
+          transition:
+            "opacity 200ms ease, transform 250ms cubic-bezier(0.32, 0.72, 0, 1)",
+          // El contenedor ocupa todo el ancho: no debe interceptar toques
+          // (la hamburguesa del banner queda debajo).
+          pointerEvents: "none",
         }}
       >
         <div
           className="flex items-center gap-4 md:gap-5 rounded-full px-6 md:px-7 py-3 md:py-3.5 shadow-lg border border-white/40"
           style={{
+            pointerEvents: pillVisible ? "auto" : "none",
             background: "rgba(255, 255, 255, 0.82)",
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",

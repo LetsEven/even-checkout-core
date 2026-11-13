@@ -114,7 +114,9 @@
     "noResultsFor": "No se encontraron resultados para \"{query}\"",
     "noItemsAvailable": "No hay items disponibles",
     "viewCart": "Ver el carrito • {count}",
-    "profileAlt": "Perfil"
+    "profileAlt": "Perfil",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   },
   "MenuCategory": {
     "noItemsInSection": "No hay items en esta sección"

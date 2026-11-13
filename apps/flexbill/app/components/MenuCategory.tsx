@@ -44,7 +44,7 @@ export default function MenuCategory({
           ))
         ) : (
           <div className="col-span-full text-center py-4 md:py-6 lg:py-8">
-            <p className="text-gray-500 text-base md:text-lg lg:text-xl">
+            <p className="text-tone-500 text-base md:text-lg lg:text-xl">
               {t("noItemsInSection")}
             </p>
           </div>

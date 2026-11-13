@@ -189,12 +189,12 @@ export default function UserPage() {
 
   if (!tableNumber) {
     return (
-      <div className="min-h-new bg-gray-50 flex items-center justify-center">
+      <div className="min-h-new bg-tone-50 flex items-center justify-center">
         <div className="text-center px-4 md:px-6 lg:px-8">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-meduim text-gray-800 mb-4 md:mb-6">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-meduim text-tone-800 mb-4 md:mb-6">
             {t("invalidTableTitle")}
           </h1>
-          <p className="text-gray-600 text-base md:text-lg lg:text-xl">
+          <p className="text-tone-600 text-base md:text-lg lg:text-xl">
             {t("invalidTableMessage")}
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function UserPage() {
                   onChange={handleNameChange}
                   onKeyDown={handleKeyDown}
                   onFocus={handleInputFocus}
-                  className="w-full px-6 md:px-8 lg:px-10 py-3 md:py-4 lg:py-5 bg-surface rounded-full text-black text-xl md:text-2xl lg:text-3xl text-center font-normal placeholder:text-gray-400 focus:outline-none border border-stroke-soft focus:border-even-grass transition-colors"
+                  className="w-full px-6 md:px-8 lg:px-10 py-3 md:py-4 lg:py-5 bg-surface rounded-full text-black text-xl md:text-2xl lg:text-3xl text-center font-normal placeholder:text-tone-400 focus:outline-none border border-stroke-soft focus:border-even-grass transition-colors"
                 />
               </div>
 

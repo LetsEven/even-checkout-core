@@ -111,7 +111,7 @@ export default function BranchSelectionModal({
       >
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 rounded-full bg-gray-300" />
+          <div className="w-10 h-1 rounded-full bg-tone-300" />
         </div>
 
         {/* Header */}
@@ -122,9 +122,9 @@ export default function BranchSelectionModal({
             </h3>
             <button
               onClick={handleClose}
-              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-1 hover:bg-tone-100 rounded-full transition-colors"
             >
-              <X className="size-5 text-gray-500" />
+              <X className="size-5 text-tone-500" />
             </button>
           </div>
         </div>
@@ -134,13 +134,13 @@ export default function BranchSelectionModal({
           {isProcessing ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto mb-3 text-even-shamrock" />
-              <p className="text-gray-600 text-base mb-4">
+              <p className="text-tone-600 text-base mb-4">
                 {t("verifyingAvailability")}
               </p>
             </div>
           ) : itemsToRemove.length > 0 ? (
             <div className="mb-4">
-              <p className="text-gray-600 text-base mb-4">
+              <p className="text-tone-600 text-base mb-4">
                 {tc("itemsUnavailableIntro")}
               </p>
               <div className="bg-red-50 rounded-lg p-4 mb-4 max-h-48 overflow-y-auto">
@@ -152,8 +152,8 @@ export default function BranchSelectionModal({
                     >
                       <X className="size-4 text-red-500 flex-shrink-0 mt-0.5" />
                       <div className="flex-1">
-                        <p className="font-medium text-gray-900">{item.name}</p>
-                        <p className="text-gray-600 text-xs">
+                        <p className="font-medium text-tone-900">{item.name}</p>
+                        <p className="text-tone-600 text-xs">
                           {tc("itemQuantityLabel", { quantity: item.quantity })}
                         </p>
                       </div>
@@ -161,13 +161,13 @@ export default function BranchSelectionModal({
                   ))}
                 </ul>
               </div>
-              <p className="text-gray-600 text-sm mb-4">
+              <p className="text-tone-600 text-sm mb-4">
                 {tc("otherItemsKept")}
               </p>
             </div>
           ) : branches.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-500 text-base">
+              <p className="text-tone-500 text-base">
                 {t("noBranchesAvailable")}
               </p>
             </div>
@@ -182,7 +182,7 @@ export default function BranchSelectionModal({
                     className={`w-full py-2 px-5 border rounded-full transition-colors text-left ${
                       isSelected
                         ? "border-even-grass bg-even-grass/10"
-                        : "border-black/50 bg-surface hover:border-gray-400"
+                        : "border-black/50 bg-surface hover:border-tone-400"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -190,7 +190,7 @@ export default function BranchSelectionModal({
                         <p className="font-medium text-black text-base md:text-lg">
                           {branch.name}
                         </p>
-                        <p className="text-xs md:text-sm text-gray-600">
+                        <p className="text-xs md:text-sm text-tone-600">
                           {branch.address}
                         </p>
                       </div>
@@ -200,7 +200,7 @@ export default function BranchSelectionModal({
                         className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                           isSelected
                             ? "border-even-grass bg-even-grass"
-                            : "border-gray-300"
+                            : "border-tone-300"
                         }`}
                       >
                         {isSelected && (
@@ -216,7 +216,7 @@ export default function BranchSelectionModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 sticky bottom-0 bg-white">
+        <div className="px-6 py-4 border-t border-tone-200 sticky bottom-0 bg-white">
           <button
             onClick={handleConfirm}
             className="w-full bg-even-grass text-even-evergreen py-3 rounded-full transition-opacity hover:opacity-90 text-base"

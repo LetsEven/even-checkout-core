@@ -424,7 +424,7 @@ export default function AuthPage() {
                 ? t("verifyStepTitle")
                 : t("profileStepTitle")}
           </h1>
-          <p className="text-gray-200 mt-2">
+          <p className="text-tone-200 mt-2">
             {step === "phone" ? (
               t("phoneStepSubtitle")
             ) : step === "verify" ? (
@@ -456,7 +456,7 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="h-12 w-22.5 px-3 text-gray-700 font-medium bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors flex items-center justify-between gap-1.5"
+                    className="h-12 w-22.5 px-3 text-tone-700 font-medium bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen focus:border-transparent cursor-pointer hover:border-tone-400 transition-colors flex items-center justify-between gap-1.5"
                     disabled={loading}
                   >
                     <div className="flex items-center gap-1.5">
@@ -469,11 +469,11 @@ export default function AuthPage() {
                       />
                       <span className="text-sm">{countryCode}</span>
                     </div>
-                    <ChevronDown className="size-3 text-gray-500 shrink-0" />
+                    <ChevronDown className="size-3 text-tone-500 shrink-0" />
                   </button>
 
                   {isDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 overflow-hidden">
+                    <div className="absolute top-full left-0 mt-1 w-full bg-white border border-tone-300 rounded-lg shadow-lg z-50 overflow-hidden">
                       {countries.map((country) => (
                         <button
                           key={country.code}
@@ -482,13 +482,13 @@ export default function AuthPage() {
                             setCountryCode(country.code);
                             setIsDropdownOpen(false);
                           }}
-                          className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 transition-colors text-left"
+                          className="w-full px-3 py-2 flex items-center gap-2 hover:bg-tone-100 transition-colors text-left"
                         >
                           <Flag
                             code={country.flag}
                             style={{ width: 20, height: 15, borderRadius: 2 }}
                           />
-                          <span className="text-sm font-medium text-gray-700">
+                          <span className="text-sm font-medium text-tone-700">
                             {country.code}
                           </span>
                         </button>
@@ -499,7 +499,7 @@ export default function AuthPage() {
 
                 {/* Phone Number Input */}
                 <div className="relative flex-1">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
+                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 size-4 text-tone-400 pointer-events-none" />
                   <input
                     required
                     type="tel"
@@ -510,7 +510,7 @@ export default function AuthPage() {
                       setPhoneNumber(value);
                       setPhoneNumberDisplay(formatPhoneInput(value));
                     }}
-                    className="h-12 w-full pl-10 pr-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen focus:border-transparent"
+                    className="h-12 w-full pl-10 pr-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen focus:border-transparent"
                     placeholder={t("phonePlaceholder")}
                     disabled={loading}
                     maxLength={14}
@@ -551,7 +551,7 @@ export default function AuthPage() {
               value={otp}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
               placeholder="000000"
-              className="w-full px-3 py-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen text-center tracking-widest text-2xl"
+              className="w-full px-3 py-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen text-center tracking-widest text-2xl"
               required
               disabled={loading}
               autoFocus
@@ -578,8 +578,8 @@ export default function AuthPage() {
                 disabled={countdown > 0 || loading || sendingCode}
                 className={`text-sm underline transition-colors ${
                   countdown > 0
-                    ? "text-gray-400 cursor-not-allowed"
-                    : "text-white hover:text-gray-200 cursor-pointer"
+                    ? "text-tone-400 cursor-not-allowed"
+                    : "text-white hover:text-tone-200 cursor-pointer"
                 }`}
               >
                 {countdown > 0
@@ -593,7 +593,7 @@ export default function AuthPage() {
               <button
                 type="button"
                 onClick={goToPreviousStep}
-                className="text-sm text-white hover:text-gray-200 underline"
+                className="text-sm text-white hover:text-tone-200 underline"
               >
                 {t("changeNumber")}
               </button>
@@ -606,13 +606,13 @@ export default function AuthPage() {
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 size-4 text-tone-400 pointer-events-none" />
                 <input
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder={t("firstNamePlaceholder")}
-                  className="h-12 w-full pl-10 pr-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
+                  className="h-12 w-full pl-10 pr-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
                   required
                   disabled={loading}
                 />
@@ -622,7 +622,7 @@ export default function AuthPage() {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder={t("lastNamePlaceholder")}
-                className="h-12 w-full px-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
+                className="h-12 w-full px-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
                 disabled={loading}
               />
             </div>
@@ -637,7 +637,7 @@ export default function AuthPage() {
                 onChange={(e) =>
                   setAge(e.target.value === "" ? "" : Number(e.target.value))
                 }
-                className="h-12 w-full px-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer appearance-none"
+                className="h-12 w-full px-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer appearance-none"
                 disabled={loading}
               >
                 <option value="" disabled>

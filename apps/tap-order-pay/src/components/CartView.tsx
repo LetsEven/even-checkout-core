@@ -216,7 +216,7 @@ export default function CartView() {
                     <p className="text-black text-2xl md:text-3xl font-medium mb-2">
                       {t("cartEmptyTitle")}
                     </p>
-                    <p className="text-gray-500 text-base md:text-lg mb-6 md:mb-8">
+                    <p className="text-tone-500 text-base md:text-lg mb-6 md:mb-8">
                       {t("cartEmptySubtitle")}
                     </p>
                     <button
@@ -243,11 +243,11 @@ export default function CartView() {
                           className="py-3 md:py-4 lg:py-5 flex items-center gap-3 md:gap-4 lg:gap-5 animate-pulse"
                         >
                           {showImages && (
-                            <div className="shrink-0 size-16 md:size-20 lg:size-24 bg-gray-200 rounded-sm md:rounded-md" />
+                            <div className="shrink-0 size-16 md:size-20 lg:size-24 bg-tone-200 rounded-sm md:rounded-md" />
                           )}
                           <div className="flex-1 space-y-2">
-                            <div className="h-4 md:h-5 bg-gray-200 rounded w-2/3" />
-                            <div className="h-3 md:h-4 bg-gray-200 rounded w-1/3" />
+                            <div className="h-4 md:h-5 bg-tone-200 rounded w-2/3" />
+                            <div className="h-3 md:h-4 bg-tone-200 rounded w-1/3" />
                           </div>
                         </div>
                       ))}
@@ -288,7 +288,7 @@ export default function CartView() {
                               >
                                 {showImages && (
                                   <div className="shrink-0">
-                                    <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
+                                    <div className="size-16 md:size-20 lg:size-24 bg-tone-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
                                       {item.images &&
                                       item.images.length > 0 &&
                                       item.images[0] ? (
@@ -445,7 +445,7 @@ export default function CartView() {
               >
                 <div className="w-full flex gap-3 md:gap-4 lg:gap-5 mt-6 md:mt-7 lg:mt-8 justify-between">
                   <div className="flex flex-col justify-center min-w-0">
-                    <span className="text-gray-600 text-sm md:text-base lg:text-lg whitespace-nowrap">
+                    <span className="text-tone-600 text-sm md:text-base lg:text-lg whitespace-nowrap">
                       {t("itemsCount", { count: cartState.totalItems })}
                     </span>
                     <div className="flex items-center justify-center w-fit text-2xl md:text-3xl lg:text-4xl font-medium text-black text-center">

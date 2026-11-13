@@ -95,7 +95,7 @@ export function Modal({
             </h2>
           )}
           {description && (
-            <p id={descriptionId} className="text-center text-base text-gray-600 md:text-lg lg:text-xl">
+            <p id={descriptionId} className="text-center text-base text-tone-600 md:text-lg lg:text-xl">
               {description}
             </p>
           )}

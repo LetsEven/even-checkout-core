@@ -97,28 +97,28 @@ export default function OrderConfirmPage() {
 
             <div className="bg-white rounded-t-4xl relative z-10 flex flex-col px-8 py-8 gap-4">
               <div className="flex justify-between items-center">
-                <div className="h-4 w-16 bg-gray-200 rounded-full animate-pulse" />
-                <div className="h-4 w-24 bg-gray-200 rounded-full animate-pulse" />
+                <div className="h-4 w-16 bg-tone-200 rounded-full animate-pulse" />
+                <div className="h-4 w-24 bg-tone-200 rounded-full animate-pulse" />
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="h-4 w-16 bg-gray-200 rounded-full animate-pulse shrink-0" />
+                <div className="h-4 w-16 bg-tone-200 rounded-full animate-pulse shrink-0" />
                 <div className="grid grid-cols-5 gap-2 flex-1">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <div
                       key={i}
-                      className="h-8 bg-gray-100 rounded-full animate-pulse"
+                      className="h-8 bg-tone-100 rounded-full animate-pulse"
                     />
                   ))}
                 </div>
               </div>
 
               <div className="flex justify-between items-center border-t pt-4">
-                <div className="h-5 w-28 bg-gray-200 rounded-full animate-pulse" />
-                <div className="h-5 w-28 bg-gray-200 rounded-full animate-pulse" />
+                <div className="h-5 w-28 bg-tone-200 rounded-full animate-pulse" />
+                <div className="h-5 w-28 bg-tone-200 rounded-full animate-pulse" />
               </div>
 
-              <div className="h-12 w-full bg-gray-200 rounded-full animate-pulse" />
+              <div className="h-12 w-full bg-tone-200 rounded-full animate-pulse" />
             </div>
           </div>
         </div>
@@ -179,7 +179,7 @@ export default function OrderConfirmPage() {
                       className={`py-1 md:py-1.5 rounded-full border border-stroke/40 text-black transition-colors cursor-pointer ${
                         tipPercentage === percentage && !showCustomTipInput
                           ? "bg-even-grass text-even-evergreen"
-                          : "bg-surface hover:border-gray-400"
+                          : "bg-surface hover:border-tone-400"
                       }`}
                     >
                       {percentage === 0 ? "0%" : `${percentage}%`}
@@ -193,7 +193,7 @@ export default function OrderConfirmPage() {
                     className={`py-1 md:py-1.5 rounded-full border border-stroke/40 text-black transition-colors cursor-pointer ${
                       showCustomTipInput
                         ? "bg-even-grass text-even-evergreen"
-                        : "bg-surface hover:border-gray-400"
+                        : "bg-surface hover:border-tone-400"
                     }`}
                   >
                     $
@@ -215,7 +215,7 @@ export default function OrderConfirmPage() {
                       step="0.01"
                       min="0"
                       autoFocus
-                      className="w-full pl-8 pr-4 py-1 md:py-1.5 border border-stroke/40 rounded-full focus:outline-none focus:ring focus:ring-gray-400 text-black text-center bg-surface [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                      className="w-full pl-8 pr-4 py-1 md:py-1.5 border border-stroke/40 rounded-full focus:outline-none focus:ring focus:ring-tone-400 text-black text-center bg-surface [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                   </div>
                 </div>

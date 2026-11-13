@@ -158,14 +158,14 @@ export default function CheckoutModal({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-lg">
+        <div className="sticky top-0 bg-white border-b border-tone-200 px-6 py-4 rounded-t-lg">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-tone-900">
               Complete Payment
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-tone-400 hover:text-tone-600 transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -185,21 +185,21 @@ export default function CheckoutModal({
         </div>
 
         {/* Payment Summary */}
-        <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <div className="px-6 py-4 bg-tone-50 border-b border-tone-200">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Subtotal:</span>
-              <span className="text-gray-900">${baseAmount.toFixed(2)}</span>
+              <span className="text-tone-600">Subtotal:</span>
+              <span className="text-tone-900">${baseAmount.toFixed(2)}</span>
             </div>
             {tipAmount > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Tip:</span>
-                <span className="text-gray-900">${tipAmount.toFixed(2)}</span>
+                <span className="text-tone-600">Tip:</span>
+                <span className="text-tone-900">${tipAmount.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between font-semibold text-base border-t border-gray-300 pt-2">
-              <span className="text-gray-900">Total:</span>
-              <span className="text-gray-900">${amount.toFixed(2)}</span>
+            <div className="flex justify-between font-semibold text-base border-t border-tone-300 pt-2">
+              <span className="text-tone-900">Total:</span>
+              <span className="text-tone-900">${amount.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default function CheckoutModal({
           <div className="space-y-4">
             {/* Name Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-tone-700 mb-1">
                 Full Name
               </label>
               <input
@@ -237,13 +237,13 @@ export default function CheckoutModal({
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="John Doe"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
+                className="w-full px-3 py-2 border border-tone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
               />
             </div>
 
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-tone-700 mb-1">
                 Email Address
               </label>
               <input
@@ -251,13 +251,13 @@ export default function CheckoutModal({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="john@example.com"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
+                className="w-full px-3 py-2 border border-tone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
               />
             </div>
 
             {/* Card Number Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-tone-700 mb-1">
                 Card Number
               </label>
               <input
@@ -266,14 +266,14 @@ export default function CheckoutModal({
                 onChange={handleCardNumberChange}
                 placeholder="1234 5678 9012 3456"
                 maxLength={19}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
+                className="w-full px-3 py-2 border border-tone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
               />
             </div>
 
             {/* Exp Date and CVV Row */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-tone-700 mb-1">
                   Exp Date
                 </label>
                 <input
@@ -282,11 +282,11 @@ export default function CheckoutModal({
                   onChange={handleExpDateChange}
                   placeholder="MM/YY"
                   maxLength={5}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
+                  className="w-full px-3 py-2 border border-tone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-tone-700 mb-1">
                   CVV
                 </label>
                 <input
@@ -297,7 +297,7 @@ export default function CheckoutModal({
                   }
                   placeholder="123"
                   maxLength={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
+                  className="w-full px-3 py-2 border border-tone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
                 />
               </div>
             </div>
@@ -305,13 +305,13 @@ export default function CheckoutModal({
             {/* Country and Postal Code Row */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-tone-700 mb-1">
                   Country
                 </label>
                 <select
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
+                  className="w-full px-3 py-2 border border-tone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
                 >
                   <option value="Mexico">🇲🇽 Mexico</option>
                   <option value="USA">🇺🇸 USA</option>
@@ -320,7 +320,7 @@ export default function CheckoutModal({
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-tone-700 mb-1">
                   Postal Code
                 </label>
                 <input
@@ -328,7 +328,7 @@ export default function CheckoutModal({
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                   placeholder="12345"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
+                  className="w-full px-3 py-2 border border-tone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-even-grass focus:border-transparent"
                 />
               </div>
             </div>
@@ -336,12 +336,12 @@ export default function CheckoutModal({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-lg">
+        <div className="sticky bottom-0 bg-white border-t border-tone-200 px-6 py-4 rounded-b-lg">
           <div className="flex gap-3">
             <button
               onClick={onClose}
               disabled={isProcessing}
-              className="flex-1 py-3 px-4 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="flex-1 py-3 px-4 border border-tone-300 rounded-md text-tone-700 font-medium hover:bg-tone-50 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>

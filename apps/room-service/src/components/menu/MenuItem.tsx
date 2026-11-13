@@ -260,7 +260,7 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
         <div
           ref={cardRef}
           data-menu-item-id={adaptedItem.id}
-          className="border-b border-gray-300 py-3 md:py-4 cursor-pointer"
+          className="border-b border-tone-300 py-3 md:py-4 cursor-pointer"
           onClick={handleImageClick}
         >
           <div className="flex items-center gap-3 md:gap-4">
@@ -341,13 +341,13 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
       <div
         ref={cardRef}
         data-menu-item-id={adaptedItem.id}
-        className="border-b border-gray-300 py-4 md:py-6 lg:py-7 relative"
+        className="border-b border-tone-300 py-4 md:py-6 lg:py-7 relative"
         onClick={handleImageClick}
       >
         <div className="flex items-center gap-4 md:gap-5 lg:gap-6">
           {/* Image */}
           <div className="shrink-0 cursor-pointer">
-            <div className="relative size-36 md:size-40 lg:size-44 bg-gray-300 rounded-xl md:rounded-2xl flex items-center justify-center hover:scale-105 transition-transform duration-200">
+            <div className="relative size-36 md:size-40 lg:size-44 bg-tone-300 rounded-xl md:rounded-2xl flex items-center justify-center hover:scale-105 transition-transform duration-200">
               {adaptedItem.images[0] ? (
                 <img
                   src={adaptedItem.images[0]}

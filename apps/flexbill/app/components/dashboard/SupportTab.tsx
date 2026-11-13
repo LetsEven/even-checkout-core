@@ -174,17 +174,17 @@ export default function SupportTab({
           <div className="h-full flex items-center justify-center">
             <div className="text-center max-w-md px-8">
               <div className="mb-6 flex justify-center">
-                <div className="rounded-full h-20 w-20 md:h-24 md:w-24 bg-gray-100 flex items-center justify-center">
+                <div className="rounded-full h-20 w-20 md:h-24 md:w-24 bg-tone-100 flex items-center justify-center">
                   <Bot
                     className="w-12 h-12 md:w-14 md:h-14 text-black"
                     strokeWidth={1.5}
                   />
                 </div>
               </div>
-              <h2 className="text-2xl md:text-3xl font-medium text-gray-800 mb-3">
+              <h2 className="text-2xl md:text-3xl font-medium text-tone-800 mb-3">
                 {t("welcomeTitle")}
               </h2>
-              <p className="text-gray-600 text-base md:text-lg mb-8">
+              <p className="text-tone-600 text-base md:text-lg mb-8">
                 {tc("welcomeSubtitle")}
               </p>
             </div>
@@ -200,7 +200,7 @@ export default function SupportTab({
               >
                 <div
                   className={`max-w-[80%] rounded-xl px-4 md:px-5 lg:px-6 py-2 md:py-3 lg:py-4 text-black text-base md:text-lg lg:text-xl ${
-                    msg.role === "user" ? "bg-even-grass" : "bg-gray-100"
+                    msg.role === "user" ? "bg-even-grass" : "bg-tone-100"
                   }`}
                 >
                   <MessageContent content={msg.content} />
@@ -209,7 +209,7 @@ export default function SupportTab({
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="max-w-[80%] rounded-xl px-4 md:px-5 lg:px-6 py-2 md:py-3 lg:py-4 text-black text-base md:text-lg lg:text-xl bg-gray-100">
+                <div className="max-w-[80%] rounded-xl px-4 md:px-5 lg:px-6 py-2 md:py-3 lg:py-4 text-black text-base md:text-lg lg:text-xl bg-tone-100">
                   <p className="flex items-center gap-1">
                     <span className="animate-bounce">.</span>
                     <span className="animate-bounce delay-100">.</span>
@@ -225,8 +225,8 @@ export default function SupportTab({
 
       {/* Input fijado en la parte inferior */}
       <div className="flex-shrink-0 pt-4 pb-6">
-        <div className="flex items-center gap-2 md:gap-3 lg:gap-4 bg-gray-100 rounded-full px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 border border-gray-200">
-          <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
+        <div className="flex items-center gap-2 md:gap-3 lg:gap-4 bg-tone-100 rounded-full px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 border border-tone-200">
+          <button className="text-tone-400 hover:text-tone-600 cursor-pointer">
             <Plus className="size-6 md:size-7 lg:size-8" />
           </button>
           <input
@@ -235,17 +235,17 @@ export default function SupportTab({
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
             placeholder={tc("inputPlaceholder")}
-            className="flex-1 min-w-0 bg-transparent text-black text-base md:text-lg lg:text-xl placeholder-gray-500 focus:outline-none"
+            className="flex-1 min-w-0 bg-transparent text-black text-base md:text-lg lg:text-xl placeholder-tone-500 focus:outline-none"
             style={{
               textOverflow: "ellipsis",
             }}
           />
-          <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
+          <button className="text-tone-400 hover:text-tone-600 cursor-pointer">
             <Mic className="size-6 md:size-7 lg:size-8" />
           </button>
           <button
             onClick={handleSend}
-            className="text-even-evergreen rounded-full transition-colors disabled:text-gray-400"
+            className="text-even-evergreen rounded-full transition-colors disabled:text-tone-400"
             disabled={!message.trim() || isLoading}
           >
             <SendHorizontal className="size-6 md:size-7 lg:size-8 -rotate-90" />

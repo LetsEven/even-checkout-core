@@ -63,7 +63,7 @@ export default function POSBlockedModal({
                   className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 object-contain rounded-lg md:rounded-xl mb-3 md:mb-4 lg:mb-5"
                 />
               ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-200 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4 lg:mb-5">
+                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-tone-200 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4 lg:mb-5">
                   <img
                     src="/even/even-asterisk-evergreen.svg"
                     alt="Logo Even"
@@ -79,7 +79,7 @@ export default function POSBlockedModal({
             </div>
           )}
 
-          <p className="text-gray-600 text-base md:text-lg lg:text-xl text-center mb-6 md:mb-8">
+          <p className="text-tone-600 text-base md:text-lg lg:text-xl text-center mb-6 md:mb-8">
             {isTurnoClosed
               ? t("turnoClosedMessage")
               : t("agentDisconnectedMessage")}

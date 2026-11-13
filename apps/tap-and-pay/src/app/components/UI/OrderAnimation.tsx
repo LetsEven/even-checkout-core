@@ -267,7 +267,7 @@ const OrderAnimation = ({
                 {/* Restaurante */}
                 <div className="pb-4 md:pb-6 lg:pb-7">
                   <div className="flex items-center gap-3 md:gap-4">
-                    <div className="size-10 md:size-12 lg:size-14 rounded-full border border-gray-400 bg-gray-100 overflow-hidden shrink-0">
+                    <div className="size-10 md:size-12 lg:size-14 rounded-full border border-tone-400 bg-tone-100 overflow-hidden shrink-0">
                       <img
                         src={
                           restaurant?.logo_url ||
@@ -281,7 +281,7 @@ const OrderAnimation = ({
                       <span className="text-black text-base md:text-lg lg:text-xl font-medium">
                         {displayRestaurant}
                       </span>
-                      <p className="text-xs md:text-sm lg:text-base text-gray-500">
+                      <p className="text-xs md:text-sm lg:text-base text-tone-500">
                         {t("restaurantLabel")}
                       </p>
                     </div>
@@ -295,10 +295,10 @@ const OrderAnimation = ({
                       <img
                         src={userImage}
                         alt={displayName}
-                        className="size-10 md:size-12 lg:size-14 rounded-full object-cover border border-gray-400 shrink-0"
+                        className="size-10 md:size-12 lg:size-14 rounded-full object-cover border border-tone-400 shrink-0"
                       />
                     ) : (
-                      <div className="size-10 md:size-12 lg:size-14 rounded-full border border-gray-400 bg-even-evergreen flex items-center justify-center shrink-0">
+                      <div className="size-10 md:size-12 lg:size-14 rounded-full border border-tone-400 bg-even-evergreen flex items-center justify-center shrink-0">
                         <span className="text-white text-base md:text-lg lg:text-xl font-bold">
                           {displayName.charAt(0).toUpperCase()}
                         </span>
@@ -308,7 +308,7 @@ const OrderAnimation = ({
                       <span className="text-black text-base md:text-lg lg:text-xl font-medium">
                         {displayName}
                       </span>
-                      <p className="text-xs md:text-sm lg:text-base text-gray-500">
+                      <p className="text-xs md:text-sm lg:text-base text-tone-500">
                         {t("nameFieldLabel")}
                       </p>
                     </div>
@@ -318,7 +318,7 @@ const OrderAnimation = ({
                 {/* Platillos ordenados */}
                 {displayItems.length > 0 && (
                   <div className="pt-4 md:pt-6 lg:pt-7">
-                    <p className="text-xs md:text-sm lg:text-base text-gray-500 mb-3 md:mb-4">
+                    <p className="text-xs md:text-sm lg:text-base text-tone-500 mb-3 md:mb-4">
                       {t("paidDishesLabel")}
                     </p>
                     <div className="space-y-2 md:space-y-3 lg:space-y-4">
@@ -328,7 +328,7 @@ const OrderAnimation = ({
                           className="flex items-center gap-3 md:gap-4"
                         >
                           {showImages && (
-                            <div className="size-10 md:size-12 lg:size-14 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center overflow-hidden shrink-0">
+                            <div className="size-10 md:size-12 lg:size-14 bg-tone-300 rounded-sm md:rounded-md flex items-center justify-center overflow-hidden shrink-0">
                               {item.images[0] ? (
                                 <img
                                   src={item.images[0]}
@@ -348,7 +348,7 @@ const OrderAnimation = ({
                             <p className="text-black text-sm md:text-base lg:text-lg capitalize">
                               {item.item}
                             </p>
-                            <p className="text-xs md:text-sm lg:text-base text-gray-500">
+                            <p className="text-xs md:text-sm lg:text-base text-tone-500">
                               {t("quantityLabel", { quantity: item.quantity })}
                             </p>
                           </div>

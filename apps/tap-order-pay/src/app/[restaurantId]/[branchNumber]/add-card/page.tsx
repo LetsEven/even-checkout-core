@@ -365,7 +365,7 @@ function AddCardContent() {
               {/* Add Card Form */}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-gray-700 mb-2">
+                  <label className="block text-sm text-tone-700 mb-2">
                     {t("fullNameLabel")}
                   </label>
                   <input
@@ -375,7 +375,7 @@ function AddCardContent() {
                     onKeyDown={handleKeyDown}
                     autoComplete="cc-name"
                     placeholder="John Doe"
-                    className={`w-full px-3 py-3 border text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.fullName ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+                    className={`w-full px-3 py-3 border text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.fullName ? "border-red-500 bg-red-50" : "border-tone-300"}`}
                   />
                   {errors.fullName && (
                     <p className="text-red-500 text-xs mt-1">
@@ -385,7 +385,7 @@ function AddCardContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-700 mb-2">
+                  <label className="block text-sm text-tone-700 mb-2">
                     {t("cardNumberLabel")}
                   </label>
                   <input
@@ -397,7 +397,7 @@ function AddCardContent() {
                     inputMode="numeric"
                     placeholder="**** 2098"
                     maxLength={19}
-                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cardNumber ? "border border-red-500 bg-red-50" : "bg-gray-100 border border-gray-200"}`}
+                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cardNumber ? "border border-red-500 bg-red-50" : "bg-tone-100 border border-tone-200"}`}
                   />
                   {errors.cardNumber && (
                     <p className="text-red-500 text-xs mt-1">
@@ -408,7 +408,7 @@ function AddCardContent() {
 
                 {/* Expiration Date */}
                 <div>
-                  <label className="block text-sm text-gray-700 mb-2">
+                  <label className="block text-sm text-tone-700 mb-2">
                     {t("expiryLabel")}
                   </label>
                   <div className="flex gap-3">
@@ -418,7 +418,7 @@ function AddCardContent() {
                         setExpMonthIdx(MONTHS.indexOf(e.target.value))
                       }
                       autoComplete="cc-exp-month"
-                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-red-500 bg-red-50" : "bg-gray-100 border border-gray-200"}`}
+                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-red-500 bg-red-50" : "bg-tone-100 border border-tone-200"}`}
                     >
                       {MONTHS.map((m) => (
                         <option key={m} value={m}>
@@ -432,7 +432,7 @@ function AddCardContent() {
                         setExpYearIdx(YEARS.indexOf(e.target.value))
                       }
                       autoComplete="cc-exp-year"
-                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-red-500 bg-red-50" : "bg-gray-100 border border-gray-200"}`}
+                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-red-500 bg-red-50" : "bg-tone-100 border border-tone-200"}`}
                     >
                       {YEARS.map((y) => (
                         <option key={y} value={y}>
@@ -450,7 +450,7 @@ function AddCardContent() {
 
                 {/* CVV Field */}
                 <div>
-                  <label className="block text-sm text-gray-700 mb-2">
+                  <label className="block text-sm text-tone-700 mb-2">
                     CVV
                   </label>
                   <input
@@ -462,7 +462,7 @@ function AddCardContent() {
                     inputMode="numeric"
                     placeholder="123"
                     maxLength={4}
-                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cvv ? "border border-red-500 bg-red-50" : "border border-gray-300"}`}
+                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cvv ? "border border-red-500 bg-red-50" : "border border-tone-300"}`}
                   />
                   {errors.cvv && (
                     <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>

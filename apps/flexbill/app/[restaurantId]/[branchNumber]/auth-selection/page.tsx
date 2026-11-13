@@ -338,7 +338,7 @@ export default function AuthSelectionPage() {
                       <button
                         type="button"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="h-13 w-22.5 px-3 text-gray-700 font-medium bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer flex items-center justify-between gap-1.5"
+                        className="h-13 w-22.5 px-3 text-tone-700 font-medium bg-white border border-tone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer flex items-center justify-between gap-1.5"
                         disabled={loading}
                       >
                         <div className="flex items-center gap-1.5">
@@ -351,11 +351,11 @@ export default function AuthSelectionPage() {
                           />
                           <span className="text-sm">{countryCode}</span>
                         </div>
-                        <ChevronDown className="size-3 text-gray-500 shrink-0" />
+                        <ChevronDown className="size-3 text-tone-500 shrink-0" />
                       </button>
 
                       {isDropdownOpen && (
-                        <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 overflow-hidden">
+                        <div className="absolute top-full left-0 mt-1 w-full bg-white border border-tone-300 rounded-lg shadow-lg z-50 overflow-hidden">
                           {countries.map((country) => (
                             <button
                               key={country.code}
@@ -364,7 +364,7 @@ export default function AuthSelectionPage() {
                                 setCountryCode(country.code);
                                 setIsDropdownOpen(false);
                               }}
-                              className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 transition-colors text-left"
+                              className="w-full px-3 py-2 flex items-center gap-2 hover:bg-tone-100 transition-colors text-left"
                             >
                               <Flag
                                 code={country.flag}
@@ -374,7 +374,7 @@ export default function AuthSelectionPage() {
                                   borderRadius: 2,
                                 }}
                               />
-                              <span className="text-sm font-medium text-gray-700">
+                              <span className="text-sm font-medium text-tone-700">
                                 {country.code}
                               </span>
                             </button>
@@ -385,7 +385,7 @@ export default function AuthSelectionPage() {
 
                     {/* Phone Input */}
                     <div className="relative flex-1">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-tone-400 pointer-events-none" />
                       <input
                         required
                         type="tel"
@@ -395,7 +395,7 @@ export default function AuthSelectionPage() {
                           setPhoneNumber(value);
                           setPhoneNumberDisplay(formatPhoneInput(value));
                         }}
-                        className="h-13 w-full pl-10 pr-3 text-gray-700 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen"
+                        className="h-13 w-full pl-10 pr-3 text-tone-700 bg-white border border-tone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen"
                         placeholder={t("phonePlaceholder")}
                         disabled={loading}
                         maxLength={14}
@@ -438,7 +438,7 @@ export default function AuthSelectionPage() {
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                 placeholder="000000"
-                className="w-full px-3 py-3 text-gray-700 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen text-center tracking-widest text-2xl"
+                className="w-full px-3 py-3 text-tone-700 bg-white border border-tone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-even-evergreen text-center tracking-widest text-2xl"
                 required
                 disabled={loading}
                 autoFocus
@@ -488,13 +488,13 @@ export default function AuthSelectionPage() {
             <form onSubmit={handleProfileSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-tone-400 pointer-events-none" />
                   <input
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder={t("firstNamePlaceholder")}
-                    className="h-12 w-full pl-10 pr-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
+                    className="h-12 w-full pl-10 pr-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
                     required
                     disabled={loading}
                   />
@@ -504,7 +504,7 @@ export default function AuthSelectionPage() {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder={t("lastNamePlaceholder")}
-                  className="h-12 w-full px-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
+                  className="h-12 w-full px-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen appearance-none"
                   disabled={loading}
                 />
               </div>
@@ -518,7 +518,7 @@ export default function AuthSelectionPage() {
                   onChange={(e) =>
                     setAge(e.target.value === "" ? "" : Number(e.target.value))
                   }
-                  className="h-12 w-full px-3 text-gray-600 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer appearance-none"
+                  className="h-12 w-full px-3 text-tone-600 bg-white border border-tone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-even-evergreen cursor-pointer appearance-none"
                   disabled={loading}
                 >
                   <option value="" disabled>

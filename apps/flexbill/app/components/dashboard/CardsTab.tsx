@@ -105,7 +105,7 @@ export default function CardsTab() {
                             **** {method.lastFourDigits}
                           </span>
                           {method.expiryMonth && method.expiryYear && (
-                            <p className="text-xs md:text-sm lg:text-base text-gray-500">
+                            <p className="text-xs md:text-sm lg:text-base text-tone-500">
                               {method.expiryMonth?.toString().padStart(2, "0")}/
                               {method.expiryYear?.toString().slice(-2)}
                             </p>
@@ -121,7 +121,7 @@ export default function CardsTab() {
                           <button
                             onClick={() => handleSetDefault(method.id)}
                             disabled={settingDefaultId === method.id}
-                            className="text-gray-400 hover:text-even-shamrock transition-colors disabled:opacity-50 cursor-pointer"
+                            className="text-tone-400 hover:text-even-shamrock transition-colors disabled:opacity-50 cursor-pointer"
                             title={t("setDefaultTitle")}
                           >
                             {settingDefaultId === method.id ? (
@@ -146,7 +146,7 @@ export default function CardsTab() {
                         <button
                           onClick={() => setConfirmDeleteId(method.id)}
                           disabled={deletingCardId === method.id}
-                          className="p-2 md:p-2.5 lg:p-3 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                          className="p-2 md:p-2.5 lg:p-3 text-tone-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
                           title={tc("deleteCardTitle")}
                         >
                           {deletingCardId === method.id ? (
@@ -167,7 +167,7 @@ export default function CardsTab() {
         {/* Add New Card Button */}
         <button
           onClick={handleAddNewCard}
-          className="mt-2 md:mt-3 lg:mt-4 border border-black/50 flex justify-center items-center gap-1 md:gap-1.5 lg:gap-2 w-full text-black text-base md:text-lg lg:text-xl py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-colors bg-surface hover:bg-gray-100"
+          className="mt-2 md:mt-3 lg:mt-4 border border-black/50 flex justify-center items-center gap-1 md:gap-1.5 lg:gap-2 w-full text-black text-base md:text-lg lg:text-xl py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-colors bg-surface hover:bg-tone-100"
         >
           <Plus className="size-5 md:size-6 lg:size-7" />
           {t("addNewCard")}
@@ -188,20 +188,20 @@ export default function CardsTab() {
             <div className="relative bg-white rounded-t-4xl w-full p-6 md:p-7 lg:p-8">
               <button
                 onClick={() => setConfirmDeleteId(null)}
-                className="absolute top-4 md:top-5 lg:top-6 right-4 md:right-5 lg:right-6 text-gray-400 hover:text-gray-600"
+                className="absolute top-4 md:top-5 lg:top-6 right-4 md:right-5 lg:right-6 text-tone-400 hover:text-tone-600"
               >
                 <X className="size-5 md:size-6 lg:size-7" />
               </button>
-              <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-gray-800 mb-4 md:mb-5">
+              <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-tone-800 mb-4 md:mb-5">
                 {tc("deleteCardTitle")}
               </h3>
-              <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8">
+              <p className="text-sm md:text-base text-tone-600 mb-6 md:mb-8">
                 {tc("confirmDeleteCard")}
               </p>
               <div className="flex gap-3 md:gap-4">
                 <button
                   onClick={() => setConfirmDeleteId(null)}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
+                  className="flex-1 bg-tone-200 hover:bg-tone-300 text-tone-800 py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
                 >
                   {tc("cancel")}
                 </button>
@@ -231,17 +231,17 @@ export default function CardsTab() {
             <div className="relative bg-white rounded-t-4xl w-full p-6 md:p-7 lg:p-8">
               <button
                 onClick={() => setErrorMessage(null)}
-                className="absolute top-4 md:top-5 lg:top-6 right-4 md:right-5 lg:right-6 text-gray-400 hover:text-gray-600"
+                className="absolute top-4 md:top-5 lg:top-6 right-4 md:right-5 lg:right-6 text-tone-400 hover:text-tone-600"
               >
                 <X className="size-5 md:size-6 lg:size-7" />
               </button>
               <div className="flex items-center gap-3 mb-4 md:mb-5">
                 <CircleAlert className="size-6 md:size-7 text-red-500 flex-shrink-0" />
-                <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-gray-800">
+                <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-tone-800">
                   {tc("errorTitle")}
                 </h3>
               </div>
-              <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8">
+              <p className="text-sm md:text-base text-tone-600 mb-6 md:mb-8">
                 {errorMessage}
               </p>
               <button

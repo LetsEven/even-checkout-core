@@ -210,7 +210,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
       {/* Profile Image */}
       <div className="flex flex-col items-center">
         <div className="relative group mb-4">
-          <div className="size-28 md:size-32 lg:size-36 rounded-full bg-gray-200 overflow-hidden border-2 md:border-4 border-even-evergreen flex items-center justify-center">
+          <div className="size-28 md:size-32 lg:size-36 rounded-full bg-tone-200 overflow-hidden border-2 md:border-4 border-even-evergreen flex items-center justify-center">
             {isAuthenticated && photoUrl ? (
               <img
                 src={photoUrl}
@@ -249,7 +249,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
       {/* Fila 1: Nombre + Apellido */}
       <div className="flex gap-3 md:gap-4 lg:gap-5 mb-4 md:mb-5 lg:mb-6">
         <div className="space-y-2 flex-1">
-          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-gray-700">
+          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-tone-700">
             <User className="size-3.5 md:size-4 lg:size-5" />
             {t("firstNameLabel")}
           </label>
@@ -258,12 +258,12 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             placeholder={t("firstNamePlaceholder")}
-            className="w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 border text-black text-base md:text-lg lg:text-xl border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 border text-black text-base md:text-lg lg:text-xl border-tone-300 rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent disabled:bg-tone-100 disabled:cursor-not-allowed"
             disabled={isUpdating || !isAuthenticated}
           />
         </div>
         <div className="space-y-2 flex-1">
-          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-gray-700">
+          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-tone-700">
             <User className="size-3.5 md:size-4 lg:size-5" />
             {t("lastNameLabel")}
           </label>
@@ -272,7 +272,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             placeholder={t("lastNamePlaceholder")}
-            className="w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 border text-black text-base md:text-lg lg:text-xl border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 border text-black text-base md:text-lg lg:text-xl border-tone-300 rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent disabled:bg-tone-100 disabled:cursor-not-allowed"
             disabled={isUpdating || !isAuthenticated}
           />
         </div>
@@ -281,16 +281,16 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
       {/* Fila 2: Teléfono + Edad */}
       <div className="flex gap-3 md:gap-4 lg:gap-5 mb-6 md:mb-8 lg:mb-10">
         <div className="space-y-2 flex-1 min-w-0">
-          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-gray-700">
+          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-tone-700">
             <Phone className="size-3.5 md:size-4 lg:size-5" />
             {t("phoneLabel")}
           </label>
-          <div className="w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 bg-gray-100 border border-gray-300 rounded-lg text-gray-600 text-base md:text-lg lg:text-xl truncate">
+          <div className="w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 bg-tone-100 border border-tone-300 rounded-lg text-tone-600 text-base md:text-lg lg:text-xl truncate">
             {formatPhoneNumber(phone)}
           </div>
         </div>
         <div className="space-y-2 flex-1 min-w-0">
-          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-gray-700">
+          <label className="gap-1.5 md:gap-2 flex items-center text-sm md:text-base lg:text-lg text-tone-700">
             {t("ageLabel")}
           </label>
           <select
@@ -298,7 +298,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
             onChange={(e) =>
               setAge(e.target.value === "" ? "" : Number(e.target.value))
             }
-            className="cursor-pointer w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 border text-black text-base md:text-lg lg:text-xl border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed bg-white"
+            className="cursor-pointer w-full px-4 md:px-5 lg:px-6 py-3 md:py-4 lg:py-5 border text-black text-base md:text-lg lg:text-xl border-tone-300 rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent disabled:bg-tone-100 disabled:cursor-not-allowed bg-white"
             disabled={isUpdating || !isAuthenticated}
           >
             <option value="" disabled>
@@ -379,7 +379,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
                   </h2>
                 </div>
                 <div className="bg-surface border border-stroke-soft/50 rounded-xl p-4 mb-6">
-                  <p className="text-gray-700 text-sm text-center">
+                  <p className="text-tone-700 text-sm text-center">
                     {errorMessage}
                   </p>
                 </div>
@@ -412,18 +412,18 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
               {/* Close Button */}
               <button
                 onClick={() => setIsLogoutModalOpen(false)}
-                className="absolute top-4 md:top-5 lg:top-6 right-4 md:right-5 lg:right-6 text-gray-400 hover:text-gray-600"
+                className="absolute top-4 md:top-5 lg:top-6 right-4 md:right-5 lg:right-6 text-tone-400 hover:text-tone-600"
               >
                 <X className="size-5 md:size-6 lg:size-7" />
               </button>
 
               {/* Modal Title */}
-              <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-gray-800 mb-4 md:mb-5">
+              <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-tone-800 mb-4 md:mb-5">
                 {t("confirmLogoutTitle")}
               </h3>
 
               {/* Confirmation Message */}
-              <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8">
+              <p className="text-sm md:text-base text-tone-600 mb-6 md:mb-8">
                 {t("confirmLogoutMessage")}
               </p>
 
@@ -431,7 +431,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
               <div className="flex gap-3 md:gap-4">
                 <button
                   onClick={() => setIsLogoutModalOpen(false)}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
+                  className="flex-1 bg-tone-200 hover:bg-tone-300 text-tone-800 py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
                 >
                   {tc("cancel")}
                 </button>

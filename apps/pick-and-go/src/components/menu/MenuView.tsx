@@ -496,7 +496,7 @@ export default function MenuView() {
             {/* Settings Icon */}
             <button
               onClick={() => setShowSettingsModal(true)}
-              className="bg-white rounded-full shadow-sm hover:bg-gray-50 transition-all active:scale-95 size-9 md:size-10 lg:size-12 overflow-hidden flex items-center justify-center"
+              className="bg-white rounded-full shadow-sm hover:bg-tone-50 transition-all active:scale-95 size-9 md:size-10 lg:size-12 overflow-hidden flex items-center justify-center"
             >
               <UserAvatar isAuthenticated={isAuthenticated} profile={profile} />
             </button>
@@ -512,7 +512,7 @@ export default function MenuView() {
 
           {/* Name and photo */}
           <div className="mb-4 md:mb-6 flex flex-col items-center">
-            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-[#023828] overflow-hidden border border-gray-400 shadow-sm">
+            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-[#023828] overflow-hidden border border-tone-400 shadow-sm">
               {restaurant.logo_url && (
                 <img
                   src={restaurant.logo_url}
@@ -536,7 +536,7 @@ export default function MenuView() {
               >
                 {selectedBranchNumber ? (
                   <>
-                    <p className="text-gray-600 text-sm md:text-base">
+                    <p className="text-tone-600 text-sm md:text-base">
                       {tc("branchLabel")}{" "}
                       <span className="font-medium text-black">
                         {branches.find(
@@ -545,16 +545,16 @@ export default function MenuView() {
                       </span>
                     </p>
                     {branches.length > 1 && (
-                      <ChevronRight className="size-4 md:size-5 text-gray-600" />
+                      <ChevronRight className="size-4 md:size-5 text-tone-600" />
                     )}
                   </>
                 ) : (
                   <>
-                    <p className="text-gray-600 text-sm md:text-base font-medium">
+                    <p className="text-tone-600 text-sm md:text-base font-medium">
                       {tc("selectBranch")}
                     </p>
                     {branches.length > 1 && (
-                      <ChevronRight className="size-4 md:size-5 text-gray-600" />
+                      <ChevronRight className="size-4 md:size-5 text-tone-600" />
                     )}
                   </>
                 )}
@@ -622,7 +622,7 @@ export default function MenuView() {
                 ${
                   activeCat === cat
                     ? "text-white"
-                    : "text-gray-500 hover:bg-gray-100"
+                    : "text-tone-500 hover:bg-tone-100"
                 }`}
               >
                 {cat === "Todo" ? t("filterAll") : cat}
@@ -642,7 +642,7 @@ export default function MenuView() {
             ))
           ) : (
             <div className="text-center py-10 md:py-16">
-              <p className="text-gray-500 text-base md:text-lg lg:text-xl">
+              <p className="text-tone-500 text-base md:text-lg lg:text-xl">
                 {searchQuery.trim()
                   ? t("noResultsFor", { query: searchQuery })
                   : t("noItemsAvailable")}
@@ -771,7 +771,7 @@ export default function MenuView() {
                               </span>
                             </div>
                             {extraMinutesAdded > 0 && (
-                              <span className="text-xs font-medium text-green-300 bg-green-500/20 border border-green-400/30 px-2 py-0.5 rounded-full">
+                              <span className="text-xs font-medium text-positive-300 bg-positive-500/20 border border-positive-400/30 px-2 py-0.5 rounded-full">
                                 {tc("extraMinutes", {
                                   minutes: extraMinutesAdded,
                                 })}
@@ -789,17 +789,17 @@ export default function MenuView() {
                 <div className="flex items-center justify-center gap-4 md:gap-6 lg:gap-8">
                   {/* Preparando - siempre activo */}
                   <div className="flex flex-col items-center gap-1.5 md:gap-2">
-                    <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center shadow-xs transition-all duration-300 bg-white border border-green-200">
-                      <Clock className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-green-600" />
+                    <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center shadow-xs transition-all duration-300 bg-white border border-positive-200">
+                      <Clock className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-positive-600" />
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-green-100">
+                    <span className="text-xs md:text-sm font-medium text-positive-100">
                       {tc("statusPreparing")}
                     </span>
                   </div>
 
                   <div className="flex-1 max-w-12 md:max-w-16 lg:max-w-20 h-1 bg-white/10 rounded-full overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-white to-green-200"
+                      className="h-full rounded-full bg-gradient-to-r from-white to-positive-200"
                       style={{
                         width: (() => {
                           if (
@@ -827,7 +827,7 @@ export default function MenuView() {
                           "preparing") === "ready" ||
                         (activeOrder.pick_and_go_order?.cooking_status ??
                           "preparing") === "delivered"
-                          ? "bg-green-100 border border-green-100"
+                          ? "bg-positive-100 border border-positive-100"
                           : "bg-white/10"
                       }`}
                     >
@@ -837,7 +837,7 @@ export default function MenuView() {
                             "preparing") === "ready" ||
                           (activeOrder.pick_and_go_order?.cooking_status ??
                             "preparing") === "delivered"
-                            ? "text-green-600"
+                            ? "text-positive-600"
                             : "text-white"
                         }`}
                       />
@@ -848,7 +848,7 @@ export default function MenuView() {
                           "preparing") === "ready" ||
                         (activeOrder.pick_and_go_order?.cooking_status ??
                           "preparing") === "delivered"
-                          ? "text-green-100"
+                          ? "text-positive-100"
                           : "text-white/60"
                       }`}
                     >
@@ -861,7 +861,7 @@ export default function MenuView() {
                       className={`h-full rounded-full transition-all duration-500 ${
                         (activeOrder.pick_and_go_order?.cooking_status ??
                           "preparing") === "delivered"
-                          ? "w-full bg-gradient-to-r from-green-200 to-green-300"
+                          ? "w-full bg-gradient-to-r from-positive-200 to-positive-300"
                           : "w-0"
                       }`}
                     ></div>
@@ -873,7 +873,7 @@ export default function MenuView() {
                       className={`w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center shadow-xs transition-all duration-300 ${
                         (activeOrder.pick_and_go_order?.cooking_status ??
                           "preparing") === "delivered"
-                          ? "bg-green-200 border border-green-300"
+                          ? "bg-positive-200 border border-positive-300"
                           : "bg-white/10"
                       }`}
                     >
@@ -881,7 +881,7 @@ export default function MenuView() {
                         className={`w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 ${
                           (activeOrder.pick_and_go_order?.cooking_status ??
                             "preparing") === "delivered"
-                            ? "text-green-800"
+                            ? "text-positive-800"
                             : "text-white"
                         }`}
                         fill="currentColor"
@@ -898,7 +898,7 @@ export default function MenuView() {
                       className={`text-xs md:text-sm font-medium ${
                         (activeOrder.pick_and_go_order?.cooking_status ??
                           "preparing") === "delivered"
-                          ? "text-green-100"
+                          ? "text-positive-100"
                           : "text-white/60"
                       }`}
                     >
@@ -941,7 +941,7 @@ export default function MenuView() {
                     >
                       {showImages && (
                         <div className="flex-shrink-0">
-                          <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm flex items-center justify-center overflow-hidden">
+                          <div className="size-16 md:size-20 lg:size-24 bg-tone-300 rounded-sm flex items-center justify-center overflow-hidden">
                             {dish.images &&
                             dish.images.length > 0 &&
                             dish.images[0] ? (
@@ -1008,7 +1008,7 @@ export default function MenuView() {
           {/* Settings */}
           <button
             onClick={() => setShowSettingsModal(true)}
-            className="size-11 md:size-12 rounded-full overflow-hidden flex items-center justify-center bg-white/60 border border-gray-200 hover:bg-white transition-colors active:scale-95"
+            className="size-11 md:size-12 rounded-full overflow-hidden flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
           >
             <UserAvatar
               isAuthenticated={isAuthenticated}
@@ -1022,7 +1022,7 @@ export default function MenuView() {
           <div className="relative">
             <button
               onClick={() => navigateWithRestaurantId("/cart")}
-              className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-gray-200 hover:bg-white transition-colors active:scale-95"
+              className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
             >
               <ShoppingCart
                 className="size-5 md:size-6 text-stone-700"
@@ -1073,7 +1073,7 @@ export default function MenuView() {
             }}
           >
             <div className="flex justify-center pt-3 pb-1 shrink-0">
-              <div className="w-10 h-1 rounded-full bg-gray-300/80" />
+              <div className="w-10 h-1 rounded-full bg-tone-300/80" />
             </div>
             <Suspense fallback={null}>
               <ChatView onBack={closePepperChat} />
@@ -1109,7 +1109,7 @@ export default function MenuView() {
             }}
           >
             <div className="flex justify-center pt-3 pb-1 shrink-0">
-              <div className="w-10 h-1 rounded-full bg-gray-300/80" />
+              <div className="w-10 h-1 rounded-full bg-tone-300/80" />
             </div>
             <Suspense fallback={null}>
               {isAuthenticated && profile?.firstName ? (

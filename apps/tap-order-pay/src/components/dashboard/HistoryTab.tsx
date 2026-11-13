@@ -114,9 +114,9 @@ export default function HistoryTab() {
       case "ready":
         return "bg-orange-100 text-orange-800 border-orange-300";
       case "delivered":
-        return "bg-green-100 text-green-800 border-green-300";
+        return "bg-positive-100 text-positive-800 border-positive-300";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-300";
+        return "bg-tone-100 text-tone-800 border-tone-300";
     }
   };
 
@@ -188,10 +188,10 @@ export default function HistoryTab() {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-center">
-          <div className="text-gray-400 text-6xl md:text-7xl lg:text-8xl mb-4 md:mb-5 lg:mb-6">
+          <div className="text-tone-400 text-6xl md:text-7xl lg:text-8xl mb-4 md:mb-5 lg:mb-6">
             📋
           </div>
-          <p className="text-gray-500 text-base md:text-lg lg:text-xl">
+          <p className="text-tone-500 text-base md:text-lg lg:text-xl">
             {t("noOrdersYet")}
           </p>
         </div>
@@ -215,7 +215,7 @@ export default function HistoryTab() {
 
   return (
     <>
-      <h1 className="text-gray-700 text-xl md:text-2xl lg:text-3xl mb-3 md:mb-4 lg:mb-5">
+      <h1 className="text-tone-700 text-xl md:text-2xl lg:text-3xl mb-3 md:mb-4 lg:mb-5">
         {t("previousOrders")}
       </h1>
       <div className="space-y-3 md:space-y-4 lg:space-y-5">
@@ -226,7 +226,7 @@ export default function HistoryTab() {
               onClick={() => {
                 setSelectedOrderDetails(order);
               }}
-              className="border border-gray-200 rounded-lg md:rounded-xl p-4 md:p-5 lg:p-6 cursor-pointer"
+              className="border border-tone-200 rounded-lg md:rounded-xl p-4 md:p-5 lg:p-6 cursor-pointer"
             >
               <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
                 {/* Logo */}
@@ -247,11 +247,11 @@ export default function HistoryTab() {
                   <h3 className="text-black mb-1 text-base md:text-lg lg:text-xl truncate">
                     {order.restaurantName}
                   </h3>
-                  <p className="text-sm md:text-base lg:text-lg text-gray-600 mb-1">
+                  <p className="text-sm md:text-base lg:text-lg text-tone-600 mb-1">
                     {t("itemsCount", { count: order.totalQuantity })} · $
                     {order.totalAmount.toFixed(2)}
                   </p>
-                  <p className="text-xs md:text-sm lg:text-base text-gray-400">
+                  <p className="text-xs md:text-sm lg:text-base text-tone-400">
                     {format.dateTime(new Date(order.tableOrderDate), {
                       day: "numeric",
                       month: "long",
@@ -269,7 +269,7 @@ export default function HistoryTab() {
       {hasMore && (
         <button
           onClick={handleLoadMore}
-          className="mt-4 md:mt-5 lg:mt-6 border border-black/50 flex justify-center items-center gap-1 md:gap-1.5 lg:gap-2 w-full text-black text-base md:text-lg lg:text-xl py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-colors bg-surface hover:bg-gray-100"
+          className="mt-4 md:mt-5 lg:mt-6 border border-black/50 flex justify-center items-center gap-1 md:gap-1.5 lg:gap-2 w-full text-black text-base md:text-lg lg:text-xl py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-colors bg-surface hover:bg-tone-100"
         >
           {t("loadMore")}
         </button>
@@ -442,7 +442,7 @@ export default function HistoryTab() {
                           className="flex justify-between items-center gap-3 md:gap-4 lg:gap-5"
                         >
                           {(selectedOrderDetails.menuShowImages ?? showImages) && (
-                            <div className="size-14 md:size-16 lg:size-20 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
+                            <div className="size-14 md:size-16 lg:size-20 bg-tone-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
                               {dish.images?.length > 0 && dish.images[0] ? (
                                 <img
                                   src={dish.images[0]}
@@ -631,15 +631,15 @@ export default function HistoryTab() {
             />
             <div className="relative bg-white rounded-t-4xl w-full">
               <div className="px-6 md:px-8 lg:px-10 pt-4 md:pt-6 lg:pt-8">
-                <div className="flex items-center justify-between pb-4 md:pb-5 lg:pb-6 border-b border-gray-100">
+                <div className="flex items-center justify-between pb-4 md:pb-5 lg:pb-6 border-b border-tone-100">
                   <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-black">
                     {t("breakdownTitle")}
                   </h3>
                   <button
                     onClick={() => setIsBreakdownOpen(false)}
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-1 hover:bg-tone-100 rounded-full transition-colors"
                   >
-                    <X className="size-5 md:size-6 lg:size-7 text-gray-500" />
+                    <X className="size-5 md:size-6 lg:size-7 text-tone-500" />
                   </button>
                 </div>
               </div>
@@ -679,7 +679,7 @@ export default function HistoryTab() {
                     </div>
                   )}
                 </>
-                <div className="flex justify-between items-center border-t border-gray-100 pt-3 md:pt-4">
+                <div className="flex justify-between items-center border-t border-tone-100 pt-3 md:pt-4">
                   <span className="text-black font-semibold text-base md:text-lg lg:text-xl">
                     {t("total")}
                   </span>

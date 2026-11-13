@@ -9,7 +9,7 @@ type ChoiceProps = Omit<ComponentProps<"input">, "type"> & {
 
 // Reemplaza las clases .mycheckbox/.myradio de cada app.
 const checkboxClasses = cn(
-  "relative size-5 shrink-0 cursor-pointer appearance-none overflow-hidden rounded-full border border-gray-300 bg-gray-100",
+  "relative size-5 shrink-0 cursor-pointer appearance-none overflow-hidden rounded-full border border-tone-300 bg-tone-100",
   "checked:border-even-grass checked:bg-even-grass",
   "after:absolute after:top-[45%] after:left-1/2 after:hidden after:h-[9px] after:w-[5px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45",
   "after:border-r-[2.5px] after:border-b-[2.5px] after:border-even-evergreen checked:after:block",
@@ -18,7 +18,7 @@ const checkboxClasses = cn(
 );
 
 const radioClasses = cn(
-  "relative size-4 shrink-0 cursor-pointer appearance-none rounded-full border border-gray-300 bg-gray-100",
+  "relative size-4 shrink-0 cursor-pointer appearance-none rounded-full border border-tone-300 bg-tone-100",
   "checked:border-transparent checked:bg-even-grass",
   "before:absolute before:inset-0 before:m-auto before:hidden before:size-1.5 before:rounded-full before:bg-white checked:before:block",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-even-evergreen",

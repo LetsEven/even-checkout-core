@@ -143,7 +143,7 @@ export function CardScanner({
             type="button"
             aria-label="Cerrar"
             onClick={close}
-            className="text-white hover:text-gray-400 transition-colors cursor-pointer"
+            className="text-white hover:text-tone-400 transition-colors cursor-pointer"
           >
             <X className="size-6" />
           </button>

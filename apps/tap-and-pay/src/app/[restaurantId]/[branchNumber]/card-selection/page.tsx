@@ -1196,12 +1196,12 @@ export default function CardSelectionPage() {
 
   if (!tableNumber) {
     return (
-      <div className="min-h-dvh bg-gray-50 flex items-center justify-center">
+      <div className="min-h-dvh bg-tone-50 flex items-center justify-center">
         <div className="text-center px-4 md:px-6 lg:px-8">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium text-gray-800 mb-4 md:mb-6">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium text-tone-800 mb-4 md:mb-6">
             {tc("invalidTableTitle")}
           </h1>
-          <p className="text-gray-600 text-base md:text-lg lg:text-xl">
+          <p className="text-tone-600 text-base md:text-lg lg:text-xl">
             {tc("invalidTableMessage")}
           </p>
         </div>
@@ -1268,7 +1268,7 @@ export default function CardSelectionPage() {
             <h2 className="text-xl font-medium text-black mb-2">
               {t("verifyingPaymentTitle")}
             </h2>
-            <p className="text-sm text-gray-500 max-w-xs">
+            <p className="text-sm text-tone-500 max-w-xs">
               {t("verifyingPaymentMessage")}
             </p>
           </div>
@@ -1304,7 +1304,7 @@ export default function CardSelectionPage() {
                         {tc("totalToPay")}
                       </span>
                       <CircleAlert
-                        className="size-4 cursor-pointer text-gray-500"
+                        className="size-4 cursor-pointer text-tone-500"
                         strokeWidth={2.3}
                         onClick={() => setShowTotalModal(true)}
                       />
@@ -1343,7 +1343,7 @@ export default function CardSelectionPage() {
                             className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                               selectedMSI !== null
                                 ? "border-even-grass bg-even-grass"
-                                : "border-gray-300"
+                                : "border-tone-300"
                             }`}
                           >
                             {selectedMSI !== null && (
@@ -1388,7 +1388,7 @@ export default function CardSelectionPage() {
                           className={`w-4 h-4 rounded-full border-2 cursor-pointer ${
                             selectedPaymentMethodId === method.id
                               ? "border-even-grass bg-even-grass"
-                              : "border-gray-300"
+                              : "border-tone-300"
                           }`}
                         >
                           {selectedPaymentMethodId === method.id && (
@@ -1401,7 +1401,7 @@ export default function CardSelectionPage() {
                           <button
                             onClick={() => handleDeleteCard(method.id)}
                             disabled={deletingCardId === method.id}
-                            className="pl-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                            className="pl-2 text-tone-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
                             title={t("deleteCardButtonTitle")}
                           >
                             {deletingCardId === method.id ? (
@@ -1415,7 +1415,7 @@ export default function CardSelectionPage() {
                     ))}
 
                     {walletOrderRejected && (
-                      <p className="text-sm text-gray-600 text-center">
+                      <p className="text-sm text-tone-600 text-center">
                         {t("walletUnavailableMessage")}
                       </p>
                     )}
@@ -1490,7 +1490,7 @@ export default function CardSelectionPage() {
                 <div className="mb-2.5">
                   <button
                     onClick={handleAddCard}
-                    className="border border-black/50 flex justify-center items-center gap-1 w-full text-black py-3 rounded-full cursor-pointer transition-colors bg-surface hover:bg-gray-100 text-base md:text-lg lg:text-xl"
+                    className="border border-black/50 flex justify-center items-center gap-1 w-full text-black py-3 rounded-full cursor-pointer transition-colors bg-surface hover:bg-tone-100 text-base md:text-lg lg:text-xl"
                   >
                     <Plus className="size-5" />
                     {t("addPaymentMethodCta")}
@@ -1558,9 +1558,9 @@ export default function CardSelectionPage() {
                   </h3>
                   <button
                     onClick={() => setShowTotalModal(false)}
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                    className="p-1 hover:bg-tone-100 rounded-full transition-colors cursor-pointer"
                   >
-                    <X className="size-5 text-gray-500" />
+                    <X className="size-5 text-tone-500" />
                   </button>
                 </div>
               </div>
@@ -1625,9 +1625,9 @@ export default function CardSelectionPage() {
                   </h3>
                   <button
                     onClick={() => setShowPaymentOptionsModal(false)}
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                    className="p-1 hover:bg-tone-100 rounded-full transition-colors cursor-pointer"
                   >
-                    <X className="size-5 text-gray-500" />
+                    <X className="size-5 text-tone-500" />
                   </button>
                 </div>
               </div>
@@ -1651,7 +1651,7 @@ export default function CardSelectionPage() {
                         className={`py-2 px-5 border rounded-full cursor-pointer transition-colors ${
                           selectedMSI === null
                             ? "border-even-grass bg-even-grass/10"
-                            : "border-black/50 bg-surface hover:border-gray-400"
+                            : "border-black/50 bg-surface hover:border-tone-400"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -1659,7 +1659,7 @@ export default function CardSelectionPage() {
                             <p className="font-medium text-black text-base md:text-lg">
                               {t("fullPaymentOption")}
                             </p>
-                            <p className="text-xs md:text-sm text-gray-600">
+                            <p className="text-xs md:text-sm text-tone-600">
                               ${totalAmountCharged.toFixed(2)} MXN
                             </p>
                           </div>
@@ -1667,7 +1667,7 @@ export default function CardSelectionPage() {
                             className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                               selectedMSI === null
                                 ? "border-even-grass bg-even-grass"
-                                : "border-gray-300"
+                                : "border-tone-300"
                             }`}
                           >
                             {selectedMSI === null && (
@@ -1680,10 +1680,10 @@ export default function CardSelectionPage() {
                       {/* Separador */}
                       <div className="relative">
                         <div className="absolute inset-0 flex items-center">
-                          <div className="w-full border-t border-gray-300"></div>
+                          <div className="w-full border-t border-tone-300"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                          <span className="px-2 bg-white text-gray-500">
+                          <span className="px-2 bg-white text-tone-500">
                             {t("payInMonths")}
                           </span>
                         </div>
@@ -1714,7 +1714,7 @@ export default function CardSelectionPage() {
                                   className={`py-2 px-5 border rounded-full cursor-pointer transition-colors ${
                                     selectedMSI === option.months
                                       ? "border-even-grass bg-even-grass/10"
-                                      : "border-black/50 bg-surface hover:border-gray-400"
+                                      : "border-black/50 bg-surface hover:border-tone-400"
                                   }`}
                                 >
                                   <div className="flex items-center justify-between">
@@ -1724,7 +1724,7 @@ export default function CardSelectionPage() {
                                           months: option.months,
                                         })}
                                       </p>
-                                      <p className="text-xs md:text-sm text-gray-600">
+                                      <p className="text-xs md:text-sm text-tone-600">
                                         {t("monthlyInstallmentDetail", {
                                           monthly: monthlyPayment.toFixed(2),
                                           total: totalWithCommission.toFixed(2),
@@ -1735,7 +1735,7 @@ export default function CardSelectionPage() {
                                       className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                                         selectedMSI === option.months
                                           ? "border-even-grass bg-even-grass"
-                                          : "border-gray-300"
+                                          : "border-tone-300"
                                       }`}
                                     >
                                       {selectedMSI === option.months && (
@@ -1749,7 +1749,7 @@ export default function CardSelectionPage() {
 
                             {hasUnavailableOptions &&
                               totalAmountCharged < minAmountNeeded && (
-                                <p className="text-xs md:text-sm text-gray-500 text-center mt-2">
+                                <p className="text-xs md:text-sm text-tone-500 text-center mt-2">
                                   {t("minAmountForInstallments", {
                                     amount: minAmountNeeded.toFixed(2),
                                   })}
@@ -1764,7 +1764,7 @@ export default function CardSelectionPage() {
               </div>
 
               {/* Footer con botón de confirmar */}
-              <div className="px-6 py-4 border-t border-gray-200 sticky bottom-0 bg-white">
+              <div className="px-6 py-4 border-t border-tone-200 sticky bottom-0 bg-white">
                 <button
                   onClick={() => setShowPaymentOptionsModal(false)}
                   className="w-full bg-even-grass text-even-evergreen py-3 rounded-full cursor-pointer transition-colors text-base"
@@ -1806,7 +1806,7 @@ export default function CardSelectionPage() {
               </div>
 
               <div className="bg-surface border border-stroke-soft/50 rounded-xl p-4 mb-6">
-                <p className="text-gray-700 text-sm text-center">
+                <p className="text-tone-700 text-sm text-center">
                   {errorMessage}
                 </p>
               </div>

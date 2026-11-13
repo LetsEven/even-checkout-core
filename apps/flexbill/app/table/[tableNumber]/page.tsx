@@ -20,10 +20,10 @@ export default function TablePage() {
 
   if (!tableNumber) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-tone-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('invalidTableTitle')}</h1>
-          <p className="text-gray-600">{t('invalidTableMessage')}</p>
+          <h1 className="text-2xl font-bold text-tone-800 mb-4">{t('invalidTableTitle')}</h1>
+          <p className="text-tone-600">{t('invalidTableMessage')}</p>
         </div>
       </div>
     );

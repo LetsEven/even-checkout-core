@@ -657,7 +657,7 @@ export default function PaymentSuccessPage() {
                     paymentDetails?.cardBrand === "apple" ||
                     paymentDetails?.cardBrand === "google") && (
                     <div className="flex items-center gap-2 md:gap-3 lg:gap-4 text-white/90">
-                      <div className="bg-green-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
+                      <div className="bg-positive-100 p-2 md:p-2.5 lg:p-3 rounded-xl flex items-center justify-center">
                         <div className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 flex items-center justify-center">
                           {getCardTypeIcon(
                             paymentDetails.cardBrand || "unknown",
@@ -695,7 +695,7 @@ export default function PaymentSuccessPage() {
                         >
                           {/* Image */}
                           {showImages && (
-                            <div className="size-14 md:size-16 lg:size-20 bg-gray-300 rounded-lg md:rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden">
+                            <div className="size-14 md:size-16 lg:size-20 bg-tone-300 rounded-lg md:rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden">
                               {dish.images?.[0] ? (
                                 <img
                                   src={dish.images[0]}
@@ -864,9 +864,9 @@ export default function PaymentSuccessPage() {
                 </h3>
                 <button
                   onClick={() => setIsBreakdownModalOpen(false)}
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                  className="p-1 hover:bg-tone-100 rounded-full transition-colors cursor-pointer"
                 >
-                  <X className="size-5 md:size-6 lg:size-7 text-gray-500" />
+                  <X className="size-5 md:size-6 lg:size-7 text-tone-500" />
                 </button>
               </div>
             </div>
@@ -978,7 +978,7 @@ export default function PaymentSuccessPage() {
               {/* Sign Up Option */}
               <button
                 onClick={handleSignUp}
-                className="w-full bg-white hover:bg-gray-50 text-black py-4 md:py-5 lg:py-6 px-4 md:px-5 lg:px-6 rounded-xl md:rounded-2xl transition-all duration-200 flex items-center gap-3 md:gap-4 lg:gap-5 active:scale-95"
+                className="w-full bg-white hover:bg-tone-50 text-black py-4 md:py-5 lg:py-6 px-4 md:px-5 lg:px-6 rounded-xl md:rounded-2xl transition-all duration-200 flex items-center gap-3 md:gap-4 lg:gap-5 active:scale-95"
               >
                 <div className="bg-even-grass p-2 md:p-2.5 lg:p-3 rounded-full group-hover:scale-110 transition-transform">
                   <LogIn className="size-5 md:size-6 lg:size-7 text-even-evergreen" />
@@ -987,7 +987,7 @@ export default function PaymentSuccessPage() {
                   <h2 className="text-base md:text-lg lg:text-xl font-medium mb-0.5 md:mb-1">
                     {t("createAccountCta")}
                   </h2>
-                  <p className="text-xs md:text-sm lg:text-base text-gray-600">
+                  <p className="text-xs md:text-sm lg:text-base text-tone-600">
                     {t("createAccountSubtitle")}
                   </p>
                 </div>

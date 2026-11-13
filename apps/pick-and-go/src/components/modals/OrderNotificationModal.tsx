@@ -45,7 +45,7 @@ export default function OrderNotificationModal({ onDismiss }: Props) {
           {/* Button */}
           <button
             onClick={onDismiss}
-            className="mt-2 w-full bg-white text-gray-900 font-semibold py-3.5 rounded-full text-md hover:bg-white/90 transition-colors active:scale-95"
+            className="mt-2 w-full bg-white text-tone-900 font-semibold py-3.5 rounded-full text-md hover:bg-white/90 transition-colors active:scale-95"
           >
             {tc("understood")}
           </button>

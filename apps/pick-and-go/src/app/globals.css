@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "@even/ui/theme.css";
-@source "../../../../packages/payments/src";
 
 /* Fondo Evergreen de marca con asterisco watermark (llena el vacío, da aire) */
 .brand-evergreen {

@@ -616,15 +616,15 @@ export default function MenuView() {
             className="absolute top-0 h-px w-px pointer-events-none"
           />
           {/* Nombre del restaurante + asistente */}
-          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full flex items-center justify-between gap-3">
-            <p className="min-w-0 truncate text-base md:text-lg font-medium text-black">
+          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full grid grid-cols-[2.75rem_minmax(0,1fr)_2.75rem] md:grid-cols-[3.5rem_minmax(0,1fr)_3.5rem] lg:grid-cols-[4rem_minmax(0,1fr)_4rem] items-center gap-2">
+            <h2 className="col-start-2 text-center text-2xl md:text-4xl font-semibold tracking-tight leading-tight text-black line-clamp-2 text-balance">
               {restaurant.name}
-            </p>
+            </h2>
 
             {/* Asistente */}
             <button
               onClick={() => setShowPepperChat(true)}
-              className="ml-auto size-11 md:size-14 lg:size-16 overflow-hidden transition-all active:scale-95"
+              className="col-start-3 row-start-1 justify-self-end size-11 md:size-14 lg:size-16 overflow-hidden transition-all active:scale-95"
             >
               <PepperIcon />
             </button>

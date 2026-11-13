@@ -346,6 +346,14 @@
   }
 }
 
+/* Fundidos de entrada/salida que con movimiento reducido pasan a ser cortos
+   (150 ms) en vez de cortes secos. La clase gana al selector * por especificidad. */
+@media (prefers-reduced-motion: reduce) {
+  .reduce-motion-fade {
+    transition-duration: 150ms !important;
+  }
+}
+
 /* ✅ SOLUCIÓN BANNER MÓVIL - Consistente con flexbill y taporderpay */
 @media (max-width: 768px) {
   .banner-mobile {

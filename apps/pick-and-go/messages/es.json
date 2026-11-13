@@ -479,5 +479,9 @@
       "saturday": "Sábado",
       "sunday": "Domingo"
     }
+  },
+  "RestaurantIntro": {
+    "title": "Bienvenida",
+    "skip": "Toca para continuar"
   }
 }

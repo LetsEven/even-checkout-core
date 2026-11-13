@@ -10,6 +10,11 @@ import PepperIcon from "../UI/PepperIcon";
 import RestaurantDetailCard, {
   DETAIL_ANIMATION_MS,
 } from "./RestaurantDetailCard";
+import RestaurantIntro, {
+  INTRO_FLY_MS,
+  INTRO_SHOW_MS,
+  type IntroPhase,
+} from "./RestaurantIntro";
 import {
   Search,
   ShoppingCart,
@@ -57,6 +62,10 @@ const ChatView = lazy(() => import("../ChatView"));
 const AuthView = lazy(() => import("./../AuthView"));
 const DashboardView = lazy(() => import("./../DashboardView"));
 const RestaurantClosedModal = lazy(() => import("../RestaurantClosedModal"));
+
+// Bienvenida: una vez por carga completa de la página (entrada o refresh).
+// Flag en memoria de módulo: se reinicia al recargar, no al navegar en cliente.
+let introShownThisLoad = false;
 
 // Pure functions — defined outside to avoid re-creation on every render
 
@@ -176,6 +185,44 @@ export default function MenuView() {
   const [showDetail, setShowDetail] = useState(false);
   const detailCloseRef = useRef<HTMLButtonElement>(null);
   const logoButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Pantalla de bienvenida (el estado inicial es igual en servidor y en el
+  // primer render del cliente, así el overlay ya está presente sin parpadeo)
+  const [introPhase, setIntroPhase] = useState<IntroPhase>(
+    introShownThisLoad ? "done" : "show",
+  );
+  const [introLogoTransform, setIntroLogoTransform] = useState("");
+  const introLogoRef = useRef<HTMLDivElement>(null);
+  const introActive = introPhase !== "done";
+
+  const startIntroFly = useCallback(() => {
+    const from = introLogoRef.current?.getBoundingClientRect();
+    const to = logoButtonRef.current?.getBoundingClientRect();
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (!from || !to || !from.width || reduceMotion) {
+      setIntroPhase("done");
+      return;
+    }
+    setIntroLogoTransform(
+      `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${to.width / from.width})`,
+    );
+    setIntroPhase("fly");
+  }, []);
+
+  useEffect(() => {
+    if (introPhase !== "show") return;
+    introShownThisLoad = true;
+    const timer = setTimeout(startIntroFly, INTRO_SHOW_MS);
+    return () => clearTimeout(timer);
+  }, [introPhase, startIntroFly]);
+
+  useEffect(() => {
+    if (introPhase !== "fly") return;
+    const timer = setTimeout(() => setIntroPhase("done"), INTRO_FLY_MS + 30);
+    return () => clearTimeout(timer);
+  }, [introPhase]);
   const [activeOrders, setActiveOrders] = useState<
     NonNullable<ActiveOrderResponse["data"]>[]
   >([]);
@@ -281,7 +328,8 @@ export default function MenuView() {
       showSettingsModal ||
       showStatusModal ||
       showReorderModal ||
-      showDetail
+      showDetail ||
+      introActive
     ) {
       lockScroll();
     } else {
@@ -294,6 +342,7 @@ export default function MenuView() {
     showStatusModal,
     showReorderModal,
     showDetail,
+    introActive,
   ]);
 
   // Precargar chunks lazy después de que la página ya es interactiva
@@ -534,6 +583,7 @@ export default function MenuView() {
               aria-haspopup="dialog"
               aria-expanded={showDetail}
               aria-label={tr("openDetail")}
+              style={{ opacity: introActive ? 0 : 1 }}
               className="pointer-events-auto size-10 md:size-12 lg:size-14 shrink-0 rounded-full bg-even-evergreen overflow-hidden border border-white/70 shadow-sm active:scale-95 transition-transform"
             >
               {restaurant.logo_url && (
@@ -556,8 +606,8 @@ export default function MenuView() {
 
       <main
         className="mt-[4.5rem] md:mt-64 lg:mt-80 relative z-10"
-        inert={showDetail}
-        aria-hidden={showDetail}
+        inert={showDetail || introActive}
+        aria-hidden={showDetail || introActive}
       >
         <div className="bg-white rounded-t-4xl flex flex-col items-center px-6 md:px-8 lg:px-10">
           {/* Trigger invisible para IntersectionObserver */}
@@ -673,7 +723,7 @@ export default function MenuView() {
       </main>
 
       {/* Carrito flotante */}
-      {totalItems > 0 && !showDetail && (
+      {totalItems > 0 && !showDetail && !introActive && (
         <div className="fixed bottom-6 md:bottom-8 lg:bottom-10 left-0 right-0 z-50 flex justify-center pointer-events-none">
           <button
             onClick={() => navigateWithRestaurantId("/cart")}
@@ -685,6 +735,27 @@ export default function MenuView() {
             </span>
           </button>
         </div>
+      )}
+
+      {/* Bienvenida al cargar la página */}
+      {introActive && (
+        <RestaurantIntro
+          restaurant={restaurant}
+          phase={introPhase === "fly" ? "fly" : "show"}
+          branchName={
+            selectedBranchNumber
+              ? branches.find((b) => b.branch_number === selectedBranchNumber)
+                  ?.name || tc("defaultBranchName")
+              : null
+          }
+          welcomeText={t("welcome", {
+            gender: profile?.gender === "female" ? "female" : "other",
+            name: profile?.firstName ? ` ${profile.firstName}` : "",
+          })}
+          logoTransform={introLogoTransform}
+          logoRef={introLogoRef}
+          onSkip={startIntroFly}
+        />
       )}
 
       {/* Detalle del restaurante (se intercambia con la tarjeta del menú) */}
@@ -1025,9 +1096,9 @@ export default function MenuView() {
       <div
         className="fixed top-0 inset-x-0 z-40 flex justify-center px-4 pt-4 pb-3"
         style={{
-          opacity: showStickyBar && !showDetail ? 1 : 0,
+          opacity: showStickyBar && !showDetail && !introActive ? 1 : 0,
           transition: "opacity 120ms ease",
-          pointerEvents: showStickyBar && !showDetail ? "auto" : "none",
+          pointerEvents: showStickyBar && !showDetail && !introActive ? "auto" : "none",
         }}
       >
         <div

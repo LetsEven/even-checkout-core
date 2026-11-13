@@ -217,7 +217,9 @@ export default function MenuView() {
   // "#ffffff", así que ese es el valor correcto al que hay que volver.
   useEffect(() => {
     const modalOpen = showPepperChat || showSettingsModal;
-    document.body.style.backgroundColor = modalOpen ? "var(--color-overscroll)" : "var(--color-background)";
+    document.body.style.backgroundColor = modalOpen
+      ? "var(--color-overscroll)"
+      : "var(--color-background)";
     return () => {
       document.body.style.backgroundColor = "var(--color-background)";
     };
@@ -418,7 +420,8 @@ export default function MenuView() {
 
   const totalItems = state.totalItems;
 
-  const deferredFilter = useDeferredValue(filter);  const deferredSearch = useDeferredValue(searchQuery);
+  const deferredFilter = useDeferredValue(filter);
+  const deferredSearch = useDeferredValue(searchQuery);
 
   // Filtrar menú usando valores diferidos — el render pesado ocurre en baja prioridad
   const filteredMenu = useMemo(() => {
@@ -483,36 +486,26 @@ export default function MenuView() {
         <div className="absolute top-0 left-0 w-full h-[230px] md:h-96 lg:h-[28rem] bg-even-evergreen banner-mobile z-0" />
       )}
 
-      <MenuHeader restaurant={restaurant} />
+      {/* Degradado para legibilidad del texto sobre el banner */}
+      <div className="absolute top-0 left-0 w-full h-28 md:h-40 bg-linear-to-b from-black/55 to-transparent z-0 pointer-events-none" />
 
-      <main className="mt-[9rem] md:mt-64 lg:mt-80 relative z-10">
-        <div className="bg-white rounded-t-4xl flex flex-col items-center px-6 md:px-8 lg:px-10">
-          {/* Trigger invisible para IntersectionObserver */}
-          <div
-            ref={stickyTriggerRef}
-            className="absolute top-0 h-px w-px pointer-events-none"
-          />
-          <div className="mt-6 md:mt-8 flex items-start justify-between w-full">
-            {/* Settings Icon */}
-            <button
-              onClick={() => setShowSettingsModal(true)}
-              className="bg-white rounded-full shadow-sm hover:bg-tone-50 transition-all active:scale-95 size-9 md:size-10 lg:size-12 overflow-hidden flex items-center justify-center"
-            >
-              <UserAvatar isAuthenticated={isAuthenticated} profile={profile} />
-            </button>
+      <MenuHeader
+        restaurant={restaurant}
+        profileButton={
+          <button
+            onClick={() => setShowSettingsModal(true)}
+            className="bg-white/85 backdrop-blur-sm rounded-full shadow-sm hover:scale-105 transition-transform active:scale-95 size-10 md:size-12 lg:size-14 overflow-hidden flex items-center justify-center"
+          >
+            <UserAvatar isAuthenticated={isAuthenticated} profile={profile} />
+          </button>
+        }
+      />
 
-            {/* Assistant Icon */}
-            <button
-              onClick={() => setShowPepperChat(true)}
-              className="size-14 md:size-16 lg:size-18 overflow-hidden transition-all active:scale-95 -mt-2 md:-mt-3"
-            >
-              <PepperIcon />
-            </button>
-          </div>
-
-          {/* Name and photo */}
-          <div className="mb-4 md:mb-6 flex flex-col items-center">
-            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-even-evergreen overflow-hidden border border-tone-400 shadow-sm">
+      {/* Logo + bienvenida sobre el banner (no sticky) */}
+      <div className="absolute top-0 inset-x-0 z-4 pointer-events-none">
+        <div className="container mx-auto px-5 md:px-8 lg:px-10 pt-5 md:pt-7 lg:pt-9">
+          <div className="flex items-center gap-2 md:gap-3 h-10 md:h-12 lg:h-14 pr-24 md:pr-32 lg:pr-40">
+            <div className="size-10 md:size-12 lg:size-14 shrink-0 rounded-full bg-even-evergreen overflow-hidden border border-white/70 shadow-sm">
               {restaurant.logo_url && (
                 <img
                   src={restaurant.logo_url}
@@ -521,17 +514,29 @@ export default function MenuView() {
                 />
               )}
             </div>
-            <h1 className="text-black text-3xl md:text-4xl lg:text-5xl font-medium mt-3 md:mt-5 mb-2 md:mb-3">
+            <h1 className="text-white text-xl md:text-3xl lg:text-4xl font-medium truncate drop-shadow">
               {t("welcome", {
                 gender: profile?.gender === "female" ? "female" : "other",
                 name: profile?.firstName ? ` ${profile.firstName}` : "",
               })}
             </h1>
+          </div>
+        </div>
+      </div>
 
+      <main className="mt-[4.5rem] md:mt-64 lg:mt-80 relative z-10">
+        <div className="bg-white rounded-t-4xl flex flex-col items-center px-6 md:px-8 lg:px-10">
+          {/* Trigger invisible para IntersectionObserver */}
+          <div
+            ref={stickyTriggerRef}
+            className="absolute top-0 h-px w-px pointer-events-none"
+          />
+          {/* Sucursal + asistente */}
+          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full flex items-center justify-between">
             {/* Sucursal seleccionada */}
             {branches.length > 0 && (
               <div
-                className={`mb-4 md:mb-6 inline-flex items-center gap-1 ${branches.length > 1 ? "cursor-pointer hover:opacity-80 transition-opacity" : ""}`}
+                className={`inline-flex items-center gap-1 ${branches.length > 1 ? "cursor-pointer hover:opacity-80 transition-opacity" : ""}`}
                 onClick={() => branches.length > 1 && setShowBranchModal(true)}
               >
                 {selectedBranchNumber ? (
@@ -561,8 +566,18 @@ export default function MenuView() {
               </div>
             )}
 
-            {/* Botón de pedidos activos + Reordenar */}
-            {activeOrders.length > 0 && (
+            {/* Asistente */}
+            <button
+              onClick={() => setShowPepperChat(true)}
+              className="ml-auto size-11 md:size-14 lg:size-16 overflow-hidden transition-all active:scale-95"
+            >
+              <PepperIcon />
+            </button>
+          </div>
+
+          {/* Botón de pedidos activos + Reordenar */}
+          {activeOrders.length > 0 && (
+            <div className="mb-2 md:mb-4">
               <div className="flex gap-2 w-fit mx-auto">
                 <button
                   onClick={() =>
@@ -582,8 +597,8 @@ export default function MenuView() {
                   </button>
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Search Input */}
           <div className="w-full">

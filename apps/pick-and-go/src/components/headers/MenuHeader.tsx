@@ -4,12 +4,15 @@ import { Restaurant } from "../../interfaces/restaurant";
 import { useCart } from "../../context/CartContext";
 import { useNavigation } from "../../hooks/useNavigation";
 import { ShoppingCart } from "lucide-react";
+import type { ReactNode } from "react";
 
 interface MenuHeaderProps {
   restaurant: Restaurant;
+  /** Botón de perfil mostrado junto al carrito */
+  profileButton?: ReactNode;
 }
 
-export default function MenuHeader(_: MenuHeaderProps) {
+export default function MenuHeader({ profileButton }: MenuHeaderProps) {
   const { state } = useCart();
   const { navigateWithRestaurantId } = useNavigation();
 
@@ -17,6 +20,7 @@ export default function MenuHeader(_: MenuHeaderProps) {
     <header className="sticky top-0 container mx-auto px-5 md:px-8 lg:px-10 pt-5 md:pt-7 lg:pt-9 z-5">
       <div className="flex items-center justify-end z-10">
         <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4 z-10">
+          {profileButton}
           <div className="relative group" id="cart-icon">
             <button
               onClick={() => navigateWithRestaurantId("/cart")}

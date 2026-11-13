@@ -30,4 +30,5 @@ export {
   termsLinks,
   type TermsCheckboxProps,
 } from "./components/terms-checkbox";
+export { TermsUpdateToast, type TermsUpdateToastProps } from "./components/terms-update-toast";
 export { Spinner, type SpinnerProps } from "./components/spinner";

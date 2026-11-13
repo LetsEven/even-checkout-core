@@ -314,19 +314,19 @@ function AddCardContent() {
             <div className="min-h-full bg-white rounded-t-4xl flex-1 z-5 flex flex-col px-6 py-6">
               {/* Test Card Helper */}
               {process.env.NODE_ENV === "development" && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="bg-info-50 border border-info-200 rounded-lg p-4 mb-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-blue-800 font-medium text-sm">
+                      <p className="text-info-800 font-medium text-sm">
                         Development Mode
                       </p>
-                      <p className="text-blue-600 text-xs">
+                      <p className="text-info-600 text-xs">
                         Use eCartpay test card data
                       </p>
                     </div>
                     <button
                       onClick={fillTestCard}
-                      className="px-3 py-2 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 transition-colors"
+                      className="px-3 py-2 bg-info-600 text-white text-xs rounded-md hover:bg-info-700 transition-colors"
                     >
                       Fill Test Card
                     </button>
@@ -347,10 +347,10 @@ function AddCardContent() {
                     onKeyDown={handleKeyDown}
                     autoComplete="cc-name"
                     placeholder="John Doe"
-                    className={`w-full px-3 py-3 border text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.fullName ? "border-red-500 bg-red-50" : "border-tone-300"}`}
+                    className={`w-full px-3 py-3 border text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.fullName ? "border-danger-500 bg-danger-50" : "border-tone-300"}`}
                   />
                   {errors.fullName && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-danger-500 text-xs mt-1">
                       {errors.fullName}
                     </p>
                   )}
@@ -369,10 +369,10 @@ function AddCardContent() {
                     inputMode="numeric"
                     placeholder="**** 2098"
                     maxLength={19}
-                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cardNumber ? "border border-red-500 bg-red-50" : "bg-tone-100 border border-tone-200"}`}
+                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cardNumber ? "border border-danger-500 bg-danger-50" : "bg-tone-100 border border-tone-200"}`}
                   />
                   {errors.cardNumber && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-danger-500 text-xs mt-1">
                       {errors.cardNumber}
                     </p>
                   )}
@@ -390,7 +390,7 @@ function AddCardContent() {
                         setExpMonthIdx(MONTHS.indexOf(e.target.value))
                       }
                       autoComplete="cc-exp-month"
-                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-red-500 bg-red-50" : "bg-tone-100 border border-tone-200"}`}
+                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-danger-500 bg-danger-50" : "bg-tone-100 border border-tone-200"}`}
                     >
                       {MONTHS.map((m) => (
                         <option key={m} value={m}>
@@ -404,7 +404,7 @@ function AddCardContent() {
                         setExpYearIdx(YEARS.indexOf(e.target.value))
                       }
                       autoComplete="cc-exp-year"
-                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-red-500 bg-red-50" : "bg-tone-100 border border-tone-200"}`}
+                      className={`flex-1 px-3 py-3 rounded-lg text-black focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.expDate ? "border border-danger-500 bg-danger-50" : "bg-tone-100 border border-tone-200"}`}
                     >
                       {YEARS.map((y) => (
                         <option key={y} value={y}>
@@ -414,7 +414,7 @@ function AddCardContent() {
                     </select>
                   </div>
                   {errors.expDate && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-danger-500 text-xs mt-1">
                       {errors.expDate}
                     </p>
                   )}
@@ -434,10 +434,10 @@ function AddCardContent() {
                     inputMode="numeric"
                     placeholder="123"
                     maxLength={4}
-                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cvv ? "border border-red-500 bg-red-50" : "border border-tone-300"}`}
+                    className={`w-full px-3 py-3 text-black rounded-lg focus:outline-none focus:ring focus:ring-even-evergreen focus:border-transparent ${errors.cvv ? "border border-danger-500 bg-danger-50" : "border border-tone-300"}`}
                   />
                   {errors.cvv && (
-                    <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>
+                    <p className="text-danger-500 text-xs mt-1">{errors.cvv}</p>
                   )}
                 </div>
               </div>
@@ -451,7 +451,7 @@ function AddCardContent() {
                 {isLoading ? t("savingCta") : t("saveCta")}
               </button>
               {errors.general && (
-                <p className="text-red-500 text-sm text-center mt-3">
+                <p className="text-danger-500 text-sm text-center mt-3">
                   {errors.general}
                 </p>
               )}

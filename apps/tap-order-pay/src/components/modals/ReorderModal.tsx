@@ -296,7 +296,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
                           </div>
                           {itemIsOutOfStock && (
                             <div className="absolute bottom-0.5 left-0.5">
-                              <span className="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full tracking-wide">
+                              <span className="bg-danger-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full tracking-wide">
                                 {tc("outOfStockBadge")}
                               </span>
                             </div>
@@ -310,7 +310,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
                           {item.item}
                         </h3>
                         {!showImages && itemIsOutOfStock && (
-                          <span className="inline-block bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full tracking-wide">
+                          <span className="inline-block bg-danger-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full tracking-wide">
                             {tc("outOfStockBadge")}
                           </span>
                         )}

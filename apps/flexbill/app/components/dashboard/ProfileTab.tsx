@@ -325,7 +325,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
           onClick={() => setIsLogoutModalOpen(true)}
           className={`font-medium text-sm md:text-base lg:text-lg flex items-center gap-2 cursor-pointer ${
             isAuthenticated
-              ? "text-red-600 hover:text-red-700"
+              ? "text-danger-600 hover:text-danger-700"
               : "text-even-shamrock hover:text-even-evergreen"
           }`}
         >
@@ -394,7 +394,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
+                  className="flex-1 bg-danger-600 hover:bg-danger-700 text-white py-2 md:py-3 text-base md:text-lg rounded-full cursor-pointer transition-colors"
                 >
                   {t("logout")}
                 </button>
@@ -423,7 +423,7 @@ export default function ProfileTab({ onLogout }: ProfileTabProps = {}) {
                 <X className="size-5 md:size-6 lg:size-7" />
               </button>
               <div className="flex items-center gap-3 mb-4 md:mb-5">
-                <CircleAlert className="size-6 md:size-7 text-red-500 flex-shrink-0" />
+                <CircleAlert className="size-6 md:size-7 text-danger-500 flex-shrink-0" />
                 <h3 className="text-base md:text-xl lg:text-2xl font-semibold text-tone-800">
                   {tc("errorTitle")}
                 </h3>

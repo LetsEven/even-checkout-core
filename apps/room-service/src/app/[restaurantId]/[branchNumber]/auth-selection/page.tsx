@@ -254,7 +254,7 @@ export default function AuthSelectionPage() {
 
           {/* Error */}
           {error && (
-            <div className="mb-4 p-3 bg-red-500/20 border border-red-500 rounded-lg text-white text-sm">
+            <div className="mb-4 p-3 bg-danger-500/20 border border-danger-500 rounded-lg text-white text-sm">
               {error}
             </div>
           )}

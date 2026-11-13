@@ -50,6 +50,58 @@
   --color-positive-700: oklch(52.7% 0.154 150.069);
   --color-positive-800: oklch(44.8% 0.119 151.328);
 
+  /* Estados y acentos (misma escala que la paleta de Tailwind: danger=red, warning=orange,
+     caution=yellow, info=blue, warm=stone, hue-*=acentos de avatar y badges) */
+  --color-danger-50: oklch(97.1% 0.013 17.38);
+  --color-danger-100: oklch(93.6% 0.032 17.717);
+  --color-danger-300: oklch(80.8% 0.114 19.571);
+  --color-danger-400: oklch(70.4% 0.191 22.216);
+  --color-danger-500: oklch(63.7% 0.237 25.331);
+  --color-danger-600: oklch(57.7% 0.245 27.325);
+  --color-danger-700: oklch(50.5% 0.213 27.518);
+  --color-warning-100: oklch(95.4% 0.038 75.164);
+  --color-warning-300: oklch(83.7% 0.128 66.29);
+  --color-warning-500: oklch(70.5% 0.213 47.604);
+  --color-warning-600: oklch(64.6% 0.222 41.116);
+  --color-warning-700: oklch(55.3% 0.195 38.402);
+  --color-warning-800: oklch(47% 0.157 37.304);
+  --color-caution-100: oklch(97.3% 0.071 103.193);
+  --color-caution-300: oklch(90.5% 0.182 98.111);
+  --color-caution-400: oklch(85.2% 0.199 91.936);
+  --color-caution-500: oklch(79.5% 0.184 86.047);
+  --color-caution-600: oklch(68.1% 0.162 75.834);
+  --color-caution-800: oklch(47.6% 0.114 61.907);
+  --color-info-50: oklch(97% 0.014 254.604);
+  --color-info-100: oklch(93.2% 0.032 255.585);
+  --color-info-200: oklch(88.2% 0.059 254.128);
+  --color-info-300: oklch(80.9% 0.105 251.813);
+  --color-info-500: oklch(62.3% 0.214 259.815);
+  --color-info-600: oklch(54.6% 0.245 262.881);
+  --color-info-700: oklch(48.8% 0.243 264.376);
+  --color-info-800: oklch(42.4% 0.199 265.638);
+  --color-warm-100: oklch(97% 0.001 106.424);
+  --color-warm-500: oklch(55.3% 0.013 58.071);
+  --color-warm-600: oklch(44.4% 0.011 73.639);
+  --color-warm-700: oklch(37.4% 0.01 67.558);
+  --color-warm-800: oklch(26.8% 0.007 34.298);
+  --color-warm-950: oklch(14.7% 0.004 49.25);
+  --color-hue-teal-500: oklch(70.4% 0.14 182.503);
+  --color-hue-emerald-500: oklch(69.6% 0.17 162.48);
+  --color-hue-lime-500: oklch(76.8% 0.233 130.85);
+  --color-hue-amber-100: oklch(96.2% 0.059 95.617);
+  --color-hue-amber-500: oklch(76.9% 0.188 70.08);
+  --color-hue-amber-700: oklch(55.5% 0.163 48.998);
+  --color-hue-sky-500: oklch(68.5% 0.169 237.323);
+  --color-hue-cyan-500: oklch(71.5% 0.143 215.221);
+  --color-hue-indigo-500: oklch(58.5% 0.233 277.117);
+  --color-hue-violet-500: oklch(60.6% 0.25 292.717);
+  --color-hue-purple-100: oklch(94.6% 0.033 307.174);
+  --color-hue-purple-500: oklch(62.7% 0.265 303.9);
+  --color-hue-purple-700: oklch(49.6% 0.265 301.924);
+  --color-hue-fuchsia-500: oklch(66.7% 0.295 322.15);
+  --color-hue-pink-500: oklch(65.6% 0.241 354.308);
+  --color-hue-rose-500: oklch(64.5% 0.246 16.439);
+
   /* Semánticos: el producto consume estos, no hex sueltos */
   --color-background: #fefeeb;
   --color-foreground: #023828;

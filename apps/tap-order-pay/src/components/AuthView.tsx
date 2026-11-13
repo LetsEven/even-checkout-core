@@ -300,7 +300,7 @@ export default function AuthView({ onClose }: AuthViewProps) {
 
           {/* Error */}
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-400/50 rounded-lg text-red-600 text-sm">
+            <div className="mb-4 p-3 bg-danger-500/10 border border-danger-400/50 rounded-lg text-danger-600 text-sm">
               {error}
             </div>
           )}

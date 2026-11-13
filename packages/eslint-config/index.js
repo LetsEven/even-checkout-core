@@ -33,11 +33,11 @@ export default defineConfig([
           message: "Hex suelto: usa un token de @even/ui/theme.css (p. ej. bg-even-evergreen, var(--color-line)).",
         },
         {
-          selector: `:matches(Literal, TemplateElement)[value.raw=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?:slate|gray|zinc|neutral|green)-[0-9]{2,3}(?![\\w])/]`,
+          selector: `:matches(Literal, TemplateElement)[value.raw=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?<!hue-)(?:slate|gray|zinc|neutral|green|red|orange|yellow|blue|stone|teal|emerald|lime|amber|sky|cyan|indigo|violet|purple|fuchsia|pink|rose)-[0-9]{2,3}(?![\\w])/]`,
           message: "Paleta genérica de Tailwind: usa un token (tone-*, positive-*, even-*) de @even/ui/theme.css.",
         },
         {
-          selector: `Literal[value=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?:slate|gray|zinc|neutral|green)-[0-9]{2,3}(?![\\w])/]`,
+          selector: `Literal[value=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?<!hue-)(?:slate|gray|zinc|neutral|green|red|orange|yellow|blue|stone|teal|emerald|lime|amber|sky|cyan|indigo|violet|purple|fuchsia|pink|rose)-[0-9]{2,3}(?![\\w])/]`,
           message: "Paleta genérica de Tailwind: usa un token (tone-*, positive-*, even-*) de @even/ui/theme.css.",
         },
       ],

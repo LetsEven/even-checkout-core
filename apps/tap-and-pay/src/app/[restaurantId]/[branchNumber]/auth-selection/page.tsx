@@ -344,7 +344,7 @@ export default function AuthSelectionPage() {
 
           {/* Error */}
           {error && (
-            <div className="mb-4 p-3 bg-red-500/20 border border-red-500 rounded-lg text-white text-sm">
+            <div className="mb-4 p-3 bg-danger-500/20 border border-danger-500 rounded-lg text-white text-sm">
               {error}
             </div>
           )}
@@ -429,7 +429,7 @@ export default function AuthSelectionPage() {
                 <button
                   type="submit"
                   disabled={loading || !phoneNumber || phoneNumber.length < 8}
-                  className="w-full bg-black hover:bg-stone-950 text-white py-3.5 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                  className="w-full bg-black hover:bg-warm-950 text-white py-3.5 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                 >
                   {loading ? t("sending") : tp("accessCta")}
                 </button>
@@ -466,7 +466,7 @@ export default function AuthSelectionPage() {
               <button
                 type="submit"
                 disabled={loading || sendingCode || otp.length !== 6}
-                className="w-full bg-black hover:bg-stone-950 text-white py-3.5 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                className="w-full bg-black hover:bg-warm-950 text-white py-3.5 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
               >
                 {sendingCode
                   ? t("sending")
@@ -559,7 +559,7 @@ export default function AuthSelectionPage() {
               <button
                 type="submit"
                 disabled={loading || !firstName || age === "" || !acceptedTerms}
-                className="w-full bg-black hover:bg-stone-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                className="w-full bg-black hover:bg-warm-950 text-white py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
               >
                 {loading ? t("saving") : t("continueCta")}
               </button>

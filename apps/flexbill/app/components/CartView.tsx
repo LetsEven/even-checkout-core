@@ -614,7 +614,7 @@ export default function CartView() {
                   </button>
                 </div>
                 {hasOnlyPromoItems && (
-                  <p className="text-center text-sm text-red-600 pb-4">
+                  <p className="text-center text-sm text-danger-600 pb-4">
                     {t("promoOnlyWarning")}
                   </p>
                 )}

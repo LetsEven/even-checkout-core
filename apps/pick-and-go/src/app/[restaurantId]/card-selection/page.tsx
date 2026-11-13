@@ -1828,7 +1828,7 @@ export default function CardSelectionPage() {
                         <button
                           onClick={() => handleDeleteCard(method.id)}
                           disabled={deletingCardId === method.id}
-                          className="pl-2 text-tone-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                          className="pl-2 text-tone-400 hover:text-danger-600 transition-colors disabled:opacity-50 cursor-pointer"
                           title={tc("deleteCardTitle")}
                         >
                           {deletingCardId === method.id ? (
@@ -2223,9 +2223,9 @@ export default function CardSelectionPage() {
           >
             <div className="p-6 max-w-2xl mx-auto">
               <div className="flex flex-col items-center mb-4">
-                <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                <div className="w-14 h-14 rounded-full bg-danger-100 flex items-center justify-center mb-4">
                   <CircleAlert
-                    className="size-7 text-red-500"
+                    className="size-7 text-danger-500"
                     strokeWidth={2}
                   />
                 </div>

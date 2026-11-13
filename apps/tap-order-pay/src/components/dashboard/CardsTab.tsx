@@ -132,7 +132,7 @@ export default function CardsTab() {
                       <button
                         onClick={() => handleDeleteCard(method.id)}
                         disabled={deletingCardId === method.id}
-                        className="p-2 md:p-2.5 lg:p-3 text-tone-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                        className="p-2 md:p-2.5 lg:p-3 text-tone-400 hover:text-danger-600 transition-colors disabled:opacity-50 cursor-pointer"
                         title={tc("deleteCardTitle")}
                       >
                         {deletingCardId === method.id ? (

@@ -54,7 +54,7 @@ export default function UnavailableCartRow({
         <h3 className="text-base md:text-lg lg:text-xl text-black/40 capitalize truncate">
           {quantity > 1 ? `${quantity} × ${name}` : name}
         </h3>
-        <p className="text-sm md:text-base text-red-600">
+        <p className="text-sm md:text-base text-danger-600">
           {t("unavailableBadge")}
         </p>
       </div>

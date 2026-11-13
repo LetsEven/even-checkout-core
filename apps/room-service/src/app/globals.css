@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "@even/ui/theme.css";
-@source "../../../../packages/payments/src";
 
 .brand-evergreen {
   background-color: #023828;

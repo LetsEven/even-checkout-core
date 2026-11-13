@@ -9,6 +9,8 @@
 
 /* Que Tailwind escanee los componentes de @even/ui sin que cada app apunte a la ruta. */
 @source "../";
+/* Y los de @even/payments (CardScanner, formularios de pago), que usan los tokens del tema. */
+@source "../../../payments/src";
 
 @theme {
   /* Marca (mismos nombres que el landing) */

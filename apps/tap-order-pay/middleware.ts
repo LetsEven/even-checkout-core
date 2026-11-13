@@ -38,6 +38,9 @@ export function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   // Set the nonce in a custom header so layout.tsx can read it
   requestHeaders.set("x-nonce", nonce);
+  // Next.js lee el nonce de la CSP de la *petición* para etiquetar sus scripts
+  // inline de hidratación; sin esto el navegador los bloquea.
+  requestHeaders.set("Content-Security-Policy", cspHeader);
 
   // Create response with security headers
   const response = NextResponse.next({

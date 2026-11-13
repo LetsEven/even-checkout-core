@@ -23,4 +23,11 @@ export {
 } from "./components/layout";
 export { FullScreenLoader, type FullScreenLoaderProps } from "./components/loader";
 export { Modal, type ModalProps } from "./components/modal";
+export {
+  PRIVACY_URL,
+  TERMS_URL,
+  TermsCheckbox,
+  termsLinks,
+  type TermsCheckboxProps,
+} from "./components/terms-checkbox";
 export { Spinner, type SpinnerProps } from "./components/spinner";

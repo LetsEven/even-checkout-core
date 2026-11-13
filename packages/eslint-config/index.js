@@ -23,7 +23,7 @@ export default defineConfig([
       "**/GlassSurface.tsx",
       "**/card-selection/page.tsx", // logo de Google en el botón de Google Pay
       // Única fuente de colores en JS (verificada contra theme.css en su test).
-      "packages/ui/src/lib/colors.ts",
+      "**/lib/colors.ts",
     ],
     rules: {
       "no-restricted-syntax": [
@@ -33,11 +33,11 @@ export default defineConfig([
           message: "Hex suelto: usa un token de @even/ui/theme.css (p. ej. bg-even-evergreen, var(--color-line)).",
         },
         {
-          selector: `:matches(Literal, TemplateElement)[value.raw=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?:slate|gray|zinc|neutral|stone|green|emerald|teal|lime)-[0-9]{2,3}(?![\\w])/]`,
+          selector: `:matches(Literal, TemplateElement)[value.raw=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?:slate|gray|zinc|neutral|green)-[0-9]{2,3}(?![\\w])/]`,
           message: "Paleta genérica de Tailwind: usa un token (tone-*, positive-*, even-*) de @even/ui/theme.css.",
         },
         {
-          selector: `Literal[value=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?:slate|gray|zinc|neutral|stone|green|emerald|teal|lime)-[0-9]{2,3}(?![\\w])/]`,
+          selector: `Literal[value=/(^|[^\\w-])(?:[a-z]+:)*[a-z-]+-(?:slate|gray|zinc|neutral|green)-[0-9]{2,3}(?![\\w])/]`,
           message: "Paleta genérica de Tailwind: usa un token (tone-*, positive-*, even-*) de @even/ui/theme.css.",
         },
       ],

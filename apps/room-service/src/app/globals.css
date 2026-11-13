@@ -1,69 +1,9 @@
 @import "tailwindcss";
+@import "@even/ui/theme.css";
 @source "../../../../packages/payments/src";
 
-:root {
-  --background: #fefeeb;
-  --foreground: #023828;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-dm-mono);
-  --font-mono: var(--font-dm-mono);
-  --font-display: var(--font-jakarta);
-
-  /* Even — paleta de marca */
-  --color-even-grass: #82e657;
-  --color-even-evergreen: #023828;
-  --color-even-shamrock: #299e66;
-  --color-even-aqua: #c3feff;
-  --color-even-offwhite: #fefeeb;
-  --color-even-ink: #141512;
-
-  /* grises de UI */
-  --color-surface: #f9f9f9;
-  --color-stroke: #8e8e8e;
-  --color-stroke-soft: #bfbfbf;
-  --color-muted: #6b7280;
-
-  --color-primary: #023828;
-  --color-accent: #82e657;
-  --color-success: #82e657;
-}
-
-/* Fondo Evergreen de marca */
 .brand-evergreen {
   background-color: #023828;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family:
-    var(--font-dm-mono),
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    monospace;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-}
-
-h1,
-h2 {
-  font-family: var(--font-jakarta), system-ui, sans-serif;
-  letter-spacing: -0.015em;
-}
-
-/* Ocultar scrollbar pero mantener funcionalidad de scroll */
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
 }
 
 /* Toast fade in/out animation */

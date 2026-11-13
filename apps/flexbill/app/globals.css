@@ -341,7 +341,7 @@
 
 @layer components {
   .myradio {
-    @apply w-4 h-4 bg-gray-100 border border-gray-300 rounded-full cursor-pointer;
+    @apply w-4 h-4 bg-tone-100 border border-tone-300 rounded-full cursor-pointer;
     @apply focus:outline-none;
     @apply checked:bg-[#82E657] checked:border-transparent;
     @apply appearance-none relative;

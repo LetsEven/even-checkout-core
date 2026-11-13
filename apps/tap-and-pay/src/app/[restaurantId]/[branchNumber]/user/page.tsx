@@ -111,12 +111,12 @@ export default function UserPage() {
 
   if (!tableNumber) {
     return (
-      <div className="min-h-dvh bg-gray-50 flex items-center justify-center">
+      <div className="min-h-dvh bg-tone-50 flex items-center justify-center">
         <div className="text-center px-4 md:px-6 lg:px-8">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-meduim text-gray-800 mb-4 md:mb-6">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-meduim text-tone-800 mb-4 md:mb-6">
             {tc("invalidTableTitle")}
           </h1>
-          <p className="text-gray-600 text-base md:text-lg lg:text-xl">
+          <p className="text-tone-600 text-base md:text-lg lg:text-xl">
             {tc("invalidTableMessage")}
           </p>
         </div>
@@ -155,7 +155,7 @@ export default function UserPage() {
                   onChange={handleNameChange}
                   onKeyDown={handleKeyDown}
                   onFocus={handleInputFocus}
-                  className="w-full px-6 md:px-8 lg:px-10 py-3 md:py-4 lg:py-5 bg-gray-100/90 backdrop-blur-xl rounded-[9999px]! text-black text-xl md:text-2xl lg:text-3xl text-center font-normal placeholder:text-gray-400 focus:outline-none border border-white/80 shadow-[0_2px_8px_rgba(0,0,0,0.06),inset_0_1px_6px_rgba(255,255,255,0.8)] focus:shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_0_0_1.2px_rgba(130,230,87,0.7)] transition-shadow"
+                  className="w-full px-6 md:px-8 lg:px-10 py-3 md:py-4 lg:py-5 bg-tone-100/90 backdrop-blur-xl rounded-[9999px]! text-black text-xl md:text-2xl lg:text-3xl text-center font-normal placeholder:text-tone-400 focus:outline-none border border-white/80 shadow-[0_2px_8px_rgba(0,0,0,0.06),inset_0_1px_6px_rgba(255,255,255,0.8)] focus:shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_0_0_1.2px_rgba(130,230,87,0.7)] transition-shadow"
                 />
               </div>
 

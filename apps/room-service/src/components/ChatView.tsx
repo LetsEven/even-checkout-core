@@ -508,13 +508,13 @@ const MessageContent = ({
     if (status === "working") {
       const toolKey = activeToolName && toolTranslationKeys[activeToolName];
       return (
-        <span className="text-gray-500">
+        <span className="text-tone-500">
           {toolKey ? t(toolKey) : activeToolName}
         </span>
       );
     }
     if (status === "thinking") {
-      return <span className="text-gray-500">{t("toolThinking")}</span>;
+      return <span className="text-tone-500">{t("toolThinking")}</span>;
     }
     return null;
   })();
@@ -836,7 +836,7 @@ export default function ChatView({ onBack }: ChatViewProps) {
         <div className="p-4 md:p-5 lg:p-6 flex items-center gap-3 md:gap-4 shrink-0">
           <button
             onClick={onBack}
-            className="text-gray-400 hover:text-gray-700 rounded-full p-1 md:p-1.5 lg:p-2 transition-colors cursor-pointer"
+            className="text-tone-400 hover:text-tone-700 rounded-full p-1 md:p-1.5 lg:p-2 transition-colors cursor-pointer"
           >
             <ChevronDown className="size-6 md:size-7 lg:size-8" />
           </button>
@@ -855,7 +855,7 @@ export default function ChatView({ onBack }: ChatViewProps) {
         <div className="p-4 md:p-5 lg:p-6 flex items-center shrink-0">
           <button
             onClick={onBack}
-            className="text-gray-400 hover:text-gray-700 rounded-full py-2 md:py-2.5 lg:py-3 transition-colors cursor-pointer"
+            className="text-tone-400 hover:text-tone-700 rounded-full py-2 md:py-2.5 lg:py-3 transition-colors cursor-pointer"
           >
             <ChevronDown className="size-6 md:size-7 lg:size-8" />
           </button>
@@ -921,7 +921,7 @@ export default function ChatView({ onBack }: ChatViewProps) {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-black mb-8 md:mb-10 lg:mb-12">
               Pepper
             </h2>
-            <p className="text-gray-600 text-lg md:text-xl lg:text-2xl">
+            <p className="text-tone-600 text-lg md:text-xl lg:text-2xl">
               {tc("welcomeSubtitle")}
             </p>
           </div>
@@ -938,12 +938,12 @@ export default function ChatView({ onBack }: ChatViewProps) {
             ref={inputRef}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder={tc("inputPlaceholder")}
-            className="flex-1 min-w-0 bg-transparent text-black placeholder-gray-500 focus:outline-none text-base md:text-lg lg:text-xl"
+            className="flex-1 min-w-0 bg-transparent text-black placeholder-tone-500 focus:outline-none text-base md:text-lg lg:text-xl"
             style={{ textOverflow: "ellipsis" }}
           />
           <button
             onClick={handleSend}
-            className="text-even-grass rounded-full transition-colors disabled:text-gray-400"
+            className="text-even-grass rounded-full transition-colors disabled:text-tone-400"
             disabled={!message.trim() || chatStatus !== "idle"}
           >
             <SendHorizontal className="size-6 md:size-7 lg:size-8 -rotate-90" />

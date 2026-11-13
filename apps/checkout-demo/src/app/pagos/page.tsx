@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function PagosPage() {
   return (
     <main className="mx-auto max-w-xl p-8">
-      <Link href="/" className="text-sm text-gray-500 hover:underline">
+      <Link href="/" className="text-sm text-tone-500 hover:underline">
         ← Inicio
       </Link>
       <h1 className="mt-2 text-2xl font-semibold">Métodos de pago</h1>

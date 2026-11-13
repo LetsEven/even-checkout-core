@@ -3,7 +3,7 @@ import { cn } from "../lib/cn";
 
 const variants = {
   /** Círculo blanco con borde: cerrar, volver, +/- de cantidad. */
-  default: "border border-gray-300 bg-white text-even-evergreen hover:bg-gray-200",
+  default: "border border-tone-300 bg-white text-even-evergreen hover:bg-tone-200",
   primary: "bg-even-grass text-even-evergreen hover:opacity-90",
   ghost: "bg-transparent text-current hover:bg-black/5",
 } as const;

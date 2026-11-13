@@ -46,7 +46,7 @@ export default function TermsCheckbox({
     ? "bg-even-grass border-even-grass"
     : dark
       ? "bg-white border-white"
-      : "bg-white border-gray-400";
+      : "bg-white border-tone-400";
 
   return (
     <label

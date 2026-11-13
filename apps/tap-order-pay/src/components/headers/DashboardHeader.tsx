@@ -34,7 +34,7 @@ export default function DashboardHeader({ onClose }: DashboardHeaderProps) {
         <div className="flex items-center z-10">
           <div
             onClick={handleBack}
-            className="size-10 md:size-12 lg:size-14 bg-white border border-gray-300 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-transform active:scale-95 duration-200"
+            className="size-10 md:size-12 lg:size-14 bg-white border border-tone-300 rounded-full flex items-center justify-center cursor-pointer hover:bg-tone-200 transition-transform active:scale-95 duration-200"
           >
             <ChevronLeft className="text-primary size-5 md:size-6 lg:size-7" />
           </div>

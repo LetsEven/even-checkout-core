@@ -37,12 +37,12 @@ export default function CartPage() {
 
   if (!restaurantId || isNaN(parseInt(restaurantId))) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-tone-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl font-bold text-tone-800 mb-4">
             {tc("invalidRestaurantTitle")}
           </h1>
-          <p className="text-gray-600">{tc("invalidRestaurantMessage")}</p>
+          <p className="text-tone-600">{tc("invalidRestaurantMessage")}</p>
         </div>
       </div>
     );

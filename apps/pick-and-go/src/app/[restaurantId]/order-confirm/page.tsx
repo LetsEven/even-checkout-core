@@ -189,18 +189,18 @@ export default function OrderConfirmPage() {
             <div className="bg-white rounded-t-4xl relative z-10 flex flex-col px-8 py-8 gap-4">
               {/* Subtotal row */}
               <div className="flex justify-between items-center">
-                <div className="h-4 w-16 bg-gray-200 rounded-full animate-pulse" />
-                <div className="h-4 w-24 bg-gray-200 rounded-full animate-pulse" />
+                <div className="h-4 w-16 bg-tone-200 rounded-full animate-pulse" />
+                <div className="h-4 w-24 bg-tone-200 rounded-full animate-pulse" />
               </div>
 
               {/* Propina label + botones */}
               <div className="flex items-center gap-4">
-                <div className="h-4 w-16 bg-gray-200 rounded-full animate-pulse flex-shrink-0" />
+                <div className="h-4 w-16 bg-tone-200 rounded-full animate-pulse flex-shrink-0" />
                 <div className="grid grid-cols-5 gap-2 flex-1">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <div
                       key={i}
-                      className="h-8 bg-gray-100 rounded-full animate-pulse"
+                      className="h-8 bg-tone-100 rounded-full animate-pulse"
                     />
                   ))}
                 </div>
@@ -208,12 +208,12 @@ export default function OrderConfirmPage() {
 
               {/* Total row */}
               <div className="flex justify-between items-center border-t pt-4">
-                <div className="h-5 w-28 bg-gray-200 rounded-full animate-pulse" />
-                <div className="h-5 w-28 bg-gray-200 rounded-full animate-pulse" />
+                <div className="h-5 w-28 bg-tone-200 rounded-full animate-pulse" />
+                <div className="h-5 w-28 bg-tone-200 rounded-full animate-pulse" />
               </div>
 
               {/* Botón continuar */}
-              <div className="h-12 w-full bg-gray-200 rounded-full animate-pulse" />
+              <div className="h-12 w-full bg-tone-200 rounded-full animate-pulse" />
             </div>
           </div>
         </div>
@@ -248,7 +248,7 @@ export default function OrderConfirmPage() {
                 onClick={() => branches.length > 1 && setShowBranchModal(true)}
               >
                 {selectedBranchNumber ? (
-                  <p className="text-gray-600 text-base">
+                  <p className="text-tone-600 text-base">
                     {tc("branchLabel")}{" "}
                     <span className="font-medium text-black">
                       {branches.find(
@@ -257,12 +257,12 @@ export default function OrderConfirmPage() {
                     </span>
                   </p>
                 ) : (
-                  <p className="text-gray-600 text-sm md:text-base font-medium">
+                  <p className="text-tone-600 text-sm md:text-base font-medium">
                     {tc("selectBranch")}
                   </p>
                 )}
                 {branches.length > 1 && (
-                  <ChevronRight className="size-4 md:size-5 text-gray-600 flex-shrink-0" />
+                  <ChevronRight className="size-4 md:size-5 text-tone-600 flex-shrink-0" />
                 )}
               </div>
             )}
@@ -301,7 +301,7 @@ export default function OrderConfirmPage() {
                       className={`py-1 md:py-1.5 lg:py-2 rounded-full border border-stroke/40 text-black transition-colors cursor-pointer ${
                         tipPercentage === percentage && !showCustomTipInput
                           ? "bg-even-grass text-even-evergreen"
-                          : "bg-surface hover:border-gray-400"
+                          : "bg-surface hover:border-tone-400"
                       }`}
                     >
                       {percentage === 0 ? "0%" : `${percentage}%`}
@@ -315,7 +315,7 @@ export default function OrderConfirmPage() {
                     className={`py-1 md:py-1.5 lg:py-2 rounded-full border border-stroke/40 text-black transition-colors cursor-pointer ${
                       showCustomTipInput
                         ? "bg-even-grass text-even-evergreen"
-                        : "bg-surface hover:border-gray-400"
+                        : "bg-surface hover:border-tone-400"
                     }`}
                   >
                     $
@@ -337,7 +337,7 @@ export default function OrderConfirmPage() {
                       step="0.01"
                       min="0"
                       autoFocus
-                      className="w-full pl-8 pr-4 py-1 md:py-1.5 lg:py-2 border border-stroke/40 rounded-full focus:outline-none focus:ring focus:ring-gray-400 focus:border-transparent text-black text-center bg-surface [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                      className="w-full pl-8 pr-4 py-1 md:py-1.5 lg:py-2 border border-stroke/40 rounded-full focus:outline-none focus:ring focus:ring-tone-400 focus:border-transparent text-black text-center bg-surface [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                   </div>
                 </div>
@@ -416,7 +416,7 @@ export default function OrderConfirmPage() {
             {isCheckingAvailability ? (
               <div className="px-6 py-8 text-center">
                 <Loader2 className="h-8 w-8 animate-spin mx-auto mb-3 text-even-evergreen" />
-                <p className="text-gray-600 text-base">
+                <p className="text-tone-600 text-base">
                   {t("verifyingAvailability")}
                 </p>
               </div>
@@ -425,7 +425,7 @@ export default function OrderConfirmPage() {
                 <div className="px-6 py-4">
                   {itemsToRemove.length > 0 ? (
                     <>
-                      <p className="text-gray-600 text-base mb-4">
+                      <p className="text-tone-600 text-base mb-4">
                         {tc("itemsUnavailableIntro")}
                       </p>
                       <div className="bg-red-50 rounded-lg p-4 mb-4 max-h-48 overflow-y-auto">
@@ -437,10 +437,10 @@ export default function OrderConfirmPage() {
                             >
                               <X className="size-4 text-red-500 flex-shrink-0 mt-0.5" />
                               <div className="flex-1">
-                                <p className="font-medium text-gray-900">
+                                <p className="font-medium text-tone-900">
                                   {item.name}
                                 </p>
-                                <p className="text-gray-600 text-xs">
+                                <p className="text-tone-600 text-xs">
                                   {tc("itemQuantityLabel", {
                                     quantity: item.quantity,
                                   })}
@@ -450,17 +450,17 @@ export default function OrderConfirmPage() {
                           ))}
                         </ul>
                       </div>
-                      <p className="text-gray-600 text-sm mb-4">
+                      <p className="text-tone-600 text-sm mb-4">
                         {tc("otherItemsKept")}
                       </p>
                     </>
                   ) : (
-                    <p className="text-gray-600 text-base mb-4">
+                    <p className="text-tone-600 text-base mb-4">
                       {t("allItemsAvailable")}
                     </p>
                   )}
                 </div>
-                <div className="px-6 py-4 border-t border-gray-200 sticky bottom-0 bg-white">
+                <div className="px-6 py-4 border-t border-tone-200 sticky bottom-0 bg-white">
                   <div className="flex gap-3">
                     <button
                       onClick={() => {
@@ -468,7 +468,7 @@ export default function OrderConfirmPage() {
                         setPendingBranchChange(null);
                         setItemsToRemove([]);
                       }}
-                      className="flex-1 py-3 px-4 border border-gray-300 rounded-full text-black font-medium hover:bg-gray-50 transition-colors"
+                      className="flex-1 py-3 px-4 border border-tone-300 rounded-full text-black font-medium hover:bg-tone-50 transition-colors"
                     >
                       {tc("cancel")}
                     </button>
@@ -541,7 +541,7 @@ export default function OrderConfirmPage() {
                   </h2>
                 </div>
                 <div className="bg-surface border border-stroke-soft/50 rounded-xl p-4 mb-6">
-                  <p className="text-gray-700 text-sm text-center">
+                  <p className="text-tone-700 text-sm text-center">
                     {errorMessage}
                   </p>
                 </div>

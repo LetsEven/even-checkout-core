@@ -286,7 +286,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
 
                       {/* Image */}
                       <div className="shrink-0 relative">
-                        <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-gray-300">
+                        <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-tone-300">
                           {menuItem?.image_url ||
                           (item.images?.length > 0 && item.images[0]) ? (
                             <img

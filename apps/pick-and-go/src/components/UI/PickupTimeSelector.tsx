@@ -98,12 +98,12 @@ export default function PickupTimeSelector({
         onClick={handleOpenModal}
       >
         <div className="flex items-center gap-2">
-          <p className="text-gray-600 text-base">
+          <p className="text-tone-600 text-base">
             {t("pickupLabel")}{" "}
             <span className="font-medium text-black">{getDisplayText()}</span>
           </p>
         </div>
-        <ChevronRight className="size-4 md:size-5 text-gray-600 flex-shrink-0" />
+        <ChevronRight className="size-4 md:size-5 text-tone-600 flex-shrink-0" />
       </div>
 
       {/* Modal de selección de tiempo */}
@@ -126,22 +126,22 @@ export default function PickupTimeSelector({
                 </h3>
                 <button
                   onClick={() => setShowTimeModal(false)}
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                  className="p-1 hover:bg-tone-100 rounded-full transition-colors cursor-pointer"
                 >
-                  <X className="size-5 text-gray-500" />
+                  <X className="size-5 text-tone-500" />
                 </button>
               </div>
             </div>
 
             {/* Toggle: Lo antes posible / Programar */}
             <div className="px-6 py-4">
-              <div className="flex bg-gray-100 rounded-full p-1">
+              <div className="flex bg-tone-100 rounded-full p-1">
                 <button
                   onClick={() => setIsScheduled(false)}
                   className={`flex-1 py-2.5 px-4 rounded-full text-sm font-medium transition-all ${
                     !isScheduled
                       ? "bg-white text-black shadow-sm"
-                      : "text-gray-500"
+                      : "text-tone-500"
                   }`}
                 >
                   {t("asapOption")}
@@ -157,7 +157,7 @@ export default function PickupTimeSelector({
                   className={`flex-1 py-2.5 px-4 rounded-full text-sm font-medium transition-all ${
                     isScheduled
                       ? "bg-white text-black shadow-sm"
-                      : "text-gray-500"
+                      : "text-tone-500"
                   }`}
                 >
                   {t("scheduleOption")}
@@ -166,7 +166,7 @@ export default function PickupTimeSelector({
 
               {/* Subtexto para "Lo antes posible" */}
               {!isScheduled && (
-                <p className="text-center text-gray-500 text-sm mt-3">
+                <p className="text-center text-tone-500 text-sm mt-3">
                   {t("readyInMinutes", { minutes: estimatedMinutes })}
                 </p>
               )}
@@ -183,7 +183,7 @@ export default function PickupTimeSelector({
                       className={`py-3 px-5 border rounded-full cursor-pointer transition-colors ${
                         tempSelectedTime === slot.value
                           ? "border-even-grass bg-even-grass/10"
-                          : "border-black/30 bg-surface hover:border-gray-400"
+                          : "border-black/30 bg-surface hover:border-tone-400"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -192,7 +192,7 @@ export default function PickupTimeSelector({
                           className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                             tempSelectedTime === slot.value
                               ? "border-even-grass bg-even-grass"
-                              : "border-gray-300"
+                              : "border-tone-300"
                           }`}
                         >
                           {tempSelectedTime === slot.value && (
@@ -207,7 +207,7 @@ export default function PickupTimeSelector({
             )}
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t border-gray-200">
+            <div className="px-6 py-4 border-t border-tone-200">
               <button
                 onClick={handleConfirm}
                 className="w-full bg-even-grass text-even-evergreen py-3 rounded-full cursor-pointer transition-opacity hover:opacity-90"

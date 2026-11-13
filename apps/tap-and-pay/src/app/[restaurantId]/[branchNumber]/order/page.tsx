@@ -78,7 +78,7 @@ function EmptyBill({
         {title}
       </h3>
       {!posIssue && (
-        <p className="mt-2 text-gray-500 text-base md:text-lg">
+        <p className="mt-2 text-tone-500 text-base md:text-lg">
           {t("emptyBillMessage")}
         </p>
       )}
@@ -354,7 +354,7 @@ export default function OrderPage() {
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium text-even-evergreen mb-2 md:mb-3">
                     {t("tableClosedTitle")}
                   </h2>
-                  <p className="text-gray-600 text-base md:text-lg lg:text-xl mb-4 md:mb-6">
+                  <p className="text-tone-600 text-base md:text-lg lg:text-xl mb-4 md:mb-6">
                     {t("tableClosedMessage")}
                   </p>
                   <button
@@ -379,7 +379,7 @@ export default function OrderPage() {
                         <button
                           onClick={handleRefresh}
                           disabled={state.isLoading}
-                          className="flex items-center gap-2 text-even-evergreen hover:text-even-shamrock transition-colors disabled:text-gray-400 cursor-pointer"
+                          className="flex items-center gap-2 text-even-evergreen hover:text-even-shamrock transition-colors disabled:text-tone-400 cursor-pointer"
                         >
                           <svg
                             className={`w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 ${state.isLoading ? "animate-spin" : ""}`}
@@ -428,7 +428,7 @@ export default function OrderPage() {
                                 <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
                                   {showImages && (
                                     <div className="shrink-0 mt-1">
-                                      <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
+                                      <div className="size-16 md:size-20 lg:size-24 bg-tone-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
                                         {dish.images?.[0] ? (
                                           <img
                                             src={dish.images[0]}
@@ -514,7 +514,7 @@ export default function OrderPage() {
                                   <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
                                     {showImages && (
                                       <div className="shrink-0 mt-1">
-                                        <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
+                                        <div className="size-16 md:size-20 lg:size-24 bg-tone-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
                                           {dish.images?.[0] ? (
                                             <img
                                               src={dish.images[0]}

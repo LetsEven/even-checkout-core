@@ -47,7 +47,7 @@ export default function OutOfStockModal({
           </div>
 
           <div className="space-y-4 md:space-y-5 lg:space-y-6">
-            <p className="text-gray-600 text-base md:text-lg lg:text-xl text-center">
+            <p className="text-tone-600 text-base md:text-lg lg:text-xl text-center">
               {itemName ? (
                 <>
                   <span className="font-medium text-black capitalize">

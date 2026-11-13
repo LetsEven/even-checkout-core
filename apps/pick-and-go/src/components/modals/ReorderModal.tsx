@@ -274,7 +274,7 @@ function ReorderModal({ isOpen, onClose, items }: ReorderModalProps) {
                       {/* Image */}
                       {showImages && (
                         <div className="flex-shrink-0 relative">
-                          <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-gray-300">
+                          <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-tone-300">
                             {item.images?.length > 0 && item.images[0] ? (
                               <img
                                 src={item.images[0]}

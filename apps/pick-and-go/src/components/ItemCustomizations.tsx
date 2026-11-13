@@ -28,8 +28,8 @@ interface ItemCustomizationsProps {
 
 const VARIANT_STYLES = {
   light: {
-    option: "text-gray-400",
-    note: "text-gray-500",
+    option: "text-tone-400",
+    note: "text-tone-500",
     toggle: "text-even-evergreen",
   },
   dark: {

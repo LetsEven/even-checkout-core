@@ -105,7 +105,7 @@ export default function CardsTab() {
                             **** {method.lastFourDigits}
                           </span>
                           {method.expiryMonth && method.expiryYear && (
-                            <p className="text-xs md:text-sm lg:text-base text-gray-500">
+                            <p className="text-xs md:text-sm lg:text-base text-tone-500">
                               {method.expiryMonth?.toString().padStart(2, "0")}/
                               {method.expiryYear?.toString().slice(-2)}
                             </p>
@@ -120,7 +120,7 @@ export default function CardsTab() {
                         <button
                           onClick={() => handleSetDefault(method.id)}
                           disabled={settingDefaultId === method.id}
-                          className="text-gray-400 hover:text-even-shamrock transition-colors disabled:opacity-50 cursor-pointer"
+                          className="text-tone-400 hover:text-even-shamrock transition-colors disabled:opacity-50 cursor-pointer"
                           title={t("setDefaultTitle")}
                         >
                           {settingDefaultId === method.id ? (
@@ -143,7 +143,7 @@ export default function CardsTab() {
                       <button
                         onClick={() => handleDeleteCard(method.id)}
                         disabled={deletingCardId === method.id}
-                        className="p-2 md:p-2.5 lg:p-3 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                        className="p-2 md:p-2.5 lg:p-3 text-tone-400 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
                         title={tc("deleteCardTitle")}
                       >
                         {deletingCardId === method.id ? (
@@ -163,7 +163,7 @@ export default function CardsTab() {
         {/* Add New Card Button */}
         <button
           onClick={handleAddNewCard}
-          className="mt-2 md:mt-3 lg:mt-4 border border-black/50 flex justify-center items-center gap-1 md:gap-1.5 lg:gap-2 w-full text-black text-base md:text-lg lg:text-xl py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-colors bg-surface hover:bg-gray-100"
+          className="mt-2 md:mt-3 lg:mt-4 border border-black/50 flex justify-center items-center gap-1 md:gap-1.5 lg:gap-2 w-full text-black text-base md:text-lg lg:text-xl py-3 md:py-4 lg:py-5 rounded-full cursor-pointer transition-colors bg-surface hover:bg-tone-100"
         >
           <Plus className="size-5 md:size-6 lg:size-7" />
           {t("addNewCard")}
@@ -194,7 +194,7 @@ export default function CardsTab() {
                   </h2>
                 </div>
                 <div className="bg-surface border border-stroke-soft/50 rounded-xl p-4 mb-6">
-                  <p className="text-gray-700 text-sm text-center">
+                  <p className="text-tone-700 text-sm text-center">
                     {errorMessage}
                   </p>
                 </div>

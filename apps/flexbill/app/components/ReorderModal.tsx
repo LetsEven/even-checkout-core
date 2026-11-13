@@ -447,7 +447,7 @@ function ReorderModal({
                       {/* Image */}
                       {showImages && (
                         <div className="shrink-0 relative">
-                          <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-gray-300">
+                          <div className="size-16 md:size-20 rounded-sm overflow-hidden bg-tone-300">
                             {order.images &&
                             order.images.length > 0 &&
                             order.images[0] ? (

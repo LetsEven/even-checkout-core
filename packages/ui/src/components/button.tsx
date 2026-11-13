@@ -10,7 +10,7 @@ const variants = {
   outline: "border border-even-evergreen bg-transparent text-even-evergreen hover:bg-even-evergreen/5",
   ghost: "bg-transparent text-even-evergreen hover:bg-black/5",
   /** Botón blanco para pantallas con fondo Evergreen. */
-  light: "bg-white text-black hover:bg-gray-50",
+  light: "bg-white text-black hover:bg-tone-50",
 } as const;
 
 const sizes = {

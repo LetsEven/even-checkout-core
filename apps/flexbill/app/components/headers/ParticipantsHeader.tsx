@@ -201,7 +201,7 @@ export default function ParticipantsHeader({
   const getAvatarColor = (name: string) => {
     const colors = [
       "bg-blue-500",
-      "bg-green-500",
+      "bg-positive-500",
       "bg-purple-500",
       "bg-pink-500",
       "bg-indigo-500",
@@ -232,7 +232,7 @@ export default function ParticipantsHeader({
         <div className="flex items-center z-10">
           <div
             onClick={onBack}
-            className="size-10 md:size-12 lg:size-14 bg-white border border-gray-300 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-200 active:scale-95 transition-transform duration-200"
+            className="size-10 md:size-12 lg:size-14 bg-white border border-tone-300 rounded-full flex items-center justify-center cursor-pointer hover:bg-tone-200 active:scale-95 transition-transform duration-200"
           >
             <ChevronLeft className="text-primary size-5 md:size-6 lg:size-7" />
           </div>
@@ -247,7 +247,7 @@ export default function ParticipantsHeader({
         {isLoading ? (
           // Loading
           <div className="flex items-center space-x-1">
-            <div className="size-10 md:size-12 lg:size-14 bg-gray-300 animate-pulse rounded-full border border-white shadow-sm"></div>
+            <div className="size-10 md:size-12 lg:size-14 bg-tone-300 animate-pulse rounded-full border border-white shadow-sm"></div>
           </div>
         ) : participants.length > 0 ? (
           <div className="flex items-center space-x-1">
@@ -317,9 +317,9 @@ export default function ParticipantsHeader({
                 </h3>
                 <button
                   onClick={() => setIsParticipantsModalOpen(false)}
-                  className="p-1 md:p-1.5 lg:p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                  className="p-1 md:p-1.5 lg:p-2 hover:bg-tone-100 rounded-full transition-colors cursor-pointer"
                 >
-                  <X className="size-5 md:size-6 lg:size-7 text-gray-500" />
+                  <X className="size-5 md:size-6 lg:size-7 text-tone-500" />
                 </button>
               </div>
             </div>

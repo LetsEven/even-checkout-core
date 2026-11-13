@@ -107,7 +107,7 @@ export default function DashboardView({
                 className={`relative px-1.5 md:px-3 lg:px-4 py-0.5 md:py-1 lg:py-1.5 rounded-full cursor-pointer whitespace-nowrap text-xs md:text-sm lg:text-lg transition-colors duration-300 ${
                   activeTab === "profile"
                     ? "text-white"
-                    : "text-gray-500 hover:bg-gray-100"
+                    : "text-tone-500 hover:bg-tone-100"
                 }`}
               >
                 {t("tabProfile")}
@@ -117,7 +117,7 @@ export default function DashboardView({
                 className={`relative px-1.5 md:px-3 lg:px-4 py-0.5 md:py-1 lg:py-1.5 rounded-full cursor-pointer whitespace-nowrap text-xs md:text-sm lg:text-lg transition-colors duration-300 ${
                   activeTab === "support"
                     ? "text-white"
-                    : "text-gray-500 hover:bg-gray-100"
+                    : "text-tone-500 hover:bg-tone-100"
                 }`}
               >
                 {t("tabSupport")}
@@ -127,7 +127,7 @@ export default function DashboardView({
                 className={`relative px-1.5 md:px-3 lg:px-4 py-0.5 md:py-1 lg:py-1.5 rounded-full cursor-pointer whitespace-nowrap text-xs md:text-sm lg:text-lg transition-colors duration-300 ${
                   activeTab === "history"
                     ? "text-white"
-                    : "text-gray-500 hover:bg-gray-100"
+                    : "text-tone-500 hover:bg-tone-100"
                 }`}
               >
                 {t("tabHistory")}
@@ -137,7 +137,7 @@ export default function DashboardView({
                 className={`relative px-1.5 md:px-3 lg:px-4 py-0.5 md:py-1 lg:py-1.5 rounded-full cursor-pointer whitespace-nowrap text-xs md:text-sm lg:text-lg transition-colors duration-300 ${
                   activeTab === "cards"
                     ? "text-white"
-                    : "text-gray-500 hover:bg-gray-100"
+                    : "text-tone-500 hover:bg-tone-100"
                 }`}
               >
                 {t("tabCards")}

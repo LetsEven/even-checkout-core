@@ -39,7 +39,7 @@ export function getCardTypeIcon(
     default:
       // For small size, return lucide icon; for medium, return gradient div
       if (size === "small") {
-        return <CreditCard className="w-5 h-5 text-gray-700" />;
+        return <CreditCard className="w-5 h-5 text-tone-700" />;
       }
       return (
         <div

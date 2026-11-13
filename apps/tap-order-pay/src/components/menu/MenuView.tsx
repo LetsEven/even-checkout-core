@@ -56,9 +56,9 @@ function getStatusColor(status: string) {
     case "ready":
       return "bg-orange-100 text-orange-800 border-orange-300";
     case "delivered":
-      return "bg-green-100 text-green-800 border-green-300";
+      return "bg-positive-100 text-positive-800 border-positive-300";
     default:
-      return "bg-gray-100 text-gray-800 border-gray-300";
+      return "bg-tone-100 text-tone-800 border-tone-300";
   }
 }
 
@@ -506,7 +506,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
             {/* Settings Icon */}
             <button
               onClick={() => setShowSettingsModal(true)}
-              className="bg-white rounded-full shadow-sm hover:bg-gray-50 transition-all active:scale-95 size-9 md:size-10 lg:size-12 overflow-hidden flex items-center justify-center"
+              className="bg-white rounded-full shadow-sm hover:bg-tone-50 transition-all active:scale-95 size-9 md:size-10 lg:size-12 overflow-hidden flex items-center justify-center"
             >
               <UserAvatar isAuthenticated={isAuthenticated} profile={profile} />
             </button>
@@ -522,7 +522,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
 
           {/* Name and photo */}
           <div className="mb-4 md:mb-6 flex flex-col items-center">
-            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-even-evergreen overflow-hidden border border-gray-400 shadow-sm">
+            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-even-evergreen overflow-hidden border border-tone-400 shadow-sm">
               {restaurant.logo_url && (
                 <img
                   src={restaurant.logo_url}
@@ -602,7 +602,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
                 ${
                   activeCat === cat
                     ? "text-white"
-                    : "text-gray-500 hover:bg-gray-100"
+                    : "text-tone-500 hover:bg-tone-100"
                 }`}
               >
                 {cat}
@@ -622,7 +622,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
             ))
           ) : (
             <div className="text-center py-10 md:py-16">
-              <p className="text-gray-500 text-base md:text-lg lg:text-xl">
+              <p className="text-tone-500 text-base md:text-lg lg:text-xl">
                 {searchQuery.trim()
                   ? t("noResultsFor", { query: searchQuery })
                   : t("noItemsAvailable")}
@@ -667,7 +667,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
           {/* Settings */}
           <button
             onClick={() => setShowSettingsModal(true)}
-            className="size-11 md:size-12 rounded-full overflow-hidden flex items-center justify-center bg-white/60 border border-gray-200 hover:bg-white transition-colors active:scale-95"
+            className="size-11 md:size-12 rounded-full overflow-hidden flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
           >
             <UserAvatar
               isAuthenticated={isAuthenticated}
@@ -681,7 +681,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
           <div className="relative">
             <button
               onClick={() => navigateWithTable("/cart")}
-              className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-gray-200 hover:bg-white transition-colors active:scale-95"
+              className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
             >
               <ShoppingCart
                 className="size-5 md:size-6 text-stone-700"
@@ -806,7 +806,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
                     >
                       {showImages && (
                         <div className="shrink-0">
-                          <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm flex items-center justify-center overflow-hidden">
+                          <div className="size-16 md:size-20 lg:size-24 bg-tone-300 rounded-sm flex items-center justify-center overflow-hidden">
                             {dish.images &&
                             dish.images.length > 0 &&
                             dish.images[0] ? (
@@ -888,7 +888,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
             }}
           >
             <div className="flex justify-center pt-3 pb-1 shrink-0">
-              <div className="w-10 h-1 rounded-full bg-gray-300/80" />
+              <div className="w-10 h-1 rounded-full bg-tone-300/80" />
             </div>
             <Suspense fallback={null}>
               {isAuthenticated && profile?.firstName ? (
@@ -934,7 +934,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
             }}
           >
             <div className="flex justify-center pt-3 pb-1 shrink-0">
-              <div className="w-10 h-1 rounded-full bg-gray-300/80" />
+              <div className="w-10 h-1 rounded-full bg-tone-300/80" />
             </div>
             <Suspense fallback={null}>
               <ChatView onBack={closePepperChat} />

@@ -167,7 +167,7 @@ export default function OrderStatus() {
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium text-even-shamrock mb-2 md:mb-3">
                     {t("tableClosedTitle")}
                   </h2>
-                  <p className="text-gray-600 text-base md:text-lg lg:text-xl mb-4 md:mb-6">
+                  <p className="text-tone-600 text-base md:text-lg lg:text-xl mb-4 md:mb-6">
                     {t("tableClosedMessage")}
                   </p>
                   <button
@@ -192,7 +192,7 @@ export default function OrderStatus() {
                         <button
                           onClick={handleRefresh}
                           disabled={state.isLoading}
-                          className="flex items-center gap-2 text-even-shamrock hover:text-even-evergreen transition-colors disabled:text-gray-400 cursor-pointer"
+                          className="flex items-center gap-2 text-even-shamrock hover:text-even-evergreen transition-colors disabled:text-tone-400 cursor-pointer"
                         >
                           <svg
                             className={`w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 ${state.isLoading ? "animate-spin" : ""}`}
@@ -242,7 +242,7 @@ export default function OrderStatus() {
                               ready:
                                 "bg-blue-100 text-blue-800 border-blue-300",
                               delivered:
-                                "bg-green-100 text-green-800 border-green-300",
+                                "bg-positive-100 text-positive-800 border-positive-300",
                             };
 
                             return (
@@ -254,7 +254,7 @@ export default function OrderStatus() {
                                   <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
                                     {showImages && (
                                       <div className="shrink-0 mt-1">
-                                        <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
+                                        <div className="size-16 md:size-20 lg:size-24 bg-tone-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
                                           {dish.images?.[0] ? (
                                             <img
                                               src={dish.images[0]}
@@ -322,7 +322,7 @@ export default function OrderStatus() {
                                           null &&
                                         dish.promo_discount_percentage <
                                           100 && (
-                                          <p className="text-xs md:text-sm text-gray-400 line-through">
+                                          <p className="text-xs md:text-sm text-tone-400 line-through">
                                             $
                                             {(
                                               (dish.total_display_price ??
@@ -394,7 +394,7 @@ export default function OrderStatus() {
                                   <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
                                     {showImages && (
                                       <div className="shrink-0 mt-1">
-                                        <div className="size-16 md:size-20 lg:size-24 bg-gray-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
+                                        <div className="size-16 md:size-20 lg:size-24 bg-tone-300 rounded-sm md:rounded-md flex items-center justify-center hover:scale-105 transition-transform duration-200">
                                           {dish.images?.[0] ? (
                                             <img
                                               src={dish.images[0]}
@@ -459,7 +459,7 @@ export default function OrderStatus() {
                                           null &&
                                         dish.promo_discount_percentage <
                                           100 && (
-                                          <p className="text-xs md:text-sm text-gray-400 line-through">
+                                          <p className="text-xs md:text-sm text-tone-400 line-through">
                                             $
                                             {(
                                               (dish.total_display_price ??

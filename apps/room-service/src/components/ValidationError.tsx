@@ -79,7 +79,7 @@ export default function ValidationError({ errorType }: ValidationErrorProps) {
             {/* Go Home Option */}
             <button
               onClick={() => router.push("/")}
-              className="w-full bg-white hover:bg-gray-50 text-black py-4 md:py-5 lg:py-6 px-4 md:px-5 lg:px-6 rounded-xl md:rounded-2xl transition-all duration-200 flex items-center gap-3 md:gap-4 lg:gap-5 active:scale-95"
+              className="w-full bg-white hover:bg-tone-50 text-black py-4 md:py-5 lg:py-6 px-4 md:px-5 lg:px-6 rounded-xl md:rounded-2xl transition-all duration-200 flex items-center gap-3 md:gap-4 lg:gap-5 active:scale-95"
             >
               <div className="bg-even-grass p-2 md:p-2.5 lg:p-3 rounded-full group-hover:scale-110 transition-transform">
                 <Home className="size-5 md:size-6 lg:size-7 text-even-evergreen" />
@@ -88,7 +88,7 @@ export default function ValidationError({ errorType }: ValidationErrorProps) {
                 <h2 className="text-base md:text-lg lg:text-xl font-medium mb-0.5 md:mb-1">
                   {tc("backToHome")}
                 </h2>
-                <p className="text-xs md:text-sm lg:text-base text-gray-600">
+                <p className="text-xs md:text-sm lg:text-base text-tone-600">
                   {t("returnToMainPage")}
                 </p>
               </div>

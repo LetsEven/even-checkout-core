@@ -276,16 +276,6 @@
   }
 }
 
-/* Loader — giro del asterisco Even en pasos (recurso de marca del landing) */
-@keyframes asterisk-spin-steps {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.asterisk-spin {
-  animation: asterisk-spin-steps 1.8s steps(6, end) infinite;
-}
-
 /* Apple Pay button border radius and height */
 #apple-pay-container apple-pay-button {
   --apple-pay-button-border-radius: 9999px;

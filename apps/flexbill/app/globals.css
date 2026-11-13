@@ -289,16 +289,6 @@
   backface-visibility: hidden;
 }
 
-/* Loader — giro del asterisco Even en pasos (recurso de marca del landing) */
-@keyframes asterisk-spin-steps {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.asterisk-spin {
-  animation: asterisk-spin-steps 1.8s steps(6, end) infinite;
-}
-
 /* Accesibilidad — respetar prefers-reduced-motion (best practice 2026) */
 @media (prefers-reduced-motion: reduce) {
   *,

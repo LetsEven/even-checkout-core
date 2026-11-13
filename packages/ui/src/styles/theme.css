@@ -276,3 +276,40 @@
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+
+/*
+ * Geometría compartida de la vista de menú: banner, tarjeta blanca del menú, tarjeta de detalle del
+ * restaurante y bienvenida usan estos valores para quedar siempre alineadas.
+ *   --menu-header-h : alto del header en flujo (pt + botón)
+ *   --menu-card-gap : separación bajo el header hasta la tarjeta blanca
+ *   --menu-card-top : distancia desde arriba de la pantalla a la tarjeta
+ *   --menu-banner-h : alto del banner (debe cubrir hasta pasada la esquina redondeada de la tarjeta)
+ */
+:root {
+  --menu-header-h: 3.75rem;
+  --menu-card-gap: 6.5rem;
+  --menu-card-top: calc(var(--menu-header-h) + var(--menu-card-gap));
+  --menu-banner-h: 15.625rem;
+}
+@media (min-width: 768px) {
+  :root {
+    --menu-header-h: 4.75rem;
+    --menu-card-gap: 18rem;
+    --menu-banner-h: 26rem;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --menu-header-h: 5.75rem;
+    --menu-card-gap: 22rem;
+    --menu-banner-h: 30rem;
+  }
+}
+
+/* Fundidos de entrada/salida que con movimiento reducido pasan a ser cortos (150 ms) en vez de
+   cortes secos. La clase gana al selector * por especificidad. */
+@media (prefers-reduced-motion: reduce) {
+  .reduce-motion-fade {
+    transition-duration: 150ms !important;
+  }
+}

@@ -10,11 +10,15 @@ import PepperIcon from "../UI/PepperIcon";
 import RestaurantDetailCard, {
   DETAIL_ANIMATION_MS,
 } from "./RestaurantDetailCard";
-import RestaurantIntro, {
-  INTRO_FLY_MS,
-  INTRO_SHOW_MS,
-  type IntroPhase,
-} from "./RestaurantIntro";
+import RestaurantIntro from "./RestaurantIntro";
+import {
+  MenuActionsPill,
+  PillButton,
+  PillCartButton,
+  PillPepperButton,
+  UserAvatar as SharedUserAvatar,
+  useRestaurantIntro,
+} from "@even/ui";
 import {
   Search,
   ShoppingCart,
@@ -63,76 +67,6 @@ const AuthView = lazy(() => import("./../AuthView"));
 const DashboardView = lazy(() => import("./../DashboardView"));
 const RestaurantClosedModal = lazy(() => import("../RestaurantClosedModal"));
 
-// Bienvenida: sale en la primera entrada al menú en la pestaña (clave por
-// restaurante en sessionStorage, marcada AL INICIAR la bienvenida) y cuando el
-// usuario recarga la página. Volver al menú desde el carrito, un platillo, etc.
-// no la repite. El flag de módulo evita que una navegación cliente posterior en
-// la misma carga de documento (que sigue teniendo type "reload") la vuelva a
-// mostrar, y es el fallback si sessionStorage falla (modo privado).
-const INTRO_STORAGE_PREFIX = "intro-shown:";
-// false → la bienvenida solo sale en la primera entrada, no al refrescar
-const INTRO_REPLAY_ON_RELOAD = true;
-let introShownThisLoad = false;
-
-function isDocumentReload(): boolean {
-  const nav = performance.getEntriesByType("navigation")[0] as
-    | PerformanceNavigationTiming
-    | undefined;
-  if (nav) return nav.type === "reload";
-  // Fallback para navegadores sin Navigation Timing 2
-  return performance.navigation?.type === 1;
-}
-
-// El tipo de navegación (performance) no es fiable a la hora de montar la
-// vista, así que la recarga se detecta con una marca: al descargar el documento
-// (pagehide) se deja una marca en sessionStorage que el siguiente documento
-// consume al cargar. La navegación cliente no descarga el documento, no la deja.
-const INTRO_UNLOAD_KEY = "intro-doc-unloaded";
-const documentLoadedAsReload = (() => {
-  if (typeof window === "undefined") return false;
-  let viaMark = false;
-  try {
-    viaMark = window.sessionStorage.getItem(INTRO_UNLOAD_KEY) === "1";
-    window.sessionStorage.removeItem(INTRO_UNLOAD_KEY);
-    const w = window as typeof window & { __introUnloadHook?: boolean };
-    if (!w.__introUnloadHook) {
-      w.__introUnloadHook = true; // una sola vez aunque el módulo se reevalúe (HMR)
-      window.addEventListener("pagehide", () => {
-        try {
-          window.sessionStorage.setItem(INTRO_UNLOAD_KEY, "1");
-        } catch {
-          // almacenamiento bloqueado
-        }
-      });
-    }
-  } catch {
-    // almacenamiento bloqueado
-  }
-  return viaMark || isDocumentReload();
-})();
-
-function introAlreadyShown(restaurantId: number | null): boolean {
-  if (typeof window === "undefined") return false;
-  if (introShownThisLoad) return true;
-  if (INTRO_REPLAY_ON_RELOAD && documentLoadedAsReload) return false;
-  try {
-    return (
-      window.sessionStorage.getItem(INTRO_STORAGE_PREFIX + restaurantId) === "1"
-    );
-  } catch {
-    return false;
-  }
-}
-
-function markIntroShown(restaurantId: number | null) {
-  introShownThisLoad = true;
-  try {
-    window.sessionStorage.setItem(INTRO_STORAGE_PREFIX + restaurantId, "1");
-  } catch {
-    // modo privado / almacenamiento bloqueado: queda el flag en memoria
-  }
-}
-
 // Pure functions — defined outside to avoid re-creation on every render
 
 function lockScroll() {
@@ -160,32 +94,9 @@ interface UserAvatarProps {
   textSize?: string;
 }
 
-function UserAvatar({
-  isAuthenticated,
-  profile,
-  iconSize = "size-6 md:size-7 lg:size-8",
-  textSize = "text-base md:text-lg lg:text-xl",
-}: UserAvatarProps) {
+function UserAvatar(props: UserAvatarProps) {
   const t = useTranslations("MenuView");
-  if (isAuthenticated && profile?.photoUrl) {
-    return (
-      <img
-        src={profile.photoUrl}
-        alt={t("profileAlt")}
-        className="w-full h-full object-cover"
-      />
-    );
-  }
-  if (isAuthenticated && profile?.firstName) {
-    return (
-      <span className={`text-warm-800 font-semibold select-none ${textSize}`}>
-        {profile.firstName.charAt(0).toUpperCase()}
-      </span>
-    );
-  }
-  return (
-    <UserCircle className={`text-warm-500 ${iconSize}`} strokeWidth={1.2} />
-  );
+  return <SharedUserAvatar {...props} alt={t("profileAlt")} />;
 }
 
 export default function MenuView() {
@@ -251,43 +162,14 @@ export default function MenuView() {
   const [showDetail, setShowDetail] = useState(false);
   const logoButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Pantalla de bienvenida (el estado inicial es igual en servidor y en el
-  // primer render del cliente, así el overlay ya está presente sin parpadeo)
-  const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
-    introAlreadyShown(menuKey) ? "done" : "show",
-  );
-  const [introLogoTransform, setIntroLogoTransform] = useState("");
-  const introLogoRef = useRef<HTMLDivElement>(null);
-  const introActive = introPhase !== "done";
-
-  const startIntroFly = useCallback(() => {
-    const from = introLogoRef.current?.getBoundingClientRect();
-    const to = logoButtonRef.current?.getBoundingClientRect();
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (!from || !to || !from.width || reduceMotion) {
-      setIntroPhase("done");
-      return;
-    }
-    setIntroLogoTransform(
-      `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${to.width / from.width})`,
-    );
-    setIntroPhase("fly");
-  }, []);
-
-  useEffect(() => {
-    if (introPhase !== "show") return;
-    markIntroShown(menuKey);
-    const timer = setTimeout(startIntroFly, INTRO_SHOW_MS);
-    return () => clearTimeout(timer);
-  }, [introPhase, startIntroFly, menuKey]);
-
-  useEffect(() => {
-    if (introPhase !== "fly") return;
-    const timer = setTimeout(() => setIntroPhase("done"), INTRO_FLY_MS + 30);
-    return () => clearTimeout(timer);
-  }, [introPhase]);
+  // Pantalla de bienvenida (hook compartido de @even/ui)
+  const {
+    phase: introPhase,
+    active: introActive,
+    logoTransform: introLogoTransform,
+    logoRef: introLogoRef,
+    skip: startIntroFly,
+  } = useRestaurantIntro({ storageKey: menuKey, logoTargetRef: logoButtonRef });
   const [activeOrders, setActiveOrders] = useState<
     NonNullable<ActiveOrderResponse["data"]>[]
   >([]);
@@ -1169,69 +1051,23 @@ export default function MenuView() {
 
       {/* Píldora de acciones — se abre con la hamburguesa o aparece al hacer
           scroll; siempre en el mismo lugar */}
-      <div
-        className="reduce-motion-fade fixed top-0 inset-x-0 z-40 flex justify-center px-4 pt-4 pb-3"
-        inert={!pillVisible}
-        aria-hidden={!pillVisible}
-        style={{
-          opacity: pillVisible ? 1 : 0,
-          transform: pillVisible ? "none" : "translateY(-0.75rem) scale(0.97)",
-          transition:
-            "opacity 200ms ease, transform 250ms cubic-bezier(0.32, 0.72, 0, 1)",
-          // El contenedor ocupa todo el ancho: no debe interceptar toques
-          // (la hamburguesa del banner queda debajo).
-          pointerEvents: "none",
-        }}
-      >
-        <div
-          className="flex items-center gap-4 md:gap-5 rounded-full px-6 md:px-7 py-3 md:py-3.5 shadow-lg border border-white/40"
-          style={{
-            pointerEvents: pillVisible ? "auto" : "none",
-            background: "rgba(255, 255, 255, 0.82)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-          }}
-        >
-          {/* Settings */}
-          <button
-            onClick={() => setShowSettingsModal(true)}
-            className="size-11 md:size-12 rounded-full overflow-hidden flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
-          >
-            <UserAvatar
-              isAuthenticated={isAuthenticated}
-              profile={profile}
-              iconSize="size-6 md:size-7"
-              textSize="text-base md:text-lg"
-            />
-          </button>
-
-          {/* Carrito */}
-          <div className="relative">
-            <button
-              onClick={() => navigateWithRestaurantId("/cart")}
-              className="size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95"
-            >
-              <ShoppingCart
-                className="size-5 md:size-6 text-warm-700"
-                strokeWidth={1.5}
-              />
-            </button>
-            {state.totalItems > 0 && (
-              <div className="absolute -top-1 -right-1 bg-even-grass text-even-evergreen rounded-full size-5 flex items-center justify-center text-xs font-normal">
-                {state.totalItems}
-              </div>
-            )}
-          </div>
-
-          {/* Pepper */}
-          <button
-            onClick={() => setShowPepperChat(true)}
-            className="size-12 md:size-14 overflow-hidden transition-colors active:scale-95"
-          >
-            <PepperIcon />
-          </button>
-        </div>
-      </div>
+      <MenuActionsPill visible={pillVisible}>
+        <PillButton onClick={() => setShowSettingsModal(true)} clip>
+          <UserAvatar
+            isAuthenticated={isAuthenticated}
+            profile={profile}
+            iconSize="size-6 md:size-7"
+            textSize="text-base md:text-lg"
+          />
+        </PillButton>
+        <PillCartButton
+          onClick={() => navigateWithRestaurantId("/cart")}
+          count={state.totalItems}
+        />
+        <PillPepperButton onClick={() => setShowPepperChat(true)}>
+          <PepperIcon />
+        </PillPepperButton>
+      </MenuActionsPill>
 
       {/* Pepper Chat Modal */}
       {showPepperChat && (

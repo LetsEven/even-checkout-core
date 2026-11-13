@@ -7,10 +7,14 @@ export type FullScreenLoaderProps = {
   className?: string;
 };
 
-/** Pantalla de carga de marca: asterisco Grass girando sobre Evergreen. */
+/**
+ * Pantalla de carga de marca: asterisco Grass girando sobre Evergreen.
+ * `data-even-loader` lo usa TermsUpdateToast para no aparecer mientras la app sigue cargando.
+ */
 export function FullScreenLoader({ label = "Cargando", className }: FullScreenLoaderProps) {
   return (
     <div
+      data-even-loader
       role="status"
       aria-label={label}
       className={cn("fixed inset-0 z-50 flex items-center justify-center bg-even-evergreen", className)}

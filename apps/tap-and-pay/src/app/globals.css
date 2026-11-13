@@ -111,17 +111,6 @@
   animation-delay: 1.2s;
 }
 
-/* Asterisk spinner (RS pattern) */
-@keyframes asterisk-spin-steps {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.asterisk-spin {
-  animation: asterisk-spin-steps 1.8s steps(6, end) infinite;
-}
-
 /* Payment success animations */
 @keyframes logo-fade-in {
   0% {
@@ -316,7 +305,6 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .asterisk-spin,
   .animate-pulse-button,
   .animate-bounce-in,
   .circle-animation,

@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { brandColors } from "@even/ui";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
@@ -23,7 +24,7 @@ export default function OpengraphImage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#023828",
+          backgroundColor: brandColors.evergreen,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -258,9 +258,9 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
   // "#ffffff", así que ese es el valor correcto al que hay que volver.
   useEffect(() => {
     const modalOpen = showPepperChat || showSettingsModal;
-    document.body.style.backgroundColor = modalOpen ? "#F1F1F1" : "#fefeeb";
+    document.body.style.backgroundColor = modalOpen ? "var(--color-overscroll)" : "var(--color-background)";
     return () => {
-      document.body.style.backgroundColor = "#fefeeb";
+      document.body.style.backgroundColor = "var(--color-background)";
     };
   }, [showPepperChat, showSettingsModal]);
 

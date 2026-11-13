@@ -217,9 +217,9 @@ export default function MenuView() {
   // "#ffffff", así que ese es el valor correcto al que hay que volver.
   useEffect(() => {
     const modalOpen = showPepperChat || showSettingsModal;
-    document.body.style.backgroundColor = modalOpen ? "#F1F1F1" : "#fefeeb";
+    document.body.style.backgroundColor = modalOpen ? "var(--color-overscroll)" : "var(--color-background)";
     return () => {
-      document.body.style.backgroundColor = "#fefeeb";
+      document.body.style.backgroundColor = "var(--color-background)";
     };
   }, [showPepperChat, showSettingsModal]);
 
@@ -480,7 +480,7 @@ export default function MenuView() {
           className="absolute top-0 left-0 w-full h-[230px] md:h-96 lg:h-[28rem] object-cover banner-mobile z-0"
         />
       ) : (
-        <div className="absolute top-0 left-0 w-full h-[230px] md:h-96 lg:h-[28rem] bg-[#023828] banner-mobile z-0" />
+        <div className="absolute top-0 left-0 w-full h-[230px] md:h-96 lg:h-[28rem] bg-even-evergreen banner-mobile z-0" />
       )}
 
       <MenuHeader restaurant={restaurant} />
@@ -512,7 +512,7 @@ export default function MenuView() {
 
           {/* Name and photo */}
           <div className="mb-4 md:mb-6 flex flex-col items-center">
-            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-[#023828] overflow-hidden border border-tone-400 shadow-sm">
+            <div className="size-28 md:size-36 lg:size-40 rounded-full bg-even-evergreen overflow-hidden border border-tone-400 shadow-sm">
               {restaurant.logo_url && (
                 <img
                   src={restaurant.logo_url}

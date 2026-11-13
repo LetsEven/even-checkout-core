@@ -3,6 +3,7 @@ import { DM_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import "./globals.css";
+import { brandColors } from "@even/ui";
 import { CartProvider } from "./context/CartContext";
 import { TableProvider } from "./context/TableContext";
 import { GuestProvider } from "./context/GuestContext";
@@ -50,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: brandColors.white,
   width: "device-width",
   initialScale: 1,
   minimumScale: 1,

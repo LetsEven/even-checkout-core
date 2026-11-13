@@ -1557,7 +1557,7 @@ export default function DishDetailPage() {
                             isFilled ? "text-yellow-400" : "text-white"
                           }`}
                           fill="currentColor"
-                          stroke={isFilled ? "#facc15" : "black"}
+                          stroke={isFilled ? "var(--color-star)" : "black"}
                           strokeWidth="1"
                           viewBox="0 0 24 24"
                         >

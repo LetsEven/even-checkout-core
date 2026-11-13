@@ -411,7 +411,7 @@ export default function PaymentSuccessPage() {
                             isFilled ? "text-yellow-400" : "text-white"
                           }`}
                           fill="currentColor"
-                          stroke={isFilled ? "#facc15" : "black"}
+                          stroke={isFilled ? "var(--color-star)" : "black"}
                           strokeWidth="1"
                           viewBox="0 0 24 24"
                         >
@@ -426,7 +426,7 @@ export default function PaymentSuccessPage() {
                 {rating > 0 && !hasRated && (
                   <button
                     onClick={handleSubmitRating}
-                    className="px-5 md:px-6 py-1.5 md:py-2 bg-even-grass text-even-evergreen hover:from-[#2a6d77] hover:to-[#12323a] text-sm md:text-base font-medium rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg animate-fade-in"
+                    className="px-5 md:px-6 py-1.5 md:py-2 bg-even-grass text-even-evergreen text-sm md:text-base font-medium rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg animate-fade-in"
                     aria-label={t("submitRatingAriaLabel")}
                   >
                     {t("submitCta")}

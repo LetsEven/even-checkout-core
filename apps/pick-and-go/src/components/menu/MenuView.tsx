@@ -249,7 +249,6 @@ export default function MenuView() {
   };
   const [showBranchModal, setShowBranchModal] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
-  const detailCloseRef = useRef<HTMLButtonElement>(null);
   const logoButtonRef = useRef<HTMLButtonElement>(null);
 
   // Pantalla de bienvenida (el estado inicial es igual en servidor y en el
@@ -845,7 +844,6 @@ export default function MenuView() {
           if (!showBranchModal) closeDetail();
         }}
         onChangeBranch={() => setShowBranchModal(true)}
-        closeButtonRef={detailCloseRef}
       />
 
       {/* Modal de selección de sucursal */}

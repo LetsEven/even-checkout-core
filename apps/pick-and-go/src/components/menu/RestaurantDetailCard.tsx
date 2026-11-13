@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronRight, Clock, Mail, MapPin, Phone, X } from "lucide-react";
+import { ChevronRight, Clock, Mail, MapPin, Phone } from "lucide-react";
 import type { Restaurant } from "../../interfaces/restaurant";
 import type { Branch } from "../../types/branch.types";
 
@@ -23,12 +23,18 @@ interface RestaurantDetailCardProps {
   open: boolean;
   onClose: () => void;
   onChangeBranch: () => void;
-  /** Se enfoca al abrir (botón de cerrar) */
-  closeButtonRef: RefObject<HTMLButtonElement | null>;
 }
 
 const EASING = "cubic-bezier(0.32, 0.72, 0, 1)";
 export const DETAIL_ANIMATION_MS = 520;
+
+// Gesto de cerrar jalando hacia abajo (con el contenido en su tope de scroll)
+const DRAG_CLOSE_DISTANCE = 90; // px de arrastre para cerrar al soltar
+const DRAG_CLOSE_VELOCITY = 0.6; // px/ms: un jalón rápido también cierra
+const DRAG_RESISTANCE = 0.85; // el panel sigue al dedo con ligera resistencia
+const WHEEL_CLOSE_DISTANCE = 120; // rueda/trackpad hacia arriba, acumulado
+const WHEEL_SETTLE_MS = 150; // ignora la inercia del scroll que acaba de llegar al tope
+const WHEEL_RESET_MS = 250; // sin eventos de rueda se reinicia lo acumulado
 
 function shortTime(time: string) {
   return time.slice(0, 5);
@@ -46,21 +52,138 @@ export default function RestaurantDetailCard({
   open,
   onClose,
   onChangeBranch,
-  closeButtonRef,
 }: RestaurantDetailCardProps) {
   const t = useTranslations("RestaurantDetail");
   const tc = useTranslations("Common");
+
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+  const [dragY, setDragY] = useState(0);
+  const [dragging, setDragging] = useState(false);
 
   // Escape cierra (solo si el modal de sucursal no está encima)
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !e.defaultPrevented) onClose();
+      if (e.key === "Escape" && !e.defaultPrevented) onCloseRef.current();
     };
     window.addEventListener("keydown", onKeyDown);
-    closeButtonRef.current?.focus({ preventScroll: true });
+    dialogRef.current?.focus({ preventScroll: true });
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open, onClose, closeButtonRef]);
+  }, [open]);
+
+  // Cerrar jalando la tarjeta hacia abajo (táctil) o con rueda/trackpad hacia
+  // arriba, solo cuando el contenido está en su tope de scroll.
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const scroller = scrollerRef.current;
+    if (!open || !dialog || !scroller) return;
+
+    // Táctil
+    let anchorY: number | null = null; // Y desde la que se mide el arrastre
+    let offset = 0;
+    let isDragging = false;
+    let lastY = 0;
+    let lastT = 0;
+    let velocity = 0;
+
+    const onTouchStart = (e: TouchEvent) => {
+      const y = e.touches[0].clientY;
+      anchorY = scroller.scrollTop <= 0 ? y : null;
+      lastY = y;
+      lastT = e.timeStamp;
+      velocity = 0;
+      offset = 0;
+      isDragging = false;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const y = e.touches[0].clientY;
+      const dt = e.timeStamp - lastT;
+      if (dt > 0) velocity = (y - lastY) / dt;
+      lastY = y;
+      lastT = e.timeStamp;
+
+      // Si el usuario sube el contenido hasta el tope durante el mismo gesto,
+      // el arrastre se mide desde ese punto
+      if (scroller.scrollTop <= 0 && anchorY === null) anchorY = y;
+      if (anchorY === null || scroller.scrollTop > 0) return;
+
+      const dy = y - anchorY;
+      if (dy > 0) {
+        e.preventDefault(); // evita pull-to-refresh y el scroll nativo
+        offset = dy * DRAG_RESISTANCE;
+        if (!isDragging) {
+          isDragging = true;
+          setDragging(true);
+        }
+        setDragY(offset);
+      } else if (isDragging) {
+        offset = 0;
+        setDragY(0);
+      }
+    };
+    const onTouchEnd = () => {
+      if (!isDragging) {
+        anchorY = null;
+        return;
+      }
+      const shouldClose =
+        offset > DRAG_CLOSE_DISTANCE || velocity > DRAG_CLOSE_VELOCITY;
+      isDragging = false;
+      anchorY = null;
+      setDragging(false);
+      setDragY(0);
+      if (shouldClose) onCloseRef.current();
+    };
+
+    // Rueda / trackpad en escritorio
+    let atTopSince = performance.now();
+    let wheelAcc = 0;
+    let wheelTimer: ReturnType<typeof setTimeout> | undefined;
+    const onScroll = () => {
+      if (scroller.scrollTop <= 0) atTopSince = performance.now();
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (scroller.scrollTop > 0 || e.deltaY >= 0) {
+        wheelAcc = 0;
+        return;
+      }
+      // Exige un gesto nuevo: no cerrar por la inercia del scroll que acaba
+      // de llegar al tope
+      if (performance.now() - atTopSince < WHEEL_SETTLE_MS) return;
+      wheelAcc += -e.deltaY;
+      clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(() => {
+        wheelAcc = 0;
+      }, WHEEL_RESET_MS);
+      if (wheelAcc >= WHEEL_CLOSE_DISTANCE) {
+        wheelAcc = 0;
+        onCloseRef.current();
+      }
+    };
+
+    dialog.addEventListener("touchstart", onTouchStart, { passive: true });
+    dialog.addEventListener("touchmove", onTouchMove, { passive: false });
+    dialog.addEventListener("touchend", onTouchEnd);
+    dialog.addEventListener("touchcancel", onTouchEnd);
+    dialog.addEventListener("wheel", onWheel, { passive: true });
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      dialog.removeEventListener("touchstart", onTouchStart);
+      dialog.removeEventListener("touchmove", onTouchMove);
+      dialog.removeEventListener("touchend", onTouchEnd);
+      dialog.removeEventListener("touchcancel", onTouchEnd);
+      dialog.removeEventListener("wheel", onWheel);
+      scroller.removeEventListener("scroll", onScroll);
+      clearTimeout(wheelTimer);
+      setDragging(false);
+      setDragY(0);
+    };
+  }, [open]);
 
   const branch = branches.find((b) => b.branch_number === selectedBranchNumber);
   const address = branch?.address || restaurant.address;
@@ -71,29 +194,36 @@ export default function RestaurantDetailCard({
 
   return (
     <div
+      ref={dialogRef}
+      tabIndex={-1}
       role="dialog"
       aria-modal="true"
       aria-label={t("title")}
       aria-hidden={!open}
       inert={!open}
-      className="fixed inset-x-0 bottom-0 top-(--menu-card-top) z-20 bg-white rounded-t-4xl flex flex-col"
+      className="fixed inset-x-0 bottom-0 top-(--menu-card-top) z-20 bg-white rounded-t-4xl flex flex-col outline-none"
       style={{
-        transform: open ? "translateY(0)" : "translateY(100%)",
+        transform: dragging
+          ? `translateY(${dragY}px)`
+          : open
+            ? "translateY(0)"
+            : "translateY(100%)",
         visibility: open ? "visible" : "hidden",
-        transition: `transform ${DETAIL_ANIMATION_MS}ms ${EASING}, visibility 0s linear ${open ? "0s" : `${DETAIL_ANIMATION_MS}ms`}`,
+        transition: dragging
+          ? "none"
+          : `transform ${DETAIL_ANIMATION_MS}ms ${EASING}, visibility 0s linear ${open ? "0s" : `${DETAIL_ANIMATION_MS}ms`}`,
       }}
     >
-      <button
-        ref={closeButtonRef}
-        type="button"
-        onClick={onClose}
-        aria-label={t("close")}
-        className="absolute top-4 right-4 md:top-6 md:right-6 size-10 rounded-full bg-surface border border-stroke flex items-center justify-center active:scale-95 transition-transform"
-      >
-        <X className="size-5 text-black" />
-      </button>
+      {/* Asa: indica que la tarjeta se puede jalar hacia abajo para cerrarla */}
+      <div
+        aria-hidden
+        className="mx-auto mt-3 h-1.5 w-10 shrink-0 rounded-full bg-stroke-soft"
+      />
 
-      <div className="overflow-y-auto overscroll-contain px-6 md:px-8 lg:px-10 pt-8 pb-10">
+      <div
+        ref={scrollerRef}
+        className="overflow-y-auto overscroll-contain px-6 md:px-8 lg:px-10 pt-5 pb-10"
+      >
         <div className="mx-auto max-w-xl flex flex-col items-center text-center">
           <div className="size-28 md:size-36 rounded-full bg-even-evergreen overflow-hidden border border-stroke shadow-sm">
             {restaurant.logo_url && (

@@ -463,7 +463,6 @@
   "RestaurantDetail": {
     "title": "Detalle del restaurante",
     "openDetail": "Ver información del restaurante",
-    "close": "Cerrar",
     "branch": "Sucursal",
     "changeBranch": "Cambiar sucursal",
     "address": "Dirección",

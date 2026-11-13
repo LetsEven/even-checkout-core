@@ -76,7 +76,7 @@ export default function RestaurantDetailCard({
       aria-label={t("title")}
       aria-hidden={!open}
       inert={!open}
-      className="fixed inset-x-0 bottom-0 top-[8.25rem] md:top-[20.75rem] lg:top-[25.75rem] z-20 bg-white rounded-t-4xl flex flex-col"
+      className="fixed inset-x-0 bottom-0 top-(--menu-card-top) z-20 bg-white rounded-t-4xl flex flex-col"
       style={{
         transform: open ? "translateY(0)" : "translateY(100%)",
         visibility: open ? "visible" : "hidden",

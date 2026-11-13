@@ -16,8 +16,7 @@ export const INTRO_SHOW_MS = 2800;
 export const INTRO_FLY_MS = 700;
 
 const EASING = "cubic-bezier(0.32, 0.72, 0, 1)";
-const CARD_TOP =
-  "top-[8.25rem] md:top-[20.75rem] lg:top-[25.75rem]";
+const CARD_TOP = "top-(--menu-card-top)";
 const LOGO_SIZE = "size-36 md:size-48";
 
 interface RestaurantIntroProps {

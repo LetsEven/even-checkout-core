@@ -9,7 +9,7 @@ const ReorderModal = lazy(() => import("@/components/ReorderModal"));
 import InvoiceModal from "@/components/modals/InvoiceModal";
 import { invoiceService } from "@/services/invoice.service";
 import { ticketService } from "@/services/ticket.service";
-import { lockScroll, unlockScroll } from "@/utils/scrollLock";
+import { lockScroll, unlockScroll, useModalBackClose } from "@even/ui";
 import { useRoom } from "@/context/RoomContext";
 import {
   Receipt,
@@ -29,7 +29,6 @@ import { roomOrderService } from "@/services/roomorders.service";
 import type { RoomOrder } from "@/services/roomorders.service";
 import { useAuth } from "@/context/AuthContext";
 import { useGuest } from "@/context/GuestContext";
-import { useModalBackClose } from "@/hooks/useModalBackClose";
 import ItemCustomizations from "@/components/ItemCustomizations";
 
 export default function PaymentSuccessPage() {

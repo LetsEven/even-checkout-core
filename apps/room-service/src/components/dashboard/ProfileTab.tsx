@@ -16,7 +16,7 @@ import {
   CircleAlert,
 } from "lucide-react";
 import { useRoomNavigation } from "@/hooks/useRoomNavigation";
-import { useModalBackClose } from "@/hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 
 interface ProfileTabProps {
   onLogout?: () => void;

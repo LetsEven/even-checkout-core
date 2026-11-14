@@ -17,7 +17,7 @@ describe("lockScroll / unlockScroll", () => {
 
     unlockScroll();
     expect(document.body.style.position).toBe("");
-    expect(scrollTo).toHaveBeenCalledWith(0, 240);
+    expect(scrollTo).toHaveBeenCalledWith({ top: 240, left: 0, behavior: "instant" });
   });
 
   it("solo libera cuando se suelta el último lock", () => {

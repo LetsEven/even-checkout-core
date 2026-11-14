@@ -954,7 +954,7 @@ export default function MenuView({ roomNumber }: MenuViewProps) {
       )}
 
       <MenuActionsPill visible={pillVisible}>
-        <PillButton onClick={handleSettingsClick} clip>
+        <PillButton onClick={handleSettingsClick} aria-label={t("profileAlt")} clip>
           <UserAvatar
             isAuthenticated={isAuthenticated}
             profile={profile}
@@ -962,8 +962,12 @@ export default function MenuView({ roomNumber }: MenuViewProps) {
             textSize="text-base md:text-lg"
           />
         </PillButton>
-        <PillCartButton onClick={handleCartClick} count={state.totalItems} />
-        <PillPepperButton onClick={handlePepperClick}>
+        <PillCartButton
+          onClick={handleCartClick}
+          count={state.totalItems}
+          aria-label={t("viewCart", { count: state.totalItems })}
+        />
+        <PillPepperButton onClick={handlePepperClick} aria-label="Pepper">
           <PepperIcon />
         </PillPepperButton>
       </MenuActionsPill>

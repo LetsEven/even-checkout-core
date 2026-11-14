@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Menu, ShoppingCart, UserCircle, X } from "lucide-react";
+import { Menu, ReceiptText, ShoppingCart, UserCircle, X } from "lucide-react";
 import { cn } from "../../lib/cn";
 
 export type MenuHamburgerProps = {
@@ -24,7 +24,8 @@ export function MenuHamburger({ open, onToggle, count = 0, labels }: MenuHamburg
         onClick={onToggle}
         aria-expanded={open}
         aria-label={open ? labels.close : labels.open}
-        className="size-10 md:size-12 lg:size-14 rounded-full flex items-center justify-center bg-white/85 backdrop-blur-sm shadow-sm hover:scale-105 active:scale-95 transition-transform duration-200"
+        // before: amplía el área táctil a 44 px sin cambiar el tamaño visual (40 px en móvil).
+        className="relative size-10 before:absolute before:-inset-0.5 md:size-12 md:before:inset-0 lg:size-14 rounded-full flex items-center justify-center bg-white/85 backdrop-blur-sm shadow-sm hover:scale-105 active:scale-95 transition-transform duration-200"
       >
         {open ? (
           <X className="text-primary size-5 md:size-6 lg:size-7" />
@@ -82,21 +83,32 @@ export function MenuActionsPill({ visible, children }: MenuActionsPillProps) {
 
 export type PillButtonProps = {
   onClick: () => void;
-  "aria-label"?: string;
+  /** Obligatorio: los botones de la píldora solo tienen un icono o una foto. */
+  "aria-label": string;
   /** Contador sobre el botón (carrito, pedidos). */
   count?: number;
+  /** Texto del contador para lectores de pantalla: "3 artículos". Se agrega al nombre del botón. */
+  countLabel?: (count: number) => string;
   /** Recorta el contenido al círculo (foto de perfil). */
   clip?: boolean;
   children: ReactNode;
 };
 
-export function PillButton({ onClick, count = 0, clip, children, "aria-label": ariaLabel }: PillButtonProps) {
+export function PillButton({
+  onClick,
+  count = 0,
+  countLabel,
+  clip,
+  children,
+  "aria-label": ariaLabel,
+}: PillButtonProps) {
+  const label = count > 0 && countLabel ? `${ariaLabel}, ${countLabel(count)}` : ariaLabel;
   return (
     <div className="relative">
       <button
         type="button"
         onClick={onClick}
-        aria-label={ariaLabel}
+        aria-label={label}
         className={cn(
           "size-11 md:size-12 rounded-full flex items-center justify-center bg-white/60 border border-tone-200 hover:bg-white transition-colors active:scale-95",
           clip && "overflow-hidden",
@@ -105,7 +117,10 @@ export function PillButton({ onClick, count = 0, clip, children, "aria-label": a
         {children}
       </button>
       {count > 0 && (
-        <div className="absolute -top-1 -right-1 bg-even-grass text-even-evergreen rounded-full size-5 flex items-center justify-center text-xs font-normal">
+        <div
+          aria-hidden
+          className="absolute -top-1 -right-1 bg-even-grass text-even-evergreen rounded-full size-5 flex items-center justify-center text-xs font-normal pointer-events-none"
+        >
           {count}
         </div>
       )}
@@ -113,17 +128,35 @@ export function PillButton({ onClick, count = 0, clip, children, "aria-label": a
   );
 }
 
+type PillIconButtonProps = Omit<PillButtonProps, "children" | "clip">;
+
 /** Botón de carrito con el estilo de la píldora. */
-export function PillCartButton({ onClick, count, "aria-label": ariaLabel }: { onClick: () => void; count?: number; "aria-label"?: string }) {
+export function PillCartButton(props: PillIconButtonProps) {
   return (
-    <PillButton onClick={onClick} count={count} aria-label={ariaLabel}>
+    <PillButton {...props}>
       <ShoppingCart className="size-5 md:size-6 text-warm-700" strokeWidth={1.5} />
     </PillButton>
   );
 }
 
+/** Botón "Orden" (pedidos de la mesa, FlexBill) con el estilo de la píldora. */
+export function PillOrderButton(props: PillIconButtonProps) {
+  return (
+    <PillButton {...props}>
+      <ReceiptText className="size-5 md:size-6 text-warm-700" strokeWidth={1.5} />
+    </PillButton>
+  );
+}
+
+export type PillPepperButtonProps = {
+  onClick: () => void;
+  /** Obligatorio: nombra la acción ("Abrir Pepper"), no el estado de la mascota. */
+  "aria-label": string;
+  children: ReactNode;
+};
+
 /** Botón del asistente: el ícono lo pone la app (`PepperIcon`). */
-export function PillPepperButton({ onClick, children, "aria-label": ariaLabel }: { onClick: () => void; children: ReactNode; "aria-label"?: string }) {
+export function PillPepperButton({ onClick, children, "aria-label": ariaLabel }: PillPepperButtonProps) {
   return (
     <button
       type="button"
@@ -133,6 +166,44 @@ export function PillPepperButton({ onClick, children, "aria-label": ariaLabel }:
     >
       {children}
     </button>
+  );
+}
+
+export type MenuActionsProps = {
+  /** Visible por la hamburguesa o por scroll; la app decide. */
+  visible: boolean;
+  profile: { onClick: () => void; avatar: ReactNode; label: string };
+  cart: { onClick: () => void; count?: number; label: string; countLabel?: (count: number) => string };
+  /** FlexBill: botón "Orden" con el contador de pedidos de la mesa. */
+  order?: { onClick: () => void; count?: number; label: string; countLabel?: (count: number) => string };
+  /** Acciones extra al final, antes de Pepper. */
+  extra?: ReactNode;
+  pepper?: { onClick: () => void; icon: ReactNode; label: string };
+};
+
+/** Píldora completa en el orden estándar: perfil, carrito, orden (opcional), extras y Pepper (opcional). */
+export function MenuActions({ visible, profile, cart, order, extra, pepper }: MenuActionsProps) {
+  return (
+    <MenuActionsPill visible={visible}>
+      <PillButton onClick={profile.onClick} aria-label={profile.label} clip>
+        {profile.avatar}
+      </PillButton>
+      <PillCartButton onClick={cart.onClick} count={cart.count} countLabel={cart.countLabel} aria-label={cart.label} />
+      {order && (
+        <PillOrderButton
+          onClick={order.onClick}
+          count={order.count}
+          countLabel={order.countLabel}
+          aria-label={order.label}
+        />
+      )}
+      {extra}
+      {pepper && (
+        <PillPepperButton onClick={pepper.onClick} aria-label={pepper.label}>
+          {pepper.icon}
+        </PillPepperButton>
+      )}
+    </MenuActionsPill>
   );
 }
 

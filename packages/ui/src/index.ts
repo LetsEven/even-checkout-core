@@ -5,6 +5,8 @@ export { brandColors } from "./lib/colors";
 export { cn } from "./lib/cn";
 export { lockScroll, unlockScroll } from "./lib/scroll-lock";
 export { useScrollLock } from "./lib/use-scroll-lock";
+export { useModalBackClose } from "./lib/use-modal-back-close";
+export { rememberMenuPosition, setMenuCategory, takeMenuPosition, type MenuPosition } from "./lib/menu-scroll-memory";
 
 export { Badge, type BadgeProps } from "./components/badge";
 export { Button, buttonClasses, type ButtonProps, type ButtonSize, type ButtonVariant } from "./components/button";
@@ -52,14 +54,25 @@ export {
   type UseRestaurantIntroOptions,
 } from "./components/menu/restaurant-intro";
 export {
+  MenuActions,
   MenuActionsPill,
   MenuHamburger,
   PillButton,
   PillCartButton,
+  PillOrderButton,
   PillPepperButton,
   UserAvatar,
   type MenuActionsPillProps,
+  type MenuActionsProps,
   type MenuHamburgerProps,
   type PillButtonProps,
+  type PillPepperButtonProps,
   type UserAvatarProps,
 } from "./components/menu/menu-actions-pill";
+export { CategoryTabs, type CategoryTab, type CategoryTabsProps } from "./components/menu/category-tabs";
+export { FloatingCartButton, type FloatingCartButtonProps } from "./components/menu/floating-cart-button";
+export { MenuEmptyState, type MenuEmptyStateProps } from "./components/menu/menu-empty-state";
+export { MenuProductCard, type MenuProductCardProps } from "./components/menu/menu-product-card";
+export { MenuRestaurantHeading, type MenuRestaurantHeadingProps } from "./components/menu/menu-restaurant-heading";
+export { MenuSearchInput, type MenuSearchInputProps } from "./components/menu/menu-search-input";
+export { QuantityStepper, type QuantityStepperProps } from "./components/menu/quantity-stepper";

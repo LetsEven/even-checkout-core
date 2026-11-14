@@ -1052,7 +1052,7 @@ export default function MenuView() {
       {/* Píldora de acciones — se abre con la hamburguesa o aparece al hacer
           scroll; siempre en el mismo lugar */}
       <MenuActionsPill visible={pillVisible}>
-        <PillButton onClick={() => setShowSettingsModal(true)} clip>
+        <PillButton onClick={() => setShowSettingsModal(true)} aria-label={t("profileAlt")} clip>
           <UserAvatar
             isAuthenticated={isAuthenticated}
             profile={profile}
@@ -1063,8 +1063,9 @@ export default function MenuView() {
         <PillCartButton
           onClick={() => navigateWithRestaurantId("/cart")}
           count={state.totalItems}
+          aria-label={t("viewCart", { count: state.totalItems })}
         />
-        <PillPepperButton onClick={() => setShowPepperChat(true)}>
+        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label="Pepper">
           <PepperIcon />
         </PillPepperButton>
       </MenuActionsPill>

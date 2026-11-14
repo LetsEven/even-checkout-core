@@ -18,6 +18,7 @@ interface RestaurantIntroProps {
 /** Bienvenida de Pick & Go: textos de la app sobre la pantalla compartida de @even/ui. */
 export default function RestaurantIntro({
   restaurant,
+  branchName,
   ...props
 }: RestaurantIntroProps) {
   const t = useTranslations("RestaurantIntro");
@@ -26,13 +27,13 @@ export default function RestaurantIntro({
   return (
     <SharedIntro
       {...props}
+      subtitle={branchName}
       name={restaurant.name}
       logoUrl={restaurant.logo_url}
       labels={{
         title: t("title"),
         skip: t("skip"),
         logoAlt: tc("restaurantLogoAlt"),
-        branchLabel: tc("branchLabel"),
       }}
     />
   );

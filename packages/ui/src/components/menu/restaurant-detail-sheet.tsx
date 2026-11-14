@@ -242,7 +242,7 @@ export function RestaurantDetailSheet({
                   <button
                     type="button"
                     onClick={branch.onChange}
-                    className="inline-flex items-center gap-1 rounded-full bg-surface border border-stroke px-3 py-1 text-sm text-black active:scale-95 transition-transform"
+                    className="inline-flex items-center gap-1 rounded-full bg-surface border border-stroke min-h-11 px-4 py-1 text-sm text-black active:scale-95 transition-transform"
                   >
                     {labels.changeBranch}
                     <ChevronRight className="size-4" />

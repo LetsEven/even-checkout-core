@@ -26,10 +26,9 @@ import { useAuth } from "@/app/context/AuthContext";
 import InvoiceModal from "@/app/components/modals/InvoiceModal";
 import { invoiceService } from "@/app/services/invoice.service";
 import { ticketService } from "@/app/services/ticket.service";
-import { lockScroll, unlockScroll } from "@/app/utils/scrollLock";
+import { lockScroll, unlockScroll, useModalBackClose } from "@even/ui";
 import { useValidateAccess } from "@/app/hooks/useValidateAccess";
 import ValidationError from "@/app/components/ValidationError";
-import { useModalBackClose } from "@/app/hooks/useModalBackClose";
 import ItemCustomizations from "@/app/components/ItemCustomizations";
 
 export default function PaymentSuccessPage() {

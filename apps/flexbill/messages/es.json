@@ -36,6 +36,8 @@
     "showLessOptions": "Ver menos"
   },
   "MenuView": {
+    "categoriesLabel": "Categorías",
+    "pepperLabel": "Abrir chat con Pepper",
     "profileAlt": "Perfil",
     "restaurantNotFoundTitle": "Restaurante no encontrado",
     "restaurantNotFoundDescription": "No se pudo cargar la información del restaurante",
@@ -51,6 +53,12 @@
     "viewCart": "Ver el carrito • {count}",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú"
+  },
+  "MenuItem": {
+    "addToCart": "Agregar {name}",
+    "removeFromCart": "Quitar {name}",
+    "discountBadge": "{percent}% OFF",
+    "imageAlt": "{name}"
   },
   "MenuCategory": {
     "noItemsInSection": "No hay items en esta sección"

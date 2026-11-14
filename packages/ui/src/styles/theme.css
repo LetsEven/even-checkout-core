@@ -27,6 +27,8 @@
   --color-stroke: #8e8e8e;
   --color-stroke-soft: #bfbfbf;
   --color-muted: #6b7280;
+  /* Texto secundario con contraste AA (>=4.5:1 sobre blanco y sobre surface). `stroke` (3.3:1) es solo para trazos. */
+  --color-text-subtle: #6b6b6b;
 
   /* Neutros de UI (misma escala que gray de Tailwind; el rediseño los remapea aquí) */
   --color-tone-50: oklch(98.5% 0.002 247.839);
@@ -129,6 +131,7 @@
   --animate-bounce-in: bounce-in 0.5s ease-out forwards;
   --animate-pulse-button: pulse-button 1.5s ease-out infinite;
   --animate-asterisk-spin: asterisk-spin 1.8s steps(6, end) infinite;
+  --animate-qty-pop: qty-pop 0.25s ease-out;
 
   @keyframes slide-up {
     0% {
@@ -193,6 +196,22 @@
     }
     100% {
       box-shadow: 0 0 0 0 rgb(130 230 87 / 0);
+    }
+  }
+
+  /* Rebote del número al cambiar la cantidad (stepper) */
+  @keyframes qty-pop {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.4;
+    }
+    60% {
+      transform: scale(1.25);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
     }
   }
 

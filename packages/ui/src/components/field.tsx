@@ -12,7 +12,7 @@ type FieldOwnProps = {
 };
 
 const controlClasses = cn(
-  "w-full rounded-lg border border-stroke-soft bg-white/70 px-3 text-base text-tone-700 placeholder:text-tone-400",
+  "w-full rounded-lg border border-stroke-soft bg-white/70 px-3 text-base text-tone-700 placeholder:text-tone-500",
   "focus:outline-none focus:ring-2 focus:ring-even-evergreen",
   "disabled:cursor-not-allowed disabled:opacity-50",
   "aria-invalid:border-danger aria-invalid:focus:ring-danger",
@@ -81,7 +81,7 @@ export function Input({
     >
       <div className="relative">
         {leadingIcon && (
-          <span className="pointer-events-none absolute top-1/2 left-3 flex -translate-y-1/2 text-tone-400 [&>svg]:size-4">
+          <span className="pointer-events-none absolute top-1/2 left-3 flex -translate-y-1/2 text-tone-500 [&>svg]:size-4">
             {leadingIcon}
           </span>
         )}

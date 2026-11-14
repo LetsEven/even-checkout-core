@@ -14,7 +14,8 @@ const variants = {
 } as const;
 
 const sizes = {
-  sm: "px-4 py-2 text-sm",
+  /** min-h-11: área táctil de 44 px */
+  sm: "min-h-11 px-4 py-2 text-sm",
   md: "px-6 py-3 text-base",
   lg: "px-6 py-3 text-base md:py-4 md:text-lg lg:py-5 lg:text-xl",
 } as const;

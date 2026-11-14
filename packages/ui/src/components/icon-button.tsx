@@ -9,8 +9,9 @@ const variants = {
 } as const;
 
 const sizes = {
-  sm: "size-8",
-  md: "size-10 md:size-12 lg:size-14",
+  // El tamaño visual no cambia; el área táctil llega a 44 px con un pseudo-elemento (before:).
+  sm: "size-8 before:absolute before:-inset-1.5",
+  md: "size-10 before:absolute before:-inset-0.5 md:size-12 md:before:inset-0 lg:size-14",
 } as const;
 
 export type IconButtonProps = ComponentProps<"button"> & {
@@ -25,7 +26,7 @@ export function IconButton({ variant = "default", size = "md", type = "button", 
     <button
       type={type}
       className={cn(
-        "inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full transition-transform duration-200 active:scale-95",
+        "relative inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full transition-transform duration-200 active:scale-95",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-even-evergreen",
         "disabled:pointer-events-none disabled:opacity-40",
         variants[variant],

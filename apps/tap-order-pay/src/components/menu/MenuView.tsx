@@ -702,7 +702,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
       )}
 
       <MenuActionsPill visible={pillVisible}>
-        <PillButton onClick={() => setShowSettingsModal(true)} clip>
+        <PillButton onClick={() => setShowSettingsModal(true)} aria-label={t("profileAlt")} clip>
           <UserAvatar
             isAuthenticated={isAuthenticated}
             profile={profile}
@@ -713,8 +713,9 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
         <PillCartButton
           onClick={() => navigateWithTable("/cart")}
           count={totalItems}
+          aria-label={t("viewCart", { count: totalItems })}
         />
-        <PillPepperButton onClick={() => setShowPepperChat(true)}>
+        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label="Pepper">
           <PepperIcon />
         </PillPepperButton>
       </MenuActionsPill>

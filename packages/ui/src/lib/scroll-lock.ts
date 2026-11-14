@@ -25,6 +25,7 @@ export function unlockScroll(): void {
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
     delete document.body.dataset.scrollY;
-    window.scrollTo(0, scrollY);
+    // behavior "instant": con `scroll-behavior: smooth` en el CSS de la app, scrollTo(x, y) animaría desde el top.
+    window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
   }
 }

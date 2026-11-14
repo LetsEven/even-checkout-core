@@ -28,6 +28,7 @@ import {
   MenuActionsPill,
   PillButton,
   PillCartButton,
+  PillOrderButton,
   PillPepperButton,
   UserAvatar as SharedUserAvatar,
   useRestaurantIntro,
@@ -39,7 +40,6 @@ import Loader from "@/app/components/UI/Loader";
 import {
   Search,
   ShoppingCart,
-  ReceiptText,
   RefreshCw,
   X,
   Utensils,
@@ -632,7 +632,7 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
       )}
 
       <MenuActionsPill visible={pillVisible}>
-        <PillButton onClick={() => setShowSettingsModal(true)} clip>
+        <PillButton onClick={() => setShowSettingsModal(true)} aria-label={t("profileAlt")} clip>
           <UserAvatar
             isAuthenticated={isAuthenticated}
             profile={profile}
@@ -643,21 +643,18 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
         <PillCartButton
           onClick={() => navigateWithTable("/cart")}
           count={cartState.totalItems}
+          aria-label={t("viewCart", { count: cartState.totalItems })}
         />
-        <PillButton
+        <PillOrderButton
           onClick={() => navigateWithTable("/order")}
           count={
             Array.isArray(tableState.dishOrders)
               ? tableState.dishOrders.length
               : 0
           }
-        >
-          <ReceiptText
-            className="size-5 md:size-6 text-warm-700"
-            strokeWidth={1.5}
-          />
-        </PillButton>
-        <PillPepperButton onClick={() => setShowPepperChat(true)}>
+          aria-label={t("orderStatus")}
+        />
+        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label="Pepper">
           <PepperIcon />
         </PillPepperButton>
       </MenuActionsPill>

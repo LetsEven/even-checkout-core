@@ -6,6 +6,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type ReactNode,
   type RefObject,
 } from "react";
 
@@ -135,16 +136,14 @@ export type RestaurantIntroLabels = {
   /** "Toca para continuar" */
   skip: string;
   logoAlt: string;
-  /** Prefijo de la sucursal, p. ej. "Sucursal". Solo se usa con `branchName`. */
-  branchLabel?: string;
 };
 
 export type RestaurantIntroProps = {
   name: string;
   logoUrl?: string | null;
   phase: Exclude<IntroPhase, "done">;
-  /** Si no hay sucursal (p. ej. Room Service) no se muestra la línea. */
-  branchName?: string | null;
+  /** Línea bajo el nombre, ya con su texto: "Mesa 12", "Habitación 40", "Sucursal Centro". Sin ella no se muestra. */
+  subtitle?: ReactNode;
   welcomeText: string;
   /** transform que lleva el logo hasta el del banner (vacío = en reposo) */
   logoTransform: string;
@@ -160,7 +159,7 @@ interface Slot {
 }
 
 /**
- * Pantalla de bienvenida: tarjeta sobre el menú con logo grande, nombre, sucursal y saludo. Entra en
+ * Pantalla de bienvenida: tarjeta sobre el menú con logo grande, nombre, subtítulo y saludo. Entra en
  * crossfade desde la pantalla de carga (mismo verde de fondo que se desvanece) y al terminar el logo
  * viaja hasta el del banner mientras la tarjeta se desvanece.
  */
@@ -168,7 +167,7 @@ export function RestaurantIntro({
   name,
   logoUrl,
   phase,
-  branchName,
+  subtitle,
   welcomeText,
   logoTransform,
   logoRef,
@@ -200,6 +199,20 @@ export function RestaurantIntro({
   }, [flying]);
 
   const visible = entered && !flying;
+
+  // Saltar con teclado: el diálogo entero es clicable, pero sin esto no había forma de cerrarlo sin ratón.
+  const onSkipRef = useRef(onSkip);
+  useEffect(() => {
+    onSkipRef.current = onSkip;
+  }, [onSkip]);
+  useEffect(() => {
+    if (flying) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" || event.key === "Enter" || event.key === " ") onSkipRef.current();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [flying]);
 
   return (
     <div
@@ -251,13 +264,7 @@ export function RestaurantIntro({
           }}
         >
           <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-black text-balance">{name}</h2>
-          {branchName && (
-            <p className="mt-1 text-tone-600 text-sm md:text-lg">
-              {labels.branchLabel}
-              {labels.branchLabel ? " " : ""}
-              <span className="font-medium text-black">{branchName}</span>
-            </p>
-          )}
+          {subtitle && <p className="mt-1 text-tone-600 text-sm md:text-lg">{subtitle}</p>}
           <p className="mt-6 md:mt-8 text-xl md:text-3xl text-black text-balance">{welcomeText}</p>
         </div>
         <p

@@ -420,6 +420,8 @@
     "statusReady": "Listo",
     "statusDelivered": "Entregado",
     "outOfStockBadge": "AGOTADO",
+    "quickAddAdd": "Agregar",
+    "quickAddBack": "Regresar",
     "anythingToKnow": "¿Algo que debamos saber?",
     "invalidRestaurantTitle": "Restaurante Inválido",
     "invalidRestaurantMessage": "ID de restaurante no válido",

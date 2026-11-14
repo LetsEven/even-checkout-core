@@ -11,6 +11,8 @@
     "switchLanguage": "Cambiar idioma",
     "restaurantLogoAlt": "Logo del restaurante",
     "outOfStockBadge": "AGOTADO",
+    "quickAddAdd": "Agregar",
+    "quickAddBack": "Regresar",
     "roomLabel": "Habitación {room}",
     "roomLabelColon": "Habitación: {room}",
     "anythingToKnow": "¿Algo que debamos saber?",

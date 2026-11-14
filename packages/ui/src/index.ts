@@ -73,6 +73,7 @@ export { CategoryTabs, type CategoryTab, type CategoryTabsProps } from "./compon
 export { FloatingCartButton, type FloatingCartButtonProps } from "./components/menu/floating-cart-button";
 export { MenuEmptyState, type MenuEmptyStateProps } from "./components/menu/menu-empty-state";
 export { MenuProductCard, type MenuProductCardProps } from "./components/menu/menu-product-card";
+export { MenuQuickAddModal, type MenuQuickAddModalProps } from "./components/menu/menu-quick-add-modal";
 export { MenuRestaurantHeading, type MenuRestaurantHeadingProps } from "./components/menu/menu-restaurant-heading";
 export { MenuSearchInput, type MenuSearchInputProps } from "./components/menu/menu-search-input";
 export { QuantityStepper, type QuantityStepperProps } from "./components/menu/quantity-stepper";

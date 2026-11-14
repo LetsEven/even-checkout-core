@@ -15,6 +15,8 @@
     "quantityLabel": "Cant: {quantity}",
     "restaurantLogoAlt": "Logo del restaurante",
     "outOfStockBadge": "AGOTADO",
+    "quickAddAdd": "Agregar",
+    "quickAddBack": "Regresar",
     "tableLabel": "Mesa {table}",
     "orderStatusModalTitle": "Estatus de la orden",
     "understood": "Entendido",

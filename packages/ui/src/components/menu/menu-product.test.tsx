@@ -100,9 +100,25 @@ describe.each(["image", "compact"] as const)("MenuProductCard (%s)", (variant) =
     card({ variant, discountPercent: 20, outOfStock: true });
     expect(screen.getAllByText("20% OFF").length).toBeGreaterThan(0);
     expect(screen.getByText("Agotado")).toBeTruthy();
-    expect(screen.getByText("$100.00 MXN")).toBeTruthy(); // tachado
-    expect(screen.getByText("$80.00 MXN")).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Agregar tacos" }).getAttribute("aria-disabled")).toBe("true");
+    expect(screen.getByText("$100.00")).toBeTruthy(); // tachado
+    expect(screen.getByText("$80.00")).toBeTruthy();
+    // Agotado: sin selector.
+    expect(screen.queryByRole("button", { name: "Agregar tacos" })).toBeNull();
+  });
+
+  it("el selector solo aparece con cantidad > 0", () => {
+    const { rerender, props } = card({ variant, quantity: 0 });
+    expect(screen.queryByRole("button", { name: "Agregar tacos" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Quitar tacos" })).toBeNull();
+    rerender(<MenuProductCard {...props} quantity={2} />);
+    expect(screen.getByRole("button", { name: "Agregar tacos" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Quitar tacos" })).toBeTruthy();
+  });
+
+  it("expone la ref de la tarjeta", () => {
+    const ref = { current: null as HTMLDivElement | null };
+    const { container } = card({ variant, cardRef: ref });
+    expect(ref.current).toBe(container.firstElementChild);
   });
 
   it("usa formatPrice y finalPrice de la app", () => {
@@ -112,6 +128,15 @@ describe.each(["image", "compact"] as const)("MenuProductCard (%s)", (variant) =
 });
 
 describe("MenuProductCard imagen", () => {
+  it("muestra features[0], hasta 2 etiquetas y +n", () => {
+    card({ features: ["355 ml", "Frío", "Vegano", "Sin gluten", "Nuevo"] });
+    expect(screen.getByText("355 ml")).toBeTruthy();
+    expect(screen.getByText("Frío")).toBeTruthy();
+    expect(screen.getByText("Vegano")).toBeTruthy();
+    expect(screen.queryByText("Sin gluten")).toBeNull();
+    expect(screen.getByText("+2")).toBeTruthy();
+  });
+
   it("con foto pone el alt del nombre; sin foto usa el fallback", () => {
     const { rerender, props } = card({ imageUrl: "/a.jpg" });
     expect(screen.getByAltText("Foto de tacos")).toBeTruthy();

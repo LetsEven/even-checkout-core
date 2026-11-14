@@ -420,6 +420,8 @@
     "statusReady": "Ready",
     "statusDelivered": "Delivered",
     "outOfStockBadge": "SOLD OUT",
+    "quickAddAdd": "Add",
+    "quickAddBack": "Back",
     "anythingToKnow": "Anything we should know?",
     "invalidRestaurantTitle": "Invalid Restaurant",
     "invalidRestaurantMessage": "Invalid restaurant ID",

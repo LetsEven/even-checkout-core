@@ -14,6 +14,8 @@
     "noOrderInfo": "No order information found",
     "quantityLabel": "Qty: {quantity}",
     "outOfStockBadge": "SOLD OUT",
+    "quickAddAdd": "Add",
+    "quickAddBack": "Back",
     "tableLabel": "Table {table}",
     "backToHome": "Back to home",
     "backToHomeSubtitle": "Return to the main page",

@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, type ReactNode, type Ref } from "react";
+import { cn } from "../../lib/cn";
 import { EvenAsterisk } from "../even-asterisk";
 import { QuantityStepper } from "./quantity-stepper";
 
@@ -25,8 +26,10 @@ export type MenuProductCardProps = {
   onOpen: (card: HTMLElement) => void;
   onIncrement: () => void;
   onDecrement: () => void;
-  /** Ancla para `useFlyToCart`. */
+  /** Ancla para `useFlyToCart`. Solo existe mientras hay cantidad (el selector no se muestra en 0). */
   incrementRef?: Ref<HTMLButtonElement>;
+  /** Ref del contenedor de la tarjeta (prefetch del detalle, origen del vuelo al carrito). */
+  cardRef?: Ref<HTMLDivElement>;
   formatPrice?: (amount: number) => string;
   /** Sin foto: por defecto, el asterisco Even. */
   imageFallback?: ReactNode;
@@ -43,7 +46,7 @@ export type MenuProductCardProps = {
   };
 };
 
-const defaultFormat = (amount: number) => `$${amount.toFixed(2)} MXN`;
+const defaultFormat = (amount: number) => `$${amount.toFixed(2)}`;
 
 /**
  * Tarjeta de producto del menú, solo presentación: no conoce el carrito, la navegación ni el stock.
@@ -66,6 +69,7 @@ function MenuProductCardBase({
   onIncrement,
   onDecrement,
   incrementRef,
+  cardRef,
   formatPrice = defaultFormat,
   imageFallback,
   dataId,
@@ -73,6 +77,8 @@ function MenuProductCardBase({
 }: MenuProductCardProps) {
   const discounted = discountPercent > 0;
   const final = finalPrice ?? (discounted ? price * (1 - discountPercent / 100) : price);
+  // Solo se muestra el selector si el producto ya está en el carrito: agregar es tocar la tarjeta.
+  const showStepper = quantity > 0 && !outOfStock;
   const stepperLabels = { increment: labels.increment(name), decrement: labels.decrement(name) };
 
   // El nombre es el único foco de teclado de la tarjeta; su click sube hasta el contenedor y abre una sola vez.
@@ -85,6 +91,7 @@ function MenuProductCardBase({
   if (variant === "compact") {
     return (
       <div
+        ref={cardRef}
         data-menu-item-id={dataId ?? String(id)}
         className="cursor-pointer border-b border-tone-300 py-3 md:py-4"
         onClick={(event) => onOpen(event.currentTarget)}
@@ -110,17 +117,17 @@ function MenuProductCardBase({
               </div>
             )}
           </div>
-          <QuantityStepper
-            variant="pill"
-            collapseAtMin
-            value={quantity}
-            disabled={outOfStock}
-            pulse={pulse}
-            incrementRef={incrementRef}
-            onIncrement={onIncrement}
-            onDecrement={onDecrement}
-            labels={stepperLabels}
-          />
+          {showStepper && (
+            <QuantityStepper
+              variant="pill"
+              value={quantity}
+              pulse={pulse}
+              incrementRef={incrementRef}
+              onIncrement={onIncrement}
+              onDecrement={onDecrement}
+              labels={stepperLabels}
+            />
+          )}
         </div>
       </div>
     );
@@ -128,82 +135,79 @@ function MenuProductCardBase({
 
   return (
     <div
+      ref={cardRef}
       data-menu-item-id={dataId ?? String(id)}
-      className="relative cursor-pointer border-b border-tone-300 py-4 md:py-6 lg:py-7"
+      className="relative cursor-pointer border-b border-tone-300 py-4"
       onClick={(event) => onOpen(event.currentTarget)}
     >
-      <div className="flex items-center gap-4 md:gap-5 lg:gap-6">
-        <div className="relative size-36 shrink-0 md:size-40 lg:size-44">
-          <div className="flex size-full items-center justify-center overflow-hidden rounded-xl bg-tone-300 transition-transform duration-200 hover:scale-105 md:rounded-2xl">
+      <div className="flex items-center gap-4">
+        {/* Sin overflow-hidden en el contenedor externo: el selector sobresale de la foto. */}
+        <div className="relative size-26 shrink-0">
+          <div
+            className={cn(
+              "flex size-full items-center justify-center overflow-hidden rounded-xl bg-tone-300",
+              outOfStock && "opacity-45 grayscale",
+            )}
+          >
             {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={labels.imageAlt(name)}
-                loading="lazy"
-                className="size-full rounded-xl object-cover md:rounded-2xl"
-              />
+              <img src={imageUrl} alt={labels.imageAlt(name)} loading="lazy" className="size-full object-cover" />
             ) : (
-              (imageFallback ?? <EvenAsterisk className="size-18 text-even-evergreen md:size-20 lg:size-22" />)
+              (imageFallback ?? <EvenAsterisk className="size-16 text-even-evergreen" />)
             )}
           </div>
           {discounted && (
-            <div className="absolute top-0 left-0 overflow-hidden rounded-tl-xl md:rounded-tl-2xl">
-              <span className="block bg-danger-600 px-2 pt-1 pb-0.5 text-[11px] font-bold tracking-wide text-white md:text-xs">
+            <div className="absolute top-0 left-0 overflow-hidden rounded-tl-xl">
+              <span className="block bg-danger-600 px-2 pt-1 pb-0.5 text-[11px] font-bold tracking-wide text-white">
                 {labels.discount(discountPercent)}
               </span>
             </div>
           )}
           {outOfStock && (
-            <div className="absolute right-0 bottom-0 overflow-hidden rounded-br-xl md:rounded-br-2xl">
-              <span className="block bg-danger-600 px-2 py-0.5 text-xs font-bold tracking-wide text-white">
+            <div className="absolute inset-x-0 bottom-1.5 flex justify-center">
+              <span className="block rounded-full bg-danger-600 px-2 py-0.5 text-[11px] font-bold tracking-wide text-white">
                 {labels.outOfStock}
               </span>
             </div>
           )}
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex justify-between gap-2">
-            <h3 className="line-clamp-2 wrap-break-word text-lg font-medium leading-tight text-black md:text-xl lg:text-2xl">
-              {nameButton}
-            </h3>
+          {showStepper && (
             <QuantityStepper
-              variant="pill"
+              variant="floating"
               value={quantity}
-              disabled={outOfStock}
               pulse={pulse}
               incrementRef={incrementRef}
               onIncrement={onIncrement}
               onDecrement={onDecrement}
               labels={stepperLabels}
-              className="h-fit"
+              className="absolute -right-1 -bottom-1"
             />
-          </div>
+          )}
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <h3 className="line-clamp-2 wrap-break-word text-base font-semibold leading-tight text-black">{nameButton}</h3>
           {features.length > 0 && (
-            <div className="mt-1 mb-3 flex gap-1 md:mt-2 md:mb-4 md:gap-1.5">
-              {features.map((feature) => (
-                <div
-                  key={feature}
-                  className="rounded-3xl border border-stroke-soft/50 px-3 py-1 text-sm font-medium text-black shadow-sm md:px-4 md:py-1.5 md:text-base lg:text-lg"
+            <div className="mt-1 flex items-center gap-1 overflow-hidden whitespace-nowrap">
+              <span className="text-[13px] font-semibold text-black">{features[0]}</span>
+              {features.slice(1, 3).map((feature, index) => (
+                <span
+                  key={index}
+                  className="rounded-full border border-stroke-soft/50 px-1.5 py-px text-[11px] text-black"
                 >
                   {feature}
-                </div>
+                </span>
               ))}
+              {features.length > 3 && <span className="text-[11px] text-tone-600">+{features.length - 3}</span>}
             </div>
           )}
-          {description && (
-            <p className="mt-1.5 line-clamp-3 text-base leading-4 text-black/70 md:mt-2.5 md:text-lg md:leading-5 lg:text-xl lg:leading-6">
-              {description}
-            </p>
-          )}
-          <div className="mt-2 flex items-center justify-between md:mt-3">
+          {description && <p className="mt-1 line-clamp-2 text-[13px] leading-[18px] text-tone-600">{description}</p>}
+          <div className="mt-1.5 flex items-baseline gap-1.5">
             {discounted ? (
-              <div className="flex flex-col text-base text-black md:text-lg lg:text-xl">
-                <span className="text-xs text-text-subtle line-through md:text-sm lg:text-base">{formatPrice(price)}</span>
-                <span className="-translate-y-1">{formatPrice(final)}</span>
-              </div>
+              <>
+                <span className="text-[15px] font-bold text-danger-700">{formatPrice(final)}</span>
+                <span className="text-xs text-text-subtle line-through">{formatPrice(price)}</span>
+              </>
             ) : (
-              <span className="text-base text-black md:text-lg lg:text-xl">{formatPrice(final)}</span>
+              <span className="text-[15px] font-bold text-black">{formatPrice(final)}</span>
             )}
           </div>
         </div>

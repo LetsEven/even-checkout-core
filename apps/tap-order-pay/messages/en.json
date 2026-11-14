@@ -15,6 +15,8 @@
     "quantityLabel": "Qty: {quantity}",
     "restaurantLogoAlt": "Restaurant logo",
     "outOfStockBadge": "SOLD OUT",
+    "quickAddAdd": "Add",
+    "quickAddBack": "Back",
     "tableLabel": "Table {table}",
     "orderStatusModalTitle": "Order status",
     "understood": "Got it",

@@ -11,7 +11,7 @@ import { useCart } from "../../context/CartContext";
 import { useRoomNavigation } from "../../hooks/useRoomNavigation";
 import { useFlyToCart } from "../../hooks/useFlyToCart";
 import { useRestaurant } from "../../context/RestaurantContext";
-import { MenuProductCard, rememberMenuPosition } from "@even/ui";
+import { MenuProductCard, MenuQuickAddModal, rememberMenuPosition } from "@even/ui";
 import { useRef, useState, useEffect, useMemo, memo } from "react";
 import OutOfStockModal from "../OutOfStockModal";
 import { usePersonalItemDiscounts } from "../../hooks/usePersonalItemDiscounts";
@@ -43,7 +43,7 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
       features: [], // Los custom_fields podrían mapearse aquí si es necesario
     };
   }, [item]);
-  const { state: cartState, addItem, removeItem } = useCart();
+  const { state: cartState, addItem, decrementItem } = useCart();
   const { navigateWithRoom, getUrlWithRoom } = useRoomNavigation();
   const router = useRouter();
   const { flyToCart } = useFlyToCart();
@@ -63,6 +63,8 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
   const [localQuantity, setLocalQuantity] = useState(0);
   const [isPulsing, setIsPulsing] = useState(false);
   const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const isOutOfStock = useMemo(() => {
     if ("images" in item) return false;
@@ -89,10 +91,25 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
     return false;
   }, [item]);
 
+  // Requiere configuración si tiene cualquier custom_field (obligatorio u opcional: tamaño, leche, extras...).
+  // Esos productos se agregan desde /dish/[id]; el resto, desde el mini modal de la tarjeta.
+  const requiresConfiguration = useMemo(() => {
+    const cf = (item as MenuItemDB).custom_fields as unknown;
+    if (!cf) return false;
+    if (typeof cf === "string") {
+      try {
+        const parsed = JSON.parse(cf);
+        return Array.isArray(parsed) && parsed.length > 0;
+      } catch {
+        return false;
+      }
+    }
+    return Array.isArray(cf) && cf.length > 0;
+  }, [item]);
+
   // Prefetch al entrar en pantalla (como <Link>) para que /dish abra con su loading al instante
   useEffect(() => {
-    // El "+" vive dentro de la tarjeta, así que su posición es la de la tarjeta.
-    const el = plusButtonRef.current;
+    const el = cardRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
@@ -103,12 +120,8 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
     return () => observer.disconnect();
   }, [adaptedItem.id, router, getUrlWithRoom, showImages]);
 
-  // Desde el "+" no llega el elemento de la tarjeta: se busca a partir del botón.
-  const openDish = (
-    card: HTMLElement | null | undefined = plusButtonRef.current?.closest<HTMLElement>(
-      "[data-menu-item-id]",
-    ),
-  ) => {
+  // Desde el "+" no llega el elemento de la tarjeta: se toma de cardRef.
+  const openDish = (card: HTMLElement | null | undefined = cardRef.current) => {
     if (card) {
       rememberMenuPosition(String(restaurantId), String(adaptedItem.id), card);
     }
@@ -142,8 +155,12 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
           setIsPulsing(true);
 
           try {
-            if (plusButtonRef.current) {
-              flyToCart(plusButtonRef.current, async () => {
+            const flySource =
+              plusButtonRef.current ??
+              cardRef.current?.querySelector<HTMLElement>("img") ??
+              cardRef.current;
+            if (flySource) {
+              flyToCart(flySource, async () => {
                 await addItem(lastItem);
               });
             } else {
@@ -185,8 +202,12 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
     setIsPulsing(true);
 
     try {
-      if (plusButtonRef.current) {
-        flyToCart(plusButtonRef.current, async () => {
+      const flySource =
+        plusButtonRef.current ??
+        cardRef.current?.querySelector<HTMLElement>("img") ??
+        cardRef.current;
+      if (flySource) {
+        flyToCart(flySource, async () => {
           await addItem(itemWithDiscount);
         });
       } else {
@@ -228,12 +249,7 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
     setIsPulsing(true);
 
     try {
-      const cartItem = cartState.items.find(
-        (cartItem) => cartItem.id === adaptedItem.id,
-      );
-      if (cartItem) {
-        await removeItem(adaptedItem.id);
-      }
+      await decrementItem(adaptedItem.id);
     } finally {
       isRemovingRef.current = false;
     }
@@ -247,9 +263,37 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
   // Sync local quantity with state
   const displayQuantity = Math.max(localQuantity, currentQuantity);
 
-  const formatPrice = showImages
-    ? (amount: number) => `$${amount.toFixed(2)} MXN`
-    : (amount: number) => `$${amount.toFixed(2)}`;
+  const formatPrice = (amount: number) => `$${amount.toFixed(2)}`;
+
+  // Tocar la tarjeta: agotado -> modal de agotado; con configuración -> detalle; sin configuración -> mini modal.
+  const handleCardOpen = (card: HTMLElement) => {
+    if (isOutOfStock) {
+      setShowOutOfStockModal(true);
+      return;
+    }
+    if (requiresConfiguration) {
+      openDish(card);
+      return;
+    }
+    if (!isOpen) {
+      onRestaurantClosed?.();
+      return;
+    }
+    setShowQuickAdd(true);
+  };
+
+  // "+" de la píldora (cantidad > 0): con configuración lleva al detalle; sin ella agrega 1.
+  const handlePillAdd = () => {
+    if (isOutOfStock) {
+      setShowOutOfStockModal(true);
+      return;
+    }
+    if (requiresConfiguration && isOpen) {
+      openDish();
+      return;
+    }
+    void handleAddToCart();
+  };
 
   return (
     <>
@@ -257,6 +301,18 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
         isOpen={showOutOfStockModal}
         onClose={() => setShowOutOfStockModal(false)}
         itemName={adaptedItem.name}
+      />
+      <MenuQuickAddModal
+        open={showQuickAdd}
+        onClose={() => setShowQuickAdd(false)}
+        onConfirm={() => void handleAddToCart()}
+        name={adaptedItem.name}
+        description={adaptedItem.description}
+        imageUrl={adaptedItem.images[0]}
+        priceLabel={formatPrice(
+          adaptedItem.price * (1 - effectiveDiscount / 100),
+        )}
+        labels={{ add: tc("quickAddAdd"), back: tc("quickAddBack") }}
       />
       <MenuProductCard
         id={adaptedItem.id}
@@ -270,8 +326,9 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
         outOfStock={isOutOfStock}
         quantity={displayQuantity}
         pulse={isPulsing}
-        onOpen={openDish}
-        onIncrement={() => (isOutOfStock ? setShowOutOfStockModal(true) : void handleAddToCart())}
+        onOpen={handleCardOpen}
+        cardRef={cardRef}
+        onIncrement={handlePillAdd}
         onDecrement={() => void handleRemoveFromCart()}
         incrementRef={plusButtonRef}
         formatPrice={formatPrice}

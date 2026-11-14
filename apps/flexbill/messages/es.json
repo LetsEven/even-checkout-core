@@ -14,6 +14,8 @@
     "noOrderInfo": "No se encontró información de la orden",
     "quantityLabel": "Cant: {quantity}",
     "outOfStockBadge": "AGOTADO",
+    "quickAddAdd": "Agregar",
+    "quickAddBack": "Regresar",
     "tableLabel": "Mesa {table}",
     "backToHome": "Volver al inicio",
     "backToHomeSubtitle": "Regresar a la página principal",

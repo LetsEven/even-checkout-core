@@ -11,6 +11,8 @@
     "switchLanguage": "Switch language",
     "restaurantLogoAlt": "Restaurant logo",
     "outOfStockBadge": "SOLD OUT",
+    "quickAddAdd": "Add",
+    "quickAddBack": "Back",
     "roomLabel": "Room {room}",
     "roomLabelColon": "Room: {room}",
     "anythingToKnow": "Anything we should know?",

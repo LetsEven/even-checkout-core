@@ -15,8 +15,8 @@ export type QuantityStepperProps = {
    * `onIncrement` para que la app explique por qué (p. ej. abrir el modal de agotado).
    */
   disabled?: boolean;
-  /** "pill" (tarjeta), "boxed" (footer del detalle), "compact" (opciones). Todas con área táctil >= 44 px. */
-  variant?: "pill" | "boxed" | "compact";
+  /** "pill" (tarjeta), "floating" (sobre la foto de la tarjeta), "boxed" (footer del detalle), "compact" (opciones). Todas con área táctil >= 44 px. */
+  variant?: "pill" | "boxed" | "compact" | "floating";
   /** Con `value <= min` oculta el "−" y el número, dejando solo el "+" (tarjeta sin imagen). */
   collapseAtMin?: boolean;
   /** Ancla para `useFlyToCart`. */
@@ -36,6 +36,12 @@ const variants = {
     button: "size-7 before:absolute before:-inset-2",
     icon: "size-4 md:size-5",
     value: "min-w-[1ch] text-base font-normal md:text-lg",
+  },
+  floating: {
+    root: "h-8 rounded-full text-black shadow-[0_1px_5px_rgba(0,0,0,0.3)]",
+    button: "size-[30px] rounded-full before:absolute before:inset-x-0 before:-inset-y-[7px]",
+    icon: "size-4",
+    value: "min-w-[22px] text-sm font-semibold tabular-nums",
   },
   boxed: {
     root: "h-12 gap-2 rounded-full border border-stroke bg-white px-1 text-black md:h-14",
@@ -77,7 +83,7 @@ export function QuantityStepper({
       className={cn(
         "flex shrink-0 items-center transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
         v.root,
-        variant === "pill" && (pulse ? "scale-110 bg-even-grass/50" : "bg-surface"),
+        (variant === "pill" || variant === "floating") && (pulse ? "scale-110 bg-even-grass/50" : variant === "floating" ? "bg-white" : "bg-surface"),
         className,
       )}
     >

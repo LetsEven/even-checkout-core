@@ -118,7 +118,9 @@
     "viewCart": "View cart • {count}",
     "profileAlt": "Profile",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "menuLabel": "Menu",
+    "fabCountLabel": "{count, plural, one {# item} other {# items}}"
   },
   "MenuItem": {
     "addToCart": "Add {name}",

@@ -54,7 +54,9 @@
     "noItemsAvailable": "No hay items disponibles",
     "viewCart": "Ver el carrito • {count}",
     "openMenu": "Abrir menú",
-    "closeMenu": "Cerrar menú"
+    "closeMenu": "Cerrar menú",
+    "menuLabel": "Menú",
+    "fabCountLabel": "{count, plural, one {# artículo} other {# artículos}}"
   },
   "MenuItem": {
     "addToCart": "Agregar {name}",

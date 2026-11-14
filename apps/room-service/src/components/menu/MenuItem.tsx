@@ -43,7 +43,7 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
       features: [], // Los custom_fields podrían mapearse aquí si es necesario
     };
   }, [item]);
-  const { state: cartState, addItem, removeItem } = useCart();
+  const { state: cartState, addItem, decrementItem } = useCart();
   const { navigateWithRoom, getUrlWithRoom } = useRoomNavigation();
   const router = useRouter();
   const { flyToCart } = useFlyToCart();
@@ -249,12 +249,7 @@ function MenuItem({ item, onRestaurantClosed }: MenuItemProps) {
     setIsPulsing(true);
 
     try {
-      const cartItem = cartState.items.find(
-        (cartItem) => cartItem.id === adaptedItem.id,
-      );
-      if (cartItem) {
-        await removeItem(adaptedItem.id);
-      }
+      await decrementItem(adaptedItem.id);
     } finally {
       isRemovingRef.current = false;
     }

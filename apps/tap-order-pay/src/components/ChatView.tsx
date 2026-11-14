@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import { usePepper } from "../context/PepperContext";
 import RestaurantClosedModal from "./RestaurantClosedModal";
 import OutOfStockModal from "./OutOfStockModal";
-import { useModalBackClose } from "../hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 import { useCart } from "../context/CartContext";
 import { cartApi } from "../services/cart.service";
 import {

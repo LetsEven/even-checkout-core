@@ -6,7 +6,7 @@ import { User, Camera, Loader2, Phone, X, LogOut, LogIn } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { authService } from "@/services/auth.service";
 import { useTableNavigation } from "@/hooks/useTableNavigation";
-import { useModalBackClose } from "@/hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 
 interface ProfileTabProps {
   onLogout?: () => void;

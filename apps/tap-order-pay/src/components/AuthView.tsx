@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { authService } from "@/services/auth.service";
 import { useAuth } from "@/context/AuthContext";
 import TermsCheckbox from "@/components/TermsCheckbox";
-import { useModalBackClose } from "@/hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 import LanguageToggleButton from "@/components/UI/LanguageToggleButton";
 
 type Step = "phone" | "verify" | "profile";

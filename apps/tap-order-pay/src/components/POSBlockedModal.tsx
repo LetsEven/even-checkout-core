@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
-import { lockScroll, unlockScroll } from "@/utils/scrollLock";
+import { lockScroll, unlockScroll } from "@even/ui";
 
 interface POSBlockedModalProps {
   isOpen: boolean;

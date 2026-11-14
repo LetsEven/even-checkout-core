@@ -13,18 +13,17 @@ import {
   useDeferredValue,
 } from "react";
 import { useTranslations } from "next-intl";
-import MenuHeader from "../headers/MenuHeader";
 import RestaurantDetailCard, {
   DETAIL_ANIMATION_MS,
 } from "./RestaurantDetailCard";
 import RestaurantIntro from "./RestaurantIntro";
 import {
   CategoryTabs,
-  FloatingCartButton,
+  MenuFab,
   MenuEmptyState,
   MenuRestaurantHeading,
   MenuSearchInput,
-  MenuActionsPill,
+  MenuActionsModal,
   PillButton,
   PillCartButton,
   PillPepperButton,
@@ -160,7 +159,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
     "profile" | "cards" | "history" | "support"
   >("profile");
   const [showClosedModal, setShowClosedModal] = useState(false);
-  const [showStickyBar, setShowStickyBar] = useState(false);
+  const [, setShowStickyBar] = useState(false);
   const stickyTriggerRef = useRef<HTMLDivElement>(null);
 
   // Detalle del restaurante (se intercambia con la tarjeta del menú)
@@ -186,14 +185,8 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
   // La píldora (perfil, carrito, Pepper) se ve si el usuario la abrió con la
   // hamburguesa o si aparece por scroll.
   const [menuOpenByUser, setMenuOpenByUser] = useState(false);
-  const pillVisible =
-    (menuOpenByUser || showStickyBar) && !showDetail && !introActive;
-  // Al volver arriba la píldora se cierra sola
-  const prevStickyRef = useRef(false);
-  useEffect(() => {
-    if (prevStickyRef.current && !showStickyBar) setMenuOpenByUser(false);
-    prevStickyRef.current = showStickyBar;
-  }, [showStickyBar]);
+  const pillVisible = menuOpenByUser && !showDetail && !introActive;
+  const closeActionsMenu = useCallback(() => setMenuOpenByUser(false), []);
   const { navigateWithTable } = useTableNavigation();
   const { state: cartState, refreshCart, addItem } = useCart();
   const { restaurant, restaurantId, menu, loading, error } = useRestaurant();
@@ -480,11 +473,8 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
       {/* Degradado para legibilidad del texto sobre el banner */}
       <div className="absolute top-0 left-0 w-full h-28 md:h-40 bg-linear-to-b from-black/55 to-transparent z-0 pointer-events-none" />
 
-      <MenuHeader
-        restaurant={restaurant}
-        menuOpen={menuOpenByUser}
-        onToggleMenu={() => setMenuOpenByUser((open) => !open)}
-      />
+      {/* Espacio donde estaba el header con la hamburguesa (conserva la posición de la carta). */}
+      <div aria-hidden className="h-15 md:h-19 lg:h-23" />
 
       {/* Logo + bienvenida sobre el banner (no sticky) */}
       <div className="absolute top-0 inset-x-0 z-6 pointer-events-none">
@@ -544,7 +534,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
             name={restaurant.name}
             subtitle={tc("tableLabel", { table: tableNumber ?? "" })}
             actions={
-              (activeOrders.length > 0 || hasLastOrder) ? (
+              activeOrders.length > 0 || hasLastOrder ? (
                 <div className="flex flex-wrap justify-center gap-2">
                   {activeOrders.length > 0 && (
                     <button
@@ -553,7 +543,9 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
                       }
                       className="bg-surface border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium text-black w-fit active:scale-90 transition-all"
                     >
-                      {activeOrders.length > 1 ? t("viewOrders") : t("orderStatus")}
+                      {activeOrders.length > 1
+                        ? t("viewOrders")
+                        : t("orderStatus")}
                     </button>
                   )}
                   {hasLastOrder && (
@@ -611,16 +603,31 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
         </div>
       </main>
 
-      {/* Carrito flotante */}
-      <FloatingCartButton
+      {/* Botón flotante: hamburguesa; con artículos se vuelve verde y muestra el carrito */}
+      <MenuFab
+        open={menuOpenByUser}
+        onToggle={() => setMenuOpenByUser((open) => !open)}
         count={totalItems}
-        hidden={showDetail || introActive}
-        label={t("viewCart", { count: totalItems })}
-        onClick={() => navigateWithTable("/cart")}
+        countLabel={(count) => t("fabCountLabel", { count })}
+        hidden={
+          showDetail || introActive || showPepperChat || showSettingsModal
+        }
+        labels={{ open: t("openMenu"), close: t("closeMenu") }}
       />
 
-      <MenuActionsPill visible={pillVisible}>
-        <PillButton onClick={() => setShowSettingsModal(true)} aria-label={t("profileAlt")} clip>
+      <MenuActionsModal
+        open={pillVisible}
+        onClose={closeActionsMenu}
+        label={t("menuLabel")}
+      >
+        <PillButton
+          onClick={() => {
+            closeActionsMenu();
+            setShowSettingsModal(true);
+          }}
+          aria-label={t("profileAlt")}
+          clip
+        >
           <UserAvatar
             isAuthenticated={isAuthenticated}
             profile={profile}
@@ -629,14 +636,23 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
           />
         </PillButton>
         <PillCartButton
-          onClick={() => navigateWithTable("/cart")}
+          onClick={() => {
+            closeActionsMenu();
+            navigateWithTable("/cart");
+          }}
           count={totalItems}
           aria-label={t("viewCart", { count: totalItems })}
         />
-        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label={t("pepperLabel")}>
+        <PillPepperButton
+          onClick={() => {
+            closeActionsMenu();
+            setShowPepperChat(true);
+          }}
+          aria-label={t("pepperLabel")}
+        >
           <PepperIcon />
         </PillPepperButton>
-      </MenuActionsPill>
+      </MenuActionsModal>
 
       {/* Bienvenida al cargar la página */}
       {introActive && (

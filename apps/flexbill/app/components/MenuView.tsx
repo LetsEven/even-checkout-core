@@ -15,18 +15,17 @@ import {
   useImperativeHandle,
 } from "react";
 import { useTranslations } from "next-intl";
-import MenuHeader from "@/app/components/headers/MenuHeader";
 import RestaurantDetailCard, {
   DETAIL_ANIMATION_MS,
 } from "@/app/components/RestaurantDetailCard";
 import RestaurantIntro from "@/app/components/RestaurantIntro";
 import {
   CategoryTabs,
-  FloatingCartButton,
+  MenuFab,
   MenuEmptyState,
   MenuRestaurantHeading,
   MenuSearchInput,
-  MenuActionsPill,
+  MenuActionsModal,
   PillButton,
   PillCartButton,
   PillOrderButton,
@@ -42,12 +41,7 @@ import MenuCategory from "@/app/components/MenuCategory";
 import PepperIcon from "@/app/components/UI/PepperIcon";
 import ErrorScreen from "@/app/components/ErrorScreen";
 import Loader from "@/app/components/UI/Loader";
-import {
-  RefreshCw,
-  X,
-  Utensils,
-  Loader2,
-} from "lucide-react";
+import { RefreshCw, X, Utensils, Loader2 } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 import { useTableNavigation } from "@/app/hooks/useTableNavigation";
 import { useCart } from "@/app/context/CartContext";
@@ -177,7 +171,7 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
   const [dashboardInitialTab, setDashboardInitialTab] = useState<
     "profile" | "cards" | "history" | "support"
   >("profile");
-  const [showStickyBar, setShowStickyBar] = useState(false);
+  const [, setShowStickyBar] = useState(false);
   const [showClosedModal, setShowClosedModal] = useState(false);
   const [showReorderModal, setShowReorderModal] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -207,14 +201,8 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
   // La píldora (perfil, carrito, orden, Pepper) se ve si el usuario la abrió con
   // la hamburguesa o si aparece por scroll.
   const [menuOpenByUser, setMenuOpenByUser] = useState(false);
-  const pillVisible =
-    (menuOpenByUser || showStickyBar) && !showDetail && !introActive;
-  // Al volver arriba la píldora se cierra sola
-  const prevStickyRef = useRef(false);
-  useEffect(() => {
-    if (prevStickyRef.current && !showStickyBar) setMenuOpenByUser(false);
-    prevStickyRef.current = showStickyBar;
-  }, [showStickyBar]);
+  const pillVisible = menuOpenByUser && !showDetail && !introActive;
+  const closeActionsMenu = useCallback(() => setMenuOpenByUser(false), []);
 
   useScrollLock(
     showPepperChat ||
@@ -406,11 +394,8 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
       {/* Degradado para legibilidad del texto sobre el banner */}
       <div className="absolute top-0 left-0 w-full h-28 md:h-40 bg-linear-to-b from-black/55 to-transparent z-0 pointer-events-none" />
 
-      <MenuHeader
-        restaurant={restaurant}
-        menuOpen={menuOpenByUser}
-        onToggleMenu={() => setMenuOpenByUser((open) => !open)}
-      />
+      {/* Espacio donde estaba el header con la hamburguesa (conserva la posición de la carta). */}
+      <div aria-hidden className="h-15 md:h-19 lg:h-23" />
 
       {/* Logo + bienvenida sobre el banner (no sticky) */}
       <div className="absolute top-0 inset-x-0 z-6 pointer-events-none">
@@ -469,7 +454,7 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
             subtitle={tc("tableLabel", { table: tableNumber ?? "" })}
             actions={
               Array.isArray(tableState.dishOrders) &&
-                tableState.dishOrders.length > 0 ? (
+              tableState.dishOrders.length > 0 ? (
                 <div className="flex flex-wrap justify-center gap-2">
                   <button
                     onClick={() => setIsStatusModalOpen(true)}
@@ -530,16 +515,31 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
         </div>
       </main>
 
-      {/* Carrito flotante */}
-      <FloatingCartButton
+      {/* Botón flotante: hamburguesa; con artículos se vuelve verde y muestra el carrito */}
+      <MenuFab
+        open={menuOpenByUser}
+        onToggle={() => setMenuOpenByUser((open) => !open)}
         count={totalItems}
-        hidden={showDetail || introActive}
-        label={t("viewCart", { count: totalItems })}
-        onClick={() => navigateWithTable("/cart")}
+        countLabel={(count) => t("fabCountLabel", { count })}
+        hidden={
+          showDetail || introActive || showPepperChat || showSettingsModal
+        }
+        labels={{ open: t("openMenu"), close: t("closeMenu") }}
       />
 
-      <MenuActionsPill visible={pillVisible}>
-        <PillButton onClick={() => setShowSettingsModal(true)} aria-label={t("profileAlt")} clip>
+      <MenuActionsModal
+        open={pillVisible}
+        onClose={closeActionsMenu}
+        label={t("menuLabel")}
+      >
+        <PillButton
+          onClick={() => {
+            closeActionsMenu();
+            setShowSettingsModal(true);
+          }}
+          aria-label={t("profileAlt")}
+          clip
+        >
           <UserAvatar
             isAuthenticated={isAuthenticated}
             profile={profile}
@@ -548,12 +548,18 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
           />
         </PillButton>
         <PillCartButton
-          onClick={() => navigateWithTable("/cart")}
+          onClick={() => {
+            closeActionsMenu();
+            navigateWithTable("/cart");
+          }}
           count={cartState.totalItems}
           aria-label={t("viewCart", { count: cartState.totalItems })}
         />
         <PillOrderButton
-          onClick={() => navigateWithTable("/order")}
+          onClick={() => {
+            closeActionsMenu();
+            navigateWithTable("/order");
+          }}
           count={
             Array.isArray(tableState.dishOrders)
               ? tableState.dishOrders.length
@@ -561,10 +567,16 @@ const MenuView = forwardRef<MenuViewHandle, MenuViewProps>(function MenuView(
           }
           aria-label={t("orderStatus")}
         />
-        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label={t("pepperLabel")}>
+        <PillPepperButton
+          onClick={() => {
+            closeActionsMenu();
+            setShowPepperChat(true);
+          }}
+          aria-label={t("pepperLabel")}
+        >
           <PepperIcon />
         </PillPepperButton>
-      </MenuActionsPill>
+      </MenuActionsModal>
 
       {/* Bienvenida al cargar la página */}
       {introActive && (

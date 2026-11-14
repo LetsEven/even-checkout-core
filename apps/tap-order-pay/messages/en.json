@@ -62,7 +62,9 @@
     "viewCart": "View cart • {count}",
     "orderPageOf": "{current} of {total}",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "menuLabel": "Menu",
+    "fabCountLabel": "{count, plural, one {# item} other {# items}}"
   },
   "MenuItem": {
     "addToCart": "Add {name}",

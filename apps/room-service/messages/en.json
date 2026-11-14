@@ -59,7 +59,9 @@
     "noItemsAvailable": "No items available",
     "viewCart": "View cart • {count}",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "menuLabel": "Menu",
+    "fabCountLabel": "{count, plural, one {# item} other {# items}}"
   },
   "CartView": {
     "emptyCartHero": "Your cart is empty, add items and enjoy",

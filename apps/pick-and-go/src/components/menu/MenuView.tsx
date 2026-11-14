@@ -2,26 +2,29 @@
 
 import MenuHeader from "../headers/MenuHeader";
 import MenuCategory from "./MenuCategory";
-import {
-  setMenuCategory,
-  takeMenuPosition,
-} from "../../utils/menuScrollMemory";
 import PepperIcon from "../UI/PepperIcon";
 import RestaurantDetailCard, {
   DETAIL_ANIMATION_MS,
 } from "./RestaurantDetailCard";
 import RestaurantIntro from "./RestaurantIntro";
 import {
+  CategoryTabs,
+  FloatingCartButton,
   MenuActionsPill,
+  MenuEmptyState,
+  MenuRestaurantHeading,
+  MenuSearchInput,
   PillButton,
   PillCartButton,
   PillPepperButton,
   UserAvatar as SharedUserAvatar,
+  setMenuCategory,
+  takeMenuPosition,
+  useModalBackClose,
   useRestaurantIntro,
+  useScrollLock,
 } from "@even/ui";
 import {
-  Search,
-  ShoppingCart,
   X,
   UserCircle,
   Utensils,
@@ -50,7 +53,6 @@ import { useRestaurant } from "../../context/RestaurantContext";
 import { useBranch } from "../../context/BranchContext";
 import { useNavigation } from "../../hooks/useNavigation";
 import { usePrepCountdown } from "../../hooks/usePrepCountdown";
-import { useModalBackClose } from "../../hooks/useModalBackClose";
 const BranchSelectionModal = lazy(
   () => import("../modals/BranchSelectionModal"),
 );
@@ -66,25 +68,6 @@ const ChatView = lazy(() => import("../ChatView"));
 const AuthView = lazy(() => import("./../AuthView"));
 const DashboardView = lazy(() => import("./../DashboardView"));
 const RestaurantClosedModal = lazy(() => import("../RestaurantClosedModal"));
-
-// Pure functions — defined outside to avoid re-creation on every render
-
-function lockScroll() {
-  const scrollY = window.scrollY;
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollY}px`;
-  document.body.style.width = "100%";
-  document.body.style.overflow = "hidden";
-}
-
-function unlockScroll() {
-  const scrollY = parseInt(document.body.style.top || "0") * -1;
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.width = "";
-  document.body.style.overflow = "";
-  window.scrollTo(0, scrollY);
-}
 
 // Reutilizable para el avatar del usuario en header normal y sticky bar
 interface UserAvatarProps {
@@ -142,20 +125,8 @@ export default function MenuView() {
     const frame = requestAnimationFrame(restore);
     return () => cancelAnimationFrame(frame);
   }, [restored]);
-  const filterBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [pill, setPill] = useState<{
-    left: number;
-    width: number;
-    animate: boolean;
-  } | null>(null);
-
   const selectCategory = (cat: string) => {
     setActiveCat(cat);
-    filterBtnRefs.current[cat]?.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
     startTransition(() => setFilter(cat));
   };
   const [showBranchModal, setShowBranchModal] = useState(false);
@@ -283,28 +254,14 @@ export default function MenuView() {
   };
 
   // Scroll lock unificado para todos los modales
-  useEffect(() => {
-    if (
-      showPepperChat ||
+  useScrollLock(
+    showPepperChat ||
       showSettingsModal ||
       showStatusModal ||
       showReorderModal ||
       showDetail ||
-      introActive
-    ) {
-      lockScroll();
-    } else {
-      unlockScroll();
-    }
-    return unlockScroll;
-  }, [
-    showPepperChat,
-    showSettingsModal,
-    showStatusModal,
-    showReorderModal,
-    showDetail,
-    introActive,
-  ]);
+      introActive,
+  );
 
   // Precargar chunks lazy después de que la página ya es interactiva
   useEffect(() => {
@@ -433,22 +390,6 @@ export default function MenuView() {
     }
     return categories;
   }, [menu]);
-
-  // Posiciona la píldora negra bajo la categoría activa (y re-mide si cambia el ancho por fuentes)
-  useLayoutEffect(() => {
-    const btn = filterBtnRefs.current[activeCat];
-    if (!btn) return;
-    const measure = () =>
-      setPill((prev) => ({
-        left: btn.offsetLeft,
-        width: btn.offsetWidth,
-        animate: prev !== null,
-      }));
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(btn);
-    return () => observer.disconnect();
-  }, [activeCat, categorias]);
 
   const totalItems = state.totalItems;
 
@@ -582,81 +523,51 @@ export default function MenuView() {
             className="absolute top-0 h-px w-px pointer-events-none"
           />
           {/* Nombre del restaurante + asistente */}
-          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full px-2 md:px-4">
-            <h2 className="text-center text-2xl md:text-4xl font-semibold tracking-tight leading-tight text-black line-clamp-2 text-balance">
-              {restaurant.name}
-            </h2>
-          </div>
-
-          {/* Botón de pedidos activos + Reordenar */}
-          {activeOrders.length > 0 && (
-            <div className="mb-2 md:mb-4">
-              <div className="flex gap-2 w-fit mx-auto">
-                <button
-                  onClick={() =>
-                    setTimeout(() => setShowStatusModal(true), 400)
-                  }
-                  className="bg-surface border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium text-black w-fit active:scale-90 transition-all"
-                >
-                  {activeOrders.length > 1 ? t("viewOrders") : t("orderStatus")}
-                </button>
-                {hasLastOrder && (
+          <MenuRestaurantHeading
+            name={restaurant.name}
+            actions={
+              activeOrders.length > 0 ? (
+                <>
                   <button
-                    onClick={handleReorder}
-                    className="bg-even-grass text-even-evergreen border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium w-fit active:scale-90 transition-all flex items-center gap-1.5"
+                    onClick={() =>
+                      setTimeout(() => setShowStatusModal(true), 400)
+                    }
+                    className="bg-surface border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium text-black w-fit active:scale-90 transition-all"
                   >
-                    {tc("reorderCta")}
-                    <RefreshCw className="size-4" />
+                    {activeOrders.length > 1 ? t("viewOrders") : t("orderStatus")}
                   </button>
-                )}
-              </div>
-            </div>
-          )}
+                  {hasLastOrder && (
+                    <button
+                      onClick={handleReorder}
+                      className="bg-even-grass text-even-evergreen border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium w-fit active:scale-90 transition-all flex items-center gap-1.5"
+                    >
+                      {tc("reorderCta")}
+                      <RefreshCw className="size-4" />
+                    </button>
+                  )}
+                </>
+              ) : undefined
+            }
+          />
 
-          {/* Search Input */}
           <div className="w-full">
-            <div className="flex items-center justify-center border-b border-black">
-              <Search
-                className="text-black size-5 md:size-6 lg:size-7"
-                strokeWidth={1}
-              />
-              <input
-                type="text"
-                placeholder={t("searchPlaceholder")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full text-black text-base md:text-lg lg:text-xl px-3 md:px-4 py-2 md:py-3 focus:outline-none"
-              />
-            </div>
+            <MenuSearchInput
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder={t("searchPlaceholder")}
+            />
           </div>
 
-          {/* Filters */}
-          <div className="relative flex gap-2 md:gap-3 mt-3 md:mt-5 mb-3 md:mb-5 w-full overflow-x-auto scrollbar-hide">
-            {pill && (
-              <span
-                aria-hidden
-                className={`absolute top-0 bottom-0 rounded-full bg-black ${pill.animate ? "transition-[left,width] duration-300 ease-[cubic-bezier(0.34,1.3,0.64,1)]" : ""}`}
-                style={{ left: pill.left, width: pill.width }}
-              />
-            )}
-            {categorias.map((cat) => (
-              <button
-                key={cat}
-                ref={(el) => {
-                  filterBtnRefs.current[cat] = el;
-                }}
-                onClick={() => selectCategory(cat)}
-                className={`relative px-3 md:px-5 lg:px-6 py-1 md:py-2 text-sm md:text-base lg:text-lg rounded-full whitespace-nowrap flex-shrink-0 transition-colors duration-300
-                ${
-                  activeCat === cat
-                    ? "text-white"
-                    : "text-tone-500 hover:bg-tone-100"
-                }`}
-              >
-                {cat === "Todo" ? t("filterAll") : cat}
-              </button>
-            ))}
-          </div>
+          <CategoryTabs
+            className="mt-3 md:mt-5 mb-3 md:mb-5"
+            aria-label={t("categoriesLabel")}
+            tabs={categorias.map((cat) => ({
+              id: cat,
+              label: cat === "Todo" ? t("filterAll") : cat,
+            }))}
+            activeId={activeCat}
+            onSelect={selectCategory}
+          />
 
           {/* Items */}
           {filteredMenu.length > 0 ? (
@@ -669,31 +580,24 @@ export default function MenuView() {
               />
             ))
           ) : (
-            <div className="text-center py-10 md:py-16">
-              <p className="text-tone-500 text-base md:text-lg lg:text-xl">
-                {searchQuery.trim()
+            <MenuEmptyState
+              message={
+                searchQuery.trim()
                   ? t("noResultsFor", { query: searchQuery })
-                  : t("noItemsAvailable")}
-              </p>
-            </div>
+                  : t("noItemsAvailable")
+              }
+            />
           )}
         </div>
       </main>
 
       {/* Carrito flotante */}
-      {totalItems > 0 && !showDetail && !introActive && (
-        <div className="fixed bottom-6 md:bottom-8 lg:bottom-10 left-0 right-0 z-50 flex justify-center pointer-events-none">
-          <button
-            onClick={() => navigateWithRestaurantId("/cart")}
-            className="pointer-events-auto bg-even-grass text-even-evergreen rounded-full px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 shadow-lg flex items-center gap-3 md:gap-4 cursor-pointer transition-all hover:scale-105 animate-bounce-in active:scale-90"
-          >
-            <ShoppingCart className="size-5 md:size-6 lg:size-7" />
-            <span className="text-base md:text-lg lg:text-xl font-medium">
-              {t("viewCart", { count: totalItems })}
-            </span>
-          </button>
-        </div>
-      )}
+      <FloatingCartButton
+        count={totalItems}
+        hidden={showDetail || introActive}
+        label={t("viewCart", { count: totalItems })}
+        onClick={() => navigateWithRestaurantId("/cart")}
+      />
 
       {/* Bienvenida al cargar la página */}
       {introActive && (
@@ -1065,7 +969,7 @@ export default function MenuView() {
           count={state.totalItems}
           aria-label={t("viewCart", { count: state.totalItems })}
         />
-        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label="Pepper">
+        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label={t("pepperLabel")}>
           <PepperIcon />
         </PillPepperButton>
       </MenuActionsPill>

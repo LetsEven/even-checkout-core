@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { createPortal } from "react-dom";
 import { usePayment } from "@/app/context/PaymentContext";
 import { useTableNavigation } from "@/app/hooks/useTableNavigation";
-import { useModalBackClose } from "@/app/hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 import {
   Plus,
   Trash2,

@@ -47,6 +47,8 @@
     "successMessage": "Tu pedido fue creado con éxito"
   },
   "MenuView": {
+    "categoriesLabel": "Categorías",
+    "pepperLabel": "Abrir chat con Pepper",
     "profileAlt": "Perfil",
     "restaurantNotFound": "Restaurante no encontrado",
     "welcome": "{gender, select, female {¡Bienvenida{name}!} other {¡Bienvenido{name}!}}",
@@ -59,6 +61,12 @@
     "orderPageOf": "{current} de {total}",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú"
+  },
+  "MenuItem": {
+    "addToCart": "Agregar {name}",
+    "removeFromCart": "Quitar {name}",
+    "discountBadge": "{percent}% OFF",
+    "imageAlt": "{name}"
   },
   "MenuCategory": {
     "noItemsInSection": "No hay items en esta sección"

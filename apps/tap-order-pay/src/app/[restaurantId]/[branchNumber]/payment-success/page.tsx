@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, lazy, Suspense } from "react";
 import { useFormatter, useTranslations } from "next-intl";
-import { lockScroll, unlockScroll } from "@/utils/scrollLock";
+import { lockScroll, unlockScroll, useModalBackClose } from "@even/ui";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 const ReorderModal = lazy(() => import("@/components/modals/ReorderModal"));
@@ -29,7 +29,6 @@ import {
 import { getCardTypeIcon } from "@/utils/cardIcons";
 import { tapOrderService } from "@/services/taporders.service";
 import type { TapOrder, LastOrderDish } from "@/services/taporders.service";
-import { useModalBackClose } from "@/hooks/useModalBackClose";
 import ItemCustomizations from "@/components/ItemCustomizations";
 
 export default function PaymentSuccessPage() {

@@ -19,8 +19,7 @@ import { getCardTypeIcon } from "@/utils/cardIcons";
 import InvoiceModal from "@/components/modals/InvoiceModal";
 import { invoiceService } from "@/services/invoice.service";
 import { ticketService } from "@/services/ticket.service";
-import { lockScroll, unlockScroll } from "@/utils/scrollLock";
-import { useModalBackClose } from "@/hooks/useModalBackClose";
+import { lockScroll, unlockScroll, useModalBackClose } from "@even/ui";
 import ItemCustomizations from "@/components/ItemCustomizations";
 import { useRestaurant } from "@/context/RestaurantContext";
 

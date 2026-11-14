@@ -47,6 +47,8 @@
     "successMessage": "Your order was created successfully"
   },
   "MenuView": {
+    "categoriesLabel": "Categories",
+    "pepperLabel": "Open chat with Pepper",
     "profileAlt": "Profile",
     "restaurantNotFound": "Restaurant not found",
     "welcome": "Welcome{name}!",
@@ -59,6 +61,12 @@
     "orderPageOf": "{current} of {total}",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
+  },
+  "MenuItem": {
+    "addToCart": "Add {name}",
+    "removeFromCart": "Remove {name}",
+    "discountBadge": "{percent}% OFF",
+    "imageAlt": "{name}"
   },
   "MenuCategory": {
     "noItemsInSection": "No items in this section"

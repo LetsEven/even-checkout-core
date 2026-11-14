@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createPortal } from "react-dom";
 import { useTableNavigation } from "@/app/hooks/useTableNavigation";
-import { useModalBackClose } from "@/app/hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 import { useAuth } from "@/app/context/AuthContext";
 import { authService } from "@/app/services/auth.service";
 import {

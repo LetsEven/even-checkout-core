@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFlyToCart } from "@/hooks/useFlyToCart";
-import { lockScroll, unlockScroll } from "@/utils/scrollLock";
+import { lockScroll, unlockScroll } from "@even/ui";
 import type { PromoActivation } from "@/services/promoActivations.service";
 import { useRestaurant } from "@/context/RestaurantContext";
 

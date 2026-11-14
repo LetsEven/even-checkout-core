@@ -13,25 +13,30 @@ import {
   useDeferredValue,
 } from "react";
 import { useTranslations } from "next-intl";
-import { setMenuCategory, takeMenuPosition } from "@/utils/menuScrollMemory";
-import { lockScroll, unlockScroll } from "@/utils/scrollLock";
 import MenuHeader from "../headers/MenuHeader";
 import RestaurantDetailCard, {
   DETAIL_ANIMATION_MS,
 } from "./RestaurantDetailCard";
 import RestaurantIntro from "./RestaurantIntro";
 import {
+  CategoryTabs,
+  FloatingCartButton,
+  MenuEmptyState,
+  MenuRestaurantHeading,
+  MenuSearchInput,
   MenuActionsPill,
   PillButton,
   PillCartButton,
   PillPepperButton,
   UserAvatar as SharedUserAvatar,
+  setMenuCategory,
+  takeMenuPosition,
+  useModalBackClose,
   useRestaurantIntro,
+  useScrollLock,
 } from "@even/ui";
 import MenuCategory from "./MenuCategory";
 import {
-  Search,
-  ShoppingCart,
   X,
   RefreshCw,
   Utensils,
@@ -41,7 +46,6 @@ import {
 } from "lucide-react";
 import { useUserData } from "../../context/userDataContext";
 import { useTableNavigation } from "../../hooks/useTableNavigation";
-import { useModalBackClose } from "../../hooks/useModalBackClose";
 import { useCart } from "../../context/CartContext";
 import { useRestaurant } from "../../context/RestaurantContext";
 import Loader from "../UI/Loader";
@@ -112,12 +116,6 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
   const [, startTransition] = useTransition();
   // activeCat es urgente (mueve la píldora ya); filter va en transición (filtra la lista)
   const [activeCat, setActiveCat] = useState(restored?.category ?? "Todo");
-  const filterBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [pill, setPill] = useState<{
-    left: number;
-    width: number;
-    animate: boolean;
-  } | null>(null);
 
   useEffect(() => {
     setMenuCategory(activeCat);
@@ -142,11 +140,6 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
 
   const selectCategory = (cat: string) => {
     setActiveCat(cat);
-    filterBtnRefs.current[cat]?.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
     startTransition(() => setFilter(cat));
   };
   const { user, profile, isAuthenticated, logout } = useAuth();
@@ -268,36 +261,14 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
     }, 380);
   };
 
-  useEffect(() => {
-    if (showPepperChat) {
-      lockScroll();
-      return unlockScroll;
-    }
-  }, [showPepperChat]);
-  useEffect(() => {
-    if (showSettingsModal) {
-      lockScroll();
-      return unlockScroll;
-    }
-  }, [showSettingsModal]);
-  useEffect(() => {
-    if (isStatusModalOpen) {
-      lockScroll();
-      return unlockScroll;
-    }
-  }, [isStatusModalOpen]);
-  useEffect(() => {
-    if (showReorderModal) {
-      lockScroll();
-      return unlockScroll;
-    }
-  }, [showReorderModal]);
-  useEffect(() => {
-    if (showDetail || introActive) {
-      lockScroll();
-      return unlockScroll;
-    }
-  }, [showDetail, introActive]);
+  useScrollLock(
+    showPepperChat ||
+      showSettingsModal ||
+      isStatusModalOpen ||
+      showReorderModal ||
+      showDetail ||
+      introActive,
+  );
 
   // Precargar chunks lazy después de que la página ya es interactiva
   useEffect(() => {
@@ -416,22 +387,6 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
     }
     return categories;
   }, [menu]);
-
-  // Posiciona la píldora negra bajo la categoría activa (y re-mide si cambia el ancho por fuentes)
-  useLayoutEffect(() => {
-    const btn = filterBtnRefs.current[activeCat];
-    if (!btn) return;
-    const measure = () =>
-      setPill((prev) => ({
-        left: btn.offsetLeft,
-        width: btn.offsetWidth,
-        animate: prev !== null,
-      }));
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(btn);
-    return () => observer.disconnect();
-  }, [activeCat, categorias]);
 
   const gender = signUpData?.gender;
 
@@ -585,84 +540,54 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
             className="absolute top-0 h-px w-px pointer-events-none"
           />
           {/* Nombre del restaurante y mesa/habitación */}
-          <div className="mt-3 md:mt-6 mb-2 md:mb-4 w-full px-2 md:px-4">
-            <h2 className="text-center text-2xl md:text-4xl font-semibold tracking-tight leading-tight text-black line-clamp-2 text-balance">
-              {restaurant.name}
-            </h2>
-            <p className="mt-1 text-center text-tone-600 text-base md:text-xl">
-              {tc("tableLabel", { table: tableNumber ?? "" })}
-            </p>
-          </div>
+          <MenuRestaurantHeading
+            name={restaurant.name}
+            subtitle={tc("tableLabel", { table: tableNumber ?? "" })}
+            actions={
+              (activeOrders.length > 0 || hasLastOrder) ? (
+                <div className="flex flex-wrap justify-center gap-2">
+                  {activeOrders.length > 0 && (
+                    <button
+                      onClick={() =>
+                        setTimeout(() => setIsStatusModalOpen(true), 400)
+                      }
+                      className="bg-surface border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium text-black w-fit active:scale-90 transition-all"
+                    >
+                      {activeOrders.length > 1 ? t("viewOrders") : t("orderStatus")}
+                    </button>
+                  )}
+                  {hasLastOrder && (
+                    <button
+                      onClick={handleReorder}
+                      className="bg-even-grass text-even-evergreen border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium w-fit active:scale-90 transition-all flex items-center gap-1.5"
+                    >
+                      {tc("reorderCta")}
+                      <RefreshCw className="size-4" />
+                    </button>
+                  )}
+                </div>
+              ) : undefined
+            }
+          />
 
-          {/* Pedidos activos + Reordenar */}
-          {(activeOrders.length > 0 || hasLastOrder) && (
-            <div className="mb-2 md:mb-4 flex flex-wrap gap-2 justify-center">
-              {activeOrders.length > 0 && (
-                <button
-                  onClick={() =>
-                    setTimeout(() => setIsStatusModalOpen(true), 400)
-                  }
-                  className="bg-surface border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium text-black w-fit active:scale-90 transition-all"
-                >
-                  {activeOrders.length > 1 ? t("viewOrders") : t("orderStatus")}
-                </button>
-              )}
-              {hasLastOrder && (
-                <button
-                  onClick={handleReorder}
-                  className="bg-even-grass text-even-evergreen border border-stroke rounded-full px-3 md:px-4 lg:px-5 py-1 md:py-1.5 text-sm md:text-lg lg:text-xl font-medium w-fit active:scale-90 transition-all flex items-center gap-1.5"
-                >
-                  {tc("reorderCta")}
-                  <RefreshCw className="size-4" />
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* Search Input */}
           <div className="w-full">
-            <div className="flex items-center justify-center border-b border-black">
-              <Search
-                className="text-black size-5 md:size-6 lg:size-7"
-                strokeWidth={1}
-              />
-              <input
-                type="text"
-                placeholder={t("searchPlaceholder")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full text-black text-base md:text-lg lg:text-xl px-3 md:px-4 py-2 md:py-3 focus:outline-none"
-              />
-            </div>
+            <MenuSearchInput
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder={t("searchPlaceholder")}
+            />
           </div>
 
-          {/* Filters */}
-          <div className="relative flex gap-2 md:gap-3 mt-3 md:mt-5 mb-3 md:mb-5 w-full overflow-x-auto scrollbar-hide">
-            {pill && (
-              <span
-                aria-hidden
-                className={`absolute top-0 bottom-0 rounded-full bg-black ${pill.animate ? "transition-[left,width] duration-300 ease-[cubic-bezier(0.34,1.3,0.64,1)]" : ""}`}
-                style={{ left: pill.left, width: pill.width }}
-              />
-            )}
-            {categorias.map((cat) => (
-              <button
-                key={cat}
-                ref={(el) => {
-                  filterBtnRefs.current[cat] = el;
-                }}
-                onClick={() => selectCategory(cat)}
-                className={`relative px-3 md:px-5 lg:px-6 py-1 md:py-2 text-sm md:text-base lg:text-lg rounded-full whitespace-nowrap shrink-0 transition-colors duration-300
-                ${
-                  activeCat === cat
-                    ? "text-white"
-                    : "text-tone-500 hover:bg-tone-100"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+          <CategoryTabs
+            className="mt-3 md:mt-5 mb-3 md:mb-5"
+            aria-label={t("categoriesLabel")}
+            tabs={categorias.map((cat) => ({
+              id: cat,
+              label: cat === "Todo" ? t("filterAll") : cat,
+            }))}
+            activeId={activeCat}
+            onSelect={selectCategory}
+          />
 
           {/* Items */}
           {filteredMenu.length > 0 ? (
@@ -675,31 +600,24 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
               />
             ))
           ) : (
-            <div className="text-center py-10 md:py-16">
-              <p className="text-tone-500 text-base md:text-lg lg:text-xl">
-                {searchQuery.trim()
+            <MenuEmptyState
+              message={
+                searchQuery.trim()
                   ? t("noResultsFor", { query: searchQuery })
-                  : t("noItemsAvailable")}
-              </p>
-            </div>
+                  : t("noItemsAvailable")
+              }
+            />
           )}
         </div>
       </main>
 
       {/* Carrito flotante */}
-      {totalItems > 0 && !showDetail && !introActive && (
-        <div className="fixed bottom-6 md:bottom-8 lg:bottom-10 left-0 right-0 z-50 flex justify-center pointer-events-none">
-          <button
-            onClick={() => navigateWithTable("/cart")}
-            className="pointer-events-auto bg-even-grass text-even-evergreen rounded-full px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 shadow-lg flex items-center gap-3 md:gap-4 cursor-pointer transition-all hover:scale-105 animate-bounce-in active:scale-90"
-          >
-            <ShoppingCart className="size-5 md:size-6 lg:size-7" />
-            <span className="text-base md:text-lg lg:text-xl font-medium">
-              {t("viewCart", { count: totalItems })}
-            </span>
-          </button>
-        </div>
-      )}
+      <FloatingCartButton
+        count={totalItems}
+        hidden={showDetail || introActive}
+        label={t("viewCart", { count: totalItems })}
+        onClick={() => navigateWithTable("/cart")}
+      />
 
       <MenuActionsPill visible={pillVisible}>
         <PillButton onClick={() => setShowSettingsModal(true)} aria-label={t("profileAlt")} clip>
@@ -715,7 +633,7 @@ export default function MenuView({ tableNumber }: MenuViewProps) {
           count={totalItems}
           aria-label={t("viewCart", { count: totalItems })}
         />
-        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label="Pepper">
+        <PillPepperButton onClick={() => setShowPepperChat(true)} aria-label={t("pepperLabel")}>
           <PepperIcon />
         </PillPepperButton>
       </MenuActionsPill>

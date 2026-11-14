@@ -18,8 +18,7 @@ import {
   type FiscalData,
   type BillingProfile,
 } from "@/app/services/invoice.service";
-import { lockScroll, unlockScroll } from "@/app/utils/scrollLock";
-import { useModalBackClose } from "@/app/hooks/useModalBackClose";
+import { lockScroll, unlockScroll, useModalBackClose } from "@even/ui";
 
 // SAT catalog values shown in dropdowns
 const REGIMEN_FISCAL_OPTIONS = [

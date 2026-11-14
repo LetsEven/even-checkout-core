@@ -17,7 +17,7 @@ import {
   TwinPebbleIdle,
   PepperStatusAvatar,
 } from "./PepperMascots";
-import { useModalBackClose } from "../hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 
 interface ChatViewProps {
   onBack: () => void;

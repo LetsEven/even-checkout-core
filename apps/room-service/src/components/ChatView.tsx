@@ -12,7 +12,7 @@ import RestaurantClosedModal from "./RestaurantClosedModal";
 import OutOfStockModal from "./OutOfStockModal";
 import { useCart } from "@/context/CartContext";
 import { cartApi } from "@/services/cart.service";
-import { useModalBackClose } from "@/hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 import {
   ChatStatus,
   TwinPebbleIdle,

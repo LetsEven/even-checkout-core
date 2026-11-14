@@ -6,7 +6,7 @@ import { ArrowLeft, Phone, User, ChevronDown } from "lucide-react";
 import Flag from "react-world-flags";
 import { useAuth } from "@/app/context/AuthContext";
 import TermsCheckbox from "@/app/components/TermsCheckbox";
-import { useModalBackClose } from "@/app/hooks/useModalBackClose";
+import { useModalBackClose } from "@even/ui";
 import LanguageToggleButton from "@/app/components/UI/LanguageToggleButton";
 
 type Step = "phone" | "verify" | "profile";
